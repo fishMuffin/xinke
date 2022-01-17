@@ -90,11 +90,11 @@
 
         <!--swaggerui  几个自定义界面方便查看接口-->
         <!--访问路径：http://localhost:8080/doc.html-->
-<!--        <dependency>-->
-<!--            <groupId>com.github.xiaoymin</groupId>-->
-<!--            <artifactId>swagger-bootstrap-ui</artifactId>-->
-<!--            <version>1.9.5</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>swagger-bootstrap-ui</artifactId>
+            <version>1.9.5</version>
+        </dependency>
 
         <!--访问路径：http://localhost:8080/document.html-->
         <!--<dependency>
@@ -111,12 +111,12 @@
          </dependency>-->
     </dependencies>
 
-<!--    <build>-->
-<!--        <plugins>-->
-<!--            <plugin>-->
-<!--                <groupId>org.springframework.boot</groupId>-->
-<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            </plugin>-->
-<!--        </plugins>-->
-<!--    </build>-->
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>
