@@ -1,4 +1,4 @@
-package config;
+package com.xkyz.xinke.config;
 /**
  * @描述 自定义响应状态码枚举
  **/

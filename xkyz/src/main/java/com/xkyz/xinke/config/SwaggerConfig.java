@@ -1,4 +1,4 @@
-package config;
+package com.xkyz.xinke.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -66,7 +66,7 @@ public class SwaggerConfig {
                 .enable(flag)//是否启用swagger，如果为false则swagger不能再浏览器中访问
                 .select()//通过select()方法配置扫描接口,RequestHandlerSelectors配置如何扫描接口
                 //指定扫描的api包
-                .apis(RequestHandlerSelectors.basePackage("com.whw.swaggerdemo.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.whw.swaggerdemo.com.xkyz.xinke.controller"))
                 //.paths(PathSelectors.ant("/sys/**"));//通过paths()方法配置扫描接口,PathSelectors配置如何扫描接口
                 .build();
                 /*
