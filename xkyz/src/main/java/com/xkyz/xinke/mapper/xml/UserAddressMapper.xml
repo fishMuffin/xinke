@@ -15,12 +15,22 @@
 
     <insert id="addUserAddress" parameterType="UserAddress">
         insert into user_address(province, city, district, address_detail, user_id)
-        values (#{province}, #{city}, #{district}, #{addressDetail}, #{userId},)
+        values (#{province}, #{city}, #{district}, #{addressDetail}, #{userId})
+
     </insert>
     <delete id="deleteUserAddressByAddressId" parameterType="UserAddress">
         delete
         from user_address
         where address_id = #{addressId}
     </delete>
+
+    <update id="updateUserAddressByAddressId" parameterType="UserAddress">
+        update user_address
+        set province=#{province},
+            city=#{city},
+            district=#{district},
+            address_detail=#{addressDetail}
+        where address_id = #{addressId};
+    </update>
 
 </mapper>

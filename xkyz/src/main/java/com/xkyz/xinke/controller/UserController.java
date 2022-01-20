@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 @Api(tags = "用户操作模块API")//作用在模块API类上，对API模块进行说明
-@RestController(value = "/sys/user/")
-public class SysUserController {
+@RestController(value = "/sys/user")
+public class UserController {
     @Autowired
     private UserService userService;
 

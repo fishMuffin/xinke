@@ -2,10 +2,12 @@ package com.xkyz.xinke.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import lombok.Builder;
 import lombok.Data;
 
 @ApiModel("地址实体类")
 @Data
+@Builder
 public class UserAddress {
     @ApiModelProperty("地址id")
     private Integer addressId;
@@ -18,7 +20,7 @@ public class UserAddress {
     @ApiModelProperty("详细地址")
     public String addressDetail;
     @ApiModelProperty("用户id")
-    public String userId;
+    public Integer userId;
 }
 //    create table user_address(
 //        address_id int primary key AUTO_INCREMENT,

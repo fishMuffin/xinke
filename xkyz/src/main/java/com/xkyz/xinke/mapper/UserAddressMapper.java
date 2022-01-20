@@ -16,6 +16,6 @@ public interface UserAddressMapper {
 
     public int deleteUserAddressByAddressId(int addressId);
 
-    public int updateUserAddressByAddressId(int addressId);
+    public int updateUserAddressByAddressId(UserAddress userAddress);
 
 }

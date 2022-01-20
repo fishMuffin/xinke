@@ -29,8 +29,8 @@ public class UserAddressService {
         return userAddressMapper.deleteUserAddressByAddressId(addressId);
     }
 
-    public int updateUserAddressByAddressId(int addressId) {
-        return userAddressMapper.updateUserAddressByAddressId(addressId);
+    public int updateUserAddressByAddressId(UserAddress userAddress) {
+        return userAddressMapper.updateUserAddressByAddressId(userAddress);
     }
 
 
