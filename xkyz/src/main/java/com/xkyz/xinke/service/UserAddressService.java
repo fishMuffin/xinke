@@ -4,6 +4,7 @@ import com.xkyz.xinke.mapper.UserAddressMapper;
 import com.xkyz.xinke.model.UserAddress;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 
@@ -11,26 +12,30 @@ import java.util.List;
 public class UserAddressService {
 
     @Autowired
-    UserAddressMapper userAddressMapper;
+    private UserAddressMapper userAddressMapper;
 
     public UserAddress getUserAddressByAddressId(int addressId) {
-        return userAddressMapper.getUserAddressByAddressId(addressId);
+        return userAddressMapper.selectByPrimaryKey(addressId);
     }
 
     public List<UserAddress> getUserAddressListByUserId(int userId) {
-        return userAddressMapper.getUserAddressListByUserId(userId);
+        Example example = new Example(UserAddress.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("userId", userId);
+        return userAddressMapper.selectByExample(example);
     }
 
     public int addUserAddress(UserAddress userAddress) {
-        return userAddressMapper.addUserAddress(userAddress);
+        return userAddressMapper.insertSelective(userAddress);
     }
 
     public int deleteUserAddressByAddressId(int addressId) {
-        return userAddressMapper.deleteUserAddressByAddressId(addressId);
+        UserAddress userAddress = UserAddress.builder().addressId(addressId).build();
+        return userAddressMapper.delete(userAddress);
     }
 
     public int updateUserAddressByAddressId(UserAddress userAddress) {
-        return userAddressMapper.updateUserAddressByAddressId(userAddress);
+        return userAddressMapper.updateByPrimaryKeySelective(userAddress);
     }
 
 

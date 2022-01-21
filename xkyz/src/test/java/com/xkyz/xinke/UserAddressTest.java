@@ -30,14 +30,14 @@ public class UserAddressTest {
 
     @Test
     public void testDeleteUserAddressByAddressId() {
-        ResponseEntity<Boolean> booleanResponseEntity = userAddressController.deleteUserAddressByAddressId(2);
+        ResponseEntity<Boolean> booleanResponseEntity = userAddressController.deleteUserAddressByAddressId(6);
         Boolean body = booleanResponseEntity.getBody();
         System.out.println(body);
     }
 
     @Test
     public void testUpdateUserAddressByAddressId() {
-        ResponseEntity<Boolean> booleanResponseEntity = userAddressController.updateUserAddressByAddressId(UserAddress.builder().userId(1).addressId(5).city("武汉市").province("湖北省").addressDetail("Aaa").district("aaa").build());
+        ResponseEntity<Boolean> booleanResponseEntity = userAddressController.updateUserAddressByAddressId(UserAddress.builder().userId(1).addressId(5).city("武汉市").province("湖北省").addressDetail("bbb").district("ccc").build());
         Boolean body = booleanResponseEntity.getBody();
         System.out.println(body);
     }

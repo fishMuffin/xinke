@@ -5,11 +5,16 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 @ApiModel("地址实体类")
 @Data
 @Builder
+@Table(name = "user_address")
 public class UserAddress {
     @ApiModelProperty("地址id")
+    @Id
     private Integer addressId;
     @ApiModelProperty("省")
     public String province;
