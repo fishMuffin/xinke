@@ -10,12 +10,14 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
 @Api(tags = "用户地址操作API")//作用在模块API类上，对API模块进行说明
-@RestController(value = "/sys/userAddress/")
+@RestController()
+@RequestMapping("/sys/userAddress")
 public class UserAddressController {
     @Autowired
     private UserAddressService userAddressService;
