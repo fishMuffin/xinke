@@ -7,12 +7,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class SwaggerApplicationTests {
-    @Autowired
-    private UserMapper userMapper;
-
-    @Test
-    public void testGetUserById() {
-        System.out.println(userMapper.selectUserById(1));
-    }
+//    @Autowired
+//    private UserMapper userMapper;
+//
+//    @Test
+//    public void testGetUserById() {
+//        System.out.println(userMapper.selectOne(1));
+//    }
 
 }
