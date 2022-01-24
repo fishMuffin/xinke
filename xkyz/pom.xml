@@ -172,6 +172,11 @@
             <version>8.0.13</version>
         </dependency>
 <!--        <dependency>-->
+<!--            <groupId>mysql</groupId>-->
+<!--            <artifactId>mysql-connector-java</artifactId>-->
+<!--            <version>6.0.6</version>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
 <!--            <groupId>com.baomidou</groupId>-->
 <!--            <artifactId>mybatis-plus</artifactId>-->
 <!--            <version>1.0.4</version>-->
@@ -192,7 +197,6 @@
             <version>1.1.14</version>
         </dependency>
     </dependencies>
-
 <!--    <build>-->
 <!--        <plugins>-->
 <!--            <plugin>-->
@@ -202,14 +206,18 @@
 <!--        </plugins>-->
 <!--        <resources>-->
 <!--            <resource>-->
-<!--                <directory>src/main/java</directory>//这里是配置maven识别的资源的目录-->
+<!--                <directory>src/main/java</directory>-->
 <!--                <includes>-->
-<!--                    <include>**/*.xml</include>//配置maven所识别的资源文件-->
+<!--                    <include>**/*.yml</include>-->
+<!--                    <include>**/*.properties</include>-->
+<!--                    <include>**/*.xml</include>-->
 <!--                </includes>-->
 <!--                <filtering>false</filtering>-->
 <!--            </resource>-->
 <!--        </resources>-->
 <!--    </build>-->
+
+
     <build>
         <plugins>
             <plugin>
@@ -222,9 +230,17 @@
                 <directory>src/main/java</directory>
                 <includes>
                     <include>**/*.xml</include>
+                    <include>**/*.properties</include>
                 </includes>
-                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.yaml</include>
+                </includes>
             </resource>
         </resources>
     </build>
+
 </project>
