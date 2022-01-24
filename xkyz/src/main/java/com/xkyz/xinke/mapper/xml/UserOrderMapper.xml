@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkyz.xinke.mapper.UserOrderMapper">
+    <select id="getUserOrderByOrderNo" resultType="UserOrder" parameterType="String">
+        select *
+        from user_order
+        where order_no = #{orderNo};
+    </select>
+
+    <insert id="addUserOrder" parameterType="UserOrder">
+        insert into user_order(order_no, stuff_type, send_address, status, receive_address, order_time)
+        values (#{orderNo}, #{stuffType}, #{sendAddress}, #{status}, #{receiveAddress}, #{orderTime});
+    </insert>
+
+    <delete id="deleteUserOrderByOrderNo" parameterType="UserOrder">
+        delete
+        from user_order
+        where order_no = #{orderNo};
+    </delete>
+
+    <update id="updateUserOrder" parameterType="UserOrder">
+        update user_order
+        set stuff_type=#{stuffType},
+            send_address=#{sendAddress},
+            receive_address=#{receiveAddress},
+            status=#{status},
+            order_time=#{orderTime}
+        where order_no = #{orderNo};
+    </update>
+
+</mapper>
