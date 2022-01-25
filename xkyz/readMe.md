@@ -4,7 +4,7 @@ scp ./xkyz-1.0-SNAPSHOT.jar root@118.31.0.252:/root/xinke/Jars
 ```
 2.服务器启动项目
 ```shell
-nohup java -jar xkyz-1.0-SNAPSHOT.jar >springboot.log 2>&1 &
+nohup java -jar xkyz-1.0-SNAPSHOT.jar --server.port=80 >springboot.log 2>&1 &
 ```
 
 3.查看日志
@@ -30,4 +30,8 @@ jps -m
 8.查看服务器是否部署成功
 ```shell
 curl localhost:8087/api/test/hello
+```
+9.外部访问
+```shell
+curl 118.31.0.252:80/api/test/hello
 ```
