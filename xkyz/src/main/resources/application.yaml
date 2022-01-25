@@ -8,6 +8,8 @@ spring:
     url: jdbc:mysql://localhost:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
     username: root
     password: ycwycw123
+  resources:
+    static-locations: /root/xinke/static/images/
 
 mvc:
   static-path-pattern: /static/**  #配置静态路径
@@ -15,3 +17,13 @@ mvc:
 mybatis:
   type-aliases-package: com.xkyz.xinke.model
 #  mapper-locations: classpath:com/xkyz/xinke/mapper/**/*.xml
+
+
+em:
+  upload:
+    baseUrl:  118.31.0.252
+    allowTYpes:
+      - image/jpg
+      - image/jpeg
+      - image/png
+      - image/bmp

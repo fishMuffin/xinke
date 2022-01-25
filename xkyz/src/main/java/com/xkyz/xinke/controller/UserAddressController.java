@@ -23,8 +23,8 @@ public class UserAddressController {
     private UserAddressService userAddressService;
 
     @ApiOperation("添加用户地址接口")//作用在API方法上，对操作进行说明
-    @PostMapping(value = "/addUserAddress")
-    public ResponseEntity<Integer> addUserAddress(UserAddress userAddress) {
+    @PostMapping(value = "/add")
+    public ResponseEntity<Integer> addUserAddress(@ApiParam(name = "用户地址实体类")UserAddress userAddress) {
         int i = userAddressService.addUserAddress(userAddress);
         return new ResponseEntity<>(i, HttpStatus.CREATED);
     }
@@ -39,7 +39,7 @@ public class UserAddressController {
     }
 
     @ApiOperation("更新用户地址")
-    @PostMapping(value = "/updateUserAddressByAddressId")
+    @PostMapping(value = "/update")
     public ResponseEntity<Boolean> updateUserAddressByAddressId(
             @ApiParam("地址信息") UserAddress userAddress) {
         int i = userAddressService.updateUserAddressByAddressId(userAddress);
@@ -47,7 +47,7 @@ public class UserAddressController {
     }
 
     @ApiOperation("删除用户地址")
-    @GetMapping(value = "/deleteUserAddressByAddressId")
+    @GetMapping(value = "/delete")
     public ResponseEntity<Boolean> deleteUserAddressByAddressId(@ApiParam("地址ID") Integer addressId) {
         int i = userAddressService.deleteUserAddressByAddressId(addressId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

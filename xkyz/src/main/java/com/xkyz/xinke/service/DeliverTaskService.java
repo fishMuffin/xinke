@@ -49,4 +49,6 @@ public class DeliverTaskService {
         return deliverTaskMapper.updateByPrimaryKeySelective(res);//TODO 状态更新不成功
     }
 
+    //TODO 更新重量和价格 + 图片上传
+
 }
