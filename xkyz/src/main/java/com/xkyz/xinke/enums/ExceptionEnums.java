@@ -26,6 +26,8 @@ public enum ExceptionEnums {
 
 
     SIGN_CHECK_FAILURE(500, "签名校验失败"),
+    USER_ORDER_NOT_EXIST(501,"用户订单不存在"),
+    DELIVER_TASK_NOT_EXIST(502,"揽收任务不存在"),
 
 
     USER_DATA_TYPE_ERROR(400, "用户数据类型无效!"),

@@ -29,7 +29,7 @@ jps -m
 ```
 8.查看服务器是否部署成功
 ```shell
-curl localhost:8087/api/test/hello
+curl localhost:80/api/test/hello
 ```
 9.外部访问
 ```shell

@@ -36,11 +36,18 @@ public class UserOrderController {
         return ResponseEntity.ok(userOrder);
     }
 
+    @ApiOperation("根据OpenId获取订单列表")//作用在API方法上，对操作进行说明
+    @PostMapping(value = "/getUserOrderList")
+    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(String openId) {
+        List<UserOrder> list = userOrderService.getUserOrderListByOpenId(openId);
+        return ResponseEntity.ok(list);
+    }
+
     @ApiOperation("更新订单信息")
     @PostMapping(value = "/updateUserOrder")
     public ResponseEntity<Boolean> updateUserOrder(
-            @ApiParam("订单信息") UserOrder userOrder) {
-        int i = userOrderService.updateUserOrder(userOrder);
+            @ApiParam("订单编号") String orderNo, @ApiParam("订单所需变更的状态") Integer status) {
+        int i = userOrderService.updateUserOrder(orderNo, status);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

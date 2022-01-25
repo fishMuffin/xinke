@@ -2,6 +2,7 @@ package com.xkyz.xinke.model;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,6 +10,22 @@ import lombok.Data;
 @Data
 @Builder
 public class UserOrder {
+
+    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, String orderTime, String openId, Double price) {
+        this.orderId = orderId;
+        this.orderNo = orderNo;
+        this.stuffType = stuffType;
+        this.sendAddress = sendAddress;
+        this.receiveAddress = receiveAddress;
+        this.status = status;
+        this.orderTime = orderTime;
+        this.openId = openId;
+        this.price = price;
+    }
+
+    public UserOrder() {
+    }
+
     @ApiModelProperty("订单ID")
     private Integer orderId;
     @ApiModelProperty("订单编号")
@@ -24,7 +41,10 @@ public class UserOrder {
     private Integer status;
     @ApiModelProperty("下单时间")
     private String orderTime;
-
+    @ApiModelProperty("openID")
+    private String openId;
+    @ApiModelProperty("订单金额")
+    private Double price;
 //    create table user_order
 //            (
 //                    order_id        int primary key AUTO_INCREMENT,

@@ -29,10 +29,10 @@ public class UserAddressController {
         return new ResponseEntity<>(i, HttpStatus.CREATED);
     }
 
-    @ApiOperation("根据用户ID查询用户地址列表")
+    @ApiOperation("根据用户OpenId查询用户地址列表")
     @GetMapping(value = "/list")
     //作用在参数上，对参数进行说明
-    public ResponseEntity<List<UserAddress>> getUserAddressListByUserId(
+    public ResponseEntity<List<UserAddress>> getUserAddressListByOpenId(
             @ApiParam(name = "用户ID", required = true) Integer userId) {
         List<UserAddress> list = userAddressService.getUserAddressListByUserId(userId);
         return ResponseEntity.ok(list);

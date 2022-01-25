@@ -9,6 +9,15 @@ import lombok.Data;
 @Data
 @Builder
 public class UserProfile {
+    public UserProfile(Integer id, String username, String password) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+    }
+
+    public UserProfile() {
+    }
+
     @ApiModelProperty("id")
     private Integer id;
     @ApiModelProperty("用户名")

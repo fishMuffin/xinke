@@ -79,6 +79,8 @@ public class UserController {
         if (user == null) {
             User build = User.builder().openId(openid).sessionKey(sessionKey).skey(skey).role(role).build();
             int insert = userService.insert(build);
+        }else{
+            skey=user.getSkey();
         }
 //            user = new User();
 //            user.setOpenId(openid);
