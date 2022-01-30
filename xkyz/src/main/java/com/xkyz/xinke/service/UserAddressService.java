@@ -18,10 +18,10 @@ public class UserAddressService {
         return userAddressMapper.selectByPrimaryKey(addressId);
     }
 
-    public List<UserAddress> getUserAddressListByUserId(int userId) {
+    public List<UserAddress> getUserAddressListByUserId(String token) {
         Example example = new Example(UserAddress.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("userId", userId);
+        criteria.andEqualTo("skey", token);
         return userAddressMapper.selectByExample(example);
     }
 

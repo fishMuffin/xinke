@@ -46,7 +46,10 @@ public class DeliverTaskService {
             throw new EmException(ExceptionEnums.DELIVER_TASK_NOT_EXIST);
         }
         res.setStatus(status);
-        return deliverTaskMapper.updateByPrimaryKeySelective(res);//TODO 状态更新不成功
+        Example example = new Example(DeliverTask.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("taskId", res.getTaskId());
+        return deliverTaskMapper.updateByExampleSelective(res,example);
     }
 
     //TODO 更新重量和价格 + 图片上传

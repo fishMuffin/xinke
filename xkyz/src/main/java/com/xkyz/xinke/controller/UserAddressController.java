@@ -33,8 +33,8 @@ public class UserAddressController {
     @GetMapping(value = "/list")
     //作用在参数上，对参数进行说明
     public ResponseEntity<List<UserAddress>> getUserAddressListByOpenId(
-            @ApiParam(name = "用户ID", required = true) Integer userId) {
-        List<UserAddress> list = userAddressService.getUserAddressListByUserId(userId);
+            @ApiParam(name = "用户token", required = true) String token) {
+        List<UserAddress> list = userAddressService.getUserAddressListByUserId(token);
         return ResponseEntity.ok(list);
     }
 

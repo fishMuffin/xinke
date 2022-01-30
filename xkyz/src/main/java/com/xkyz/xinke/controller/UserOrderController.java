@@ -59,12 +59,12 @@ public class UserOrderController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @ApiOperation("删除订单")
-    @GetMapping(value = "/delete")
-    public ResponseEntity<Boolean> deleteUserOrderByOrderNo(@ApiParam("订单编号") String orderNo) {
-        int i = userOrderService.deleteUserOrderByOrderNo(orderNo);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
+//    @ApiOperation("删除订单")
+//    @GetMapping(value = "/delete")
+//    public ResponseEntity<Boolean> deleteUserOrderByOrderNo(@ApiParam("订单编号") String orderNo) {
+//        int i = userOrderService.deleteUserOrderByOrderNo(orderNo);
+//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+//    }
 
     @PostMapping("/notify")
     @ApiOperation("微信支付通知")

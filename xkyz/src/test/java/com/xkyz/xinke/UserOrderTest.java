@@ -34,17 +34,17 @@
 //        System.out.println(body);
 //
 //    }
-//
-//    @Test
-//    public void testDeleteUserOrderByOrderId() {
-//        ResponseEntity<Boolean> booleanResponseEntity = userOrderController.deleteUserOrderByOrderNo("sdsfd");
-//        Boolean body = booleanResponseEntity.getBody();
-//        System.out.println(body);
-//    }
+////
+////    @Test
+////    public void testDeleteUserOrderByOrderId() {
+////        ResponseEntity<Boolean> booleanResponseEntity = userOrderController.deleteUserOrderByOrderNo("sdsfd");
+////        Boolean body = booleanResponseEntity.getBody();
+////        System.out.println(body);
+////    }
 //
 //    @Test
 //    public void testUpdateUserOrderByOrderId() {
-//        ResponseEntity<Boolean> booleanResponseEntity = userOrderController.updateUserOrder("sdsfd", 2);
+//        ResponseEntity<Boolean> booleanResponseEntity = userOrderController.updateUserOrder("dfgfdg", 2);
 //        Boolean body = booleanResponseEntity.getBody();
 //        System.out.println(body);
 //    }

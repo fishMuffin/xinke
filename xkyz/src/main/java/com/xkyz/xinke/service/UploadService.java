@@ -19,7 +19,8 @@ import java.io.IOException;
 @EnableConfigurationProperties(UploadProperties.class)
 public class UploadService {
 
-    private static final String FILE_DESTINATION = "/root/xinke/static/images";
+//    private static final String FILE_DESTINATION = "/root/xinke/static/images";
+    private static final String FILE_DESTINATION = "/Users/klein/Desktop";
 
     @Autowired
     private UploadProperties properties;
@@ -40,11 +41,6 @@ public class UploadService {
             File dest = new File(FILE_DESTINATION, file.getOriginalFilename());
             //保存文件到本地
             file.transferTo(dest);
-
-            //上传到FastDFS
-
-//            String extension = StringUtils.substringAfterLast(file.getOriginalFilename(), ".");
-//            StorePath storePath = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), extension, null);
 
             //返回路径
             return properties.getBaseUrl() + FILE_DESTINATION;

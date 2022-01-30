@@ -37,8 +37,11 @@ public class UserOrderService {
         if (userOrder == null) {
             throw new EmException(ExceptionEnums.USER_ORDER_NOT_EXIST);
         }
+        Example example = new Example(UserOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("orderNo", userOrder.getOrderNo());
         userOrder.setStatus(status);
-        return userOrderMapper.updateByPrimaryKeySelective(userOrder);//TODO 状态更新不成功
+        return userOrderMapper.updateByExampleSelective(userOrder,example);
     }
 
     public List<UserOrder> getUserOrderListByOpenId(String openId) {
