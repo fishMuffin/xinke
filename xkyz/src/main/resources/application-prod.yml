@@ -5,9 +5,9 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
-    username: root
-    password: ycwycw123
+    url: jdbc:mysql://${MYSQL_HOST}:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
+    username: ${MYSQL_USERNAME}
+    password: ${MYSQL_PASSWORD}
   resources:
     static-locations: classpath:/static/images/,classpath:/resources,
 
@@ -34,7 +34,7 @@ logging:
           mapper: debug
 em:
   upload:
-    baseUrl:  118.31.0.252
+    baseUrl: 118.31.0.252
     allowTYpes:
       - image/jpg
       - image/jpeg

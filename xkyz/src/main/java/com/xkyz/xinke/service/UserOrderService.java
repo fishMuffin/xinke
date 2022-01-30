@@ -5,7 +5,6 @@ import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.UserOrderMapper;
 import com.xkyz.xinke.model.UserOrder;
-import com.xkyz.xinke.util.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -62,10 +61,10 @@ public class UserOrderService {
 //        and order_update_time > '';
         QueryWrapper<UserOrder> queryWrapper = new QueryWrapper<UserOrder>();
         queryWrapper.select("sum(price) as sumAll");
-        queryWrapper.eq("deliver_status",2);
+//        queryWrapper.eq("deliver_status",2);
         queryWrapper.eq("store_token",token);
-        queryWrapper.ge("order_update_time", TimeUtil.getTodayStartTime()/1000);
-        List<UserOrder> userOrders = userOrderMapper.selectList(queryWrapper);
+//        queryWrapper.ge("order_update_time", TimeUtil.getTodayStartTime()/1000);
+        List<UserOrder> list = userOrderMapper.selectList(queryWrapper);
 //        Order ord= orderService.getOne(queryWrapper);
 //        //注意，空指针问题
 //        if (ord== null){

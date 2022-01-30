@@ -1,0 +1,33 @@
+package:
+  stage: package
+  cache:
+    key: m_m2
+    policy: pull-push
+    paths:
+      - .m2/repository/
+  script:
+    - mvn clean install -P skipTests -s settings.xml
+  artifacts:
+    when: on_success
+    paths:
+      - target/xkyz-1.0-SNAPSHOT.jar
+  tags:
+    - SHARE_MAVEN_JDK
+
+deploy:
+  stage: deploy
+  image: ictu/sshpass:latest
+  script:
+    - pwd
+    - ls -l
+    - ls ./target/
+    - sshpass -p ci scp -o StrictHostKeyChecking=no target/xkyz-1.0-SNAPSHOT.jar ci@localhost:/home/ci/appsrc/spring-boot-ci/spring-boot-test-ci.jar
+    - sshpass -p ci scp -o StrictHostKeyChecking=no deploy/Dockerfile ci@localhost:/home/ci/appsrc/spring-boot-ci/Dockerfile
+    - sshpass -p ci scp -o StrictHostKeyChecking=no deploy/docker-compose.yml ci@localhost:/home/ci/appsrc/spring-boot-ci/docker-compose.yml
+    #    - sshpass -p ci ssh -o StrictHostKeyChecking=no ci@localhost 'docker build -f /home/ci/appsrc/spring-boot-ci/Dockerfile -t spring-boot-test-ci:v1 /home/ci/appsrc/spring-boot-ci/'
+    - sshpass -p ci ssh -o StrictHostKeyChecking=no ci@localhost 'docker stop spring-boot-ci'
+    - sshpass -p ci ssh -o StrictHostKeyChecking=no ci@localhost 'docker-compose -f /home/ci/appsrc/spring-boot-ci/docker-compose.yml up -d --build'
+  tags:
+    - SSH_REMOTE_DEPLOY
+#  only:
+#    - master
