@@ -46,8 +46,8 @@ public class UserOrderController {
 
     @ApiOperation("根据OpenId获取订单列表")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/list")
-    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(String openId) {
-        List<UserOrder> list = userOrderService.getUserOrderListByOpenId(openId);
+    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(String token) {
+        List<UserOrder> list = userOrderService.getUserOrderListByOpenId(token);
         return ResponseEntity.ok(list);
     }
 
@@ -59,6 +59,13 @@ public class UserOrderController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @ApiOperation("商家今日收益")
+    @PostMapping(value = "/storeTodayIncome")
+    public ResponseEntity<Double> storeTodayIncome(
+            @ApiParam("商家token") String token) {
+        Double income = userOrderService.getStoreTodayIncome(token);
+        return ResponseEntity.ok(income);
+    }
 //    @ApiOperation("删除订单")
 //    @GetMapping(value = "/delete")
 //    public ResponseEntity<Boolean> deleteUserOrderByOrderNo(@ApiParam("订单编号") String orderNo) {
