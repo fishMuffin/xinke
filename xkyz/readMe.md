@@ -37,4 +37,6 @@ curl 118.31.0.252:80/api/test/hello
 ```
 
 10.reference
-1.CICD:https://blog.csdn.net/little_kelvin/article/details/106301165
+1.CICD:
+https://www.jianshu.com/p/329818c45260
+https://www.cnblogs.com/weschen/p/6867885.html
