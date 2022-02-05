@@ -65,7 +65,53 @@ public class WxService {
         return xmlBack;
     }
 
-    public Map doUnifiedOrder() throws Exception {
+//    public ResultMap unifiedOrder(String orderNo, double amount, String body) {
+//        Map<String, String> returnMap = new HashMap<>();
+//        Map<String, String> responseMap = new HashMap<>();
+//        Map<String, String> requestMap = new HashMap<>();
+//        try {
+//            WXPay wxpay = new WXPay(wxPayAppConfig);
+//            requestMap.put("body", body);                                     // 商品描述
+//            requestMap.put("out_trade_no", orderNo);                          // 商户订单号
+//            requestMap.put("total_fee", String.valueOf((int)(amount*100)));   // 总金额
+//            requestMap.put("spbill_create_ip", HttpContextUtils.getIpAddr()); // 终端IP
+//            requestMap.put("trade_type", "APP");                              // App支付类型
+//            requestMap.put("notify_url", wxPayAppConfig.getPayNotifyUrl());   // 接收微信支付异步通知回调地址
+//            Map<String, String> resultMap = wxpay.unifiedOrder(requestMap);
+//            //获取返回码
+//            String returnCode = resultMap.get("return_code");
+//            String returnMsg = resultMap.get("return_msg");
+//            //若返回码为SUCCESS，则会返回一个result_code,再对该result_code进行判断
+//            if ("SUCCESS".equals(returnCode)) {
+//                String resultCode = resultMap.get("result_code");
+//                String errCodeDes = resultMap.get("err_code_des");
+//                if ("SUCCESS".equals(resultCode)) {
+//                    responseMap = resultMap;
+//                }
+//            }
+//            if (responseMap == null || responseMap.isEmpty()) {
+//                return ResultMap.error("获取预支付交易会话标识失败");
+//            }
+//            // 3、签名生成算法
+//            Long time = System.currentTimeMillis() / 1000;
+//            String timestamp = time.toString();
+//            returnMap.put("appid", wxPayAppConfig.getAppID());
+//            returnMap.put("partnerid", wxPayAppConfig.getMchID());
+//            returnMap.put("prepayid", responseMap.get("prepay_id"));
+//            returnMap.put("noncestr", responseMap.get("nonce_str"));
+//            returnMap.put("timestamp", timestamp);
+//            returnMap.put("package", "Sign=WXPay");
+//            returnMap.put("sign", WXPayUtil.generateSignature(returnMap, wxPayAppConfig.getKey()));//微信支付签名
+//            return ResultMap.ok().put("data", returnMap);
+//        } catch (Exception e) {
+//            logger.error("订单号：{}，错误信息：{}", orderNo, e.getMessage());
+//            return ResultMap.error("微信支付统一下单失败");
+//        }
+//    }
+
+    public Map doUnifiedOrder(String orderNo,Double amount,String body) throws Exception {
+
+
         try {
             WXConfigUtil config = new WXConfigUtil();
             WXPay wxpay = new WXPay(config);
@@ -74,9 +120,9 @@ public class WxService {
             data.put("appid", config.getAppID());
             data.put("mch_id", config.getMchID());
             data.put("nonce_str", WXPayUtil.generateNonceStr());
-            String body = "订单支付";
+//            String body = "订单支付";
             data.put("body", body);
-            data.put("out_trade_no", "订单号");
+            data.put("out_trade_no", orderNo);
             data.put("total_fee", "1");
             //自己的服务器IP地址
             data.put("spbill_create_ip", SPBILL_CREATE_IP);

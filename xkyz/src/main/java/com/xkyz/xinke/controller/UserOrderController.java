@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "订单API")
 @RestController()
@@ -44,10 +45,10 @@ public class UserOrderController {
         return ResponseEntity.ok(userOrder);
     }
 
-    @ApiOperation("根据OpenId获取订单列表")//作用在API方法上，对操作进行说明
+    @ApiOperation("根据token获取订单列表")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/list")
-    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(String token) {
-        List<UserOrder> list = userOrderService.getUserOrderListByOpenId(token);
+    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(@ApiParam("token")String token,@ApiParam("订单状态")Integer status) {
+        List<UserOrder> list = userOrderService.getUserOrderListByOpenId(token,status);
         return ResponseEntity.ok(list);
     }
 
@@ -104,6 +105,14 @@ public class UserOrderController {
             String result = "<xml>" + "<return_code><![CDATA[FAIL]]></return_code>" + "<return_msg><![CDATA[报文为空]]></return_msg>" + "</xml> ";
             return result;
         }
+    }
+
+    @PostMapping("/preparePay")
+    @ApiOperation("微信支付预备")
+    public String wxPayPrepare() throws Exception {
+//        Map map = wxService.doUnifiedOrder();
+        //TODO
+        return null;
     }
 
 }

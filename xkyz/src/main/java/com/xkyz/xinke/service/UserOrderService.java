@@ -46,10 +46,11 @@ public class UserOrderService {
         return userOrderMapper.updateByExampleSelective(userOrder,example);
     }
 
-    public List<UserOrder> getUserOrderListByOpenId(String token) {
+    public List<UserOrder> getUserOrderListByOpenId(String token,Integer status) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("userToken", token);
+        criteria.andEqualTo("status", status);
         return userOrderMapper.selectByExample(example);
     }
 

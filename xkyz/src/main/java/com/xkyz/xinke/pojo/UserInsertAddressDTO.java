@@ -1,23 +1,23 @@
-package com.xkyz.xinke.model;
+package com.xkyz.xinke.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.Builder;
 import lombok.Data;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@ApiModel("地址实体类")
+@ApiModel("地址创建参数类")
 @Data
 @Builder
 @Table(name = "user_address")
-public class UserAddress {
-    public UserAddress() {
+public class UserInsertAddressDTO {
+    public UserInsertAddressDTO() {
     }
 
-    public UserAddress(Integer addressId, String province, String userName, String phoneNumber, String city, String district, String addressDetail, String skey) {
-        this.addressId = addressId;
+    public UserInsertAddressDTO(String province, String userName, String phoneNumber, String city, String district, String addressDetail, String skey) {
         this.province = province;
         this.userName = userName;
         this.phoneNumber = phoneNumber;
@@ -27,9 +27,6 @@ public class UserAddress {
         this.skey = skey;
     }
 
-    @ApiModelProperty("地址id")
-    @Id
-    private Integer addressId;
     @ApiModelProperty("省")
     public String province;
     @ApiModelProperty("用户姓名")

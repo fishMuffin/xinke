@@ -6,6 +6,7 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://localhost:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
+#    url: jdbc:mysql://118.31.0.252:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
     username: root
     password: ycwycw123
   resources:
@@ -25,6 +26,7 @@ mybatis-plus:
   #配置sql打印日志
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    logging.level.com.lawt.repository.mapper: debug
 
 logging:
   level:
@@ -40,3 +42,4 @@ em:
       - image/jpeg
       - image/png
       - image/bmp
+
