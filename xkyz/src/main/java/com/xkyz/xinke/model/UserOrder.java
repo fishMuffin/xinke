@@ -10,7 +10,7 @@ import lombok.Data;
 @Builder
 public class UserOrder {
 
-    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, String storeToken, Double price) {
+    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.stuffType = stuffType;
@@ -22,8 +22,10 @@ public class UserOrder {
         this.orderUpdateTime = orderUpdateTime;
         this.userToken = userToken;
         this.deliverToken = deliverToken;
-        this.storeToken = storeToken;
+        this.pointsId = pointsId;
         this.price = price;
+        this.estimatedWeight = estimatedWeight;
+        this.expressCompanyId = expressCompanyId;
     }
 
     public UserOrder() {
@@ -33,16 +35,16 @@ public class UserOrder {
     private Integer orderId;
     @ApiModelProperty("订单编号")
     private String orderNo;
-    @ApiModelProperty("物品类型")
+    @ApiModelProperty("物品类型:1-日用品，2-食品，3-文件，4-衣物，5-数码产品，6-其他")
     private String stuffType;
     @ApiModelProperty("寄件地址")
     private Integer sendAddress;
     @ApiModelProperty("收件地址")
     private Integer receiveAddress;
-    @ApiModelProperty("订单状态：1未付款，2已付款，3已提现")
+    @ApiModelProperty("订单状态：1未结算，2已取消，3已发货")
 //    情况，一般分为四种：新订单、教材配送中、已完成、已取消。 新订单：订单成功提交但未付款的订单状态； 教材配送中：用户已付款，等待收货的订单状态 ； 已完成：交易成功的订单状态； 已取消：订单成功提交但7天内未付款的订单状态。
     private Integer status;
-    @ApiModelProperty("订单状态：1.新任务，2未揽收，3已揽收")
+    @ApiModelProperty("揽收状态：1.新任务，2未揽收，3已揽收")
     private Integer deliverStatus;
     @ApiModelProperty("下单时间")
     private Long orderTime;
@@ -52,8 +54,14 @@ public class UserOrder {
     private String userToken;
     @ApiModelProperty("揽收员token")
     private String deliverToken;
-    @ApiModelProperty("商家token")
-    private String storeToken;
+    @ApiModelProperty("网点id")
+    private Integer pointsId;
     @ApiModelProperty("订单金额")
     private Double price;
+    @ApiModelProperty("预估重量,单位kg")
+    private Double estimatedWeight;
+    @ApiModelProperty("选择的快递公司id")
+    private Integer expressCompanyId;
 }
+//`estimated_weight`   decimal(10, 2) DEFAULT NULL comment '预估重量',
+//        `express_company_id` int            DEFAULT NULL comment '选择的快递公司',

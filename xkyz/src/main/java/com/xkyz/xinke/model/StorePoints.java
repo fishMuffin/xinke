@@ -16,7 +16,7 @@ public class StorePoints {
     public StorePoints() {
     }
 
-    public StorePoints(Integer id, String pointName, Integer pointType, String pointPhone, String city, String district, String addressDetail, Double latitude, Double longitude) {
+    public StorePoints(Integer id, String pointName, Integer pointType, String pointPhone, String city, String district, String addressDetail, Double latitude, Double longitude, Double distanceFromHere) {
         this.id = id;
         this.pointName = pointName;
         this.pointType = pointType;
@@ -26,6 +26,7 @@ public class StorePoints {
         this.addressDetail = addressDetail;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.distanceFromHere = distanceFromHere;
     }
 
     @ApiModelProperty("id")
@@ -47,6 +48,8 @@ public class StorePoints {
     public Double latitude;
     @ApiModelProperty("经度")
     public Double longitude;
+    @ApiModelProperty("距离")
+    public Double distanceFromHere;
 }
 //    CREATE TABLE `store_network`
 //        (

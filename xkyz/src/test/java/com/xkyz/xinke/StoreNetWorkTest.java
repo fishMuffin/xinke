@@ -10,6 +10,7 @@
 //import org.springframework.boot.test.context.SpringBootTest;
 //
 //import java.util.List;
+//import java.util.Map;
 //
 //@SpringBootTest
 //public class StoreNetWorkTest {
@@ -21,5 +22,8 @@
 //        PointEntity pointA = new PointEntity(32.876791, 115.790469);
 //        List<StorePoints> body = storePointsController.getPointsByXAndY(pointA).getBody();
 //        body.stream().forEach(System.out::println);
+////        for (Map.Entry<Double, StorePoints> entry : body.entrySet()) {
+////            System.out.println(entry.getKey() + "---" + entry.getValue());
+////        }
 //    }
 //}

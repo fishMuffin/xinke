@@ -47,7 +47,7 @@ public class UserOrderController {
 
     @ApiOperation("根据token获取订单列表")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/list")
-    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(@ApiParam("token")String token,@ApiParam("订单状态")Integer status) {
+    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(@ApiParam("token")String token,@ApiParam("订单状态：1未结算，2已取消，3已发货")Integer status) {
         List<UserOrder> list = userOrderService.getUserOrderListByOpenId(token,status);
         return ResponseEntity.ok(list);
     }
@@ -55,7 +55,7 @@ public class UserOrderController {
     @ApiOperation("更新订单信息")
     @PostMapping(value = "/update")
     public ResponseEntity<Boolean> updateUserOrder(
-            @ApiParam("订单编号") String orderNo, @ApiParam("订单所需变更的状态") Integer status) {
+            @ApiParam("订单编号") String orderNo, @ApiParam("订单所需变更的状态:1未结算，2已取消，3已发货") Integer status) {
         int i = userOrderService.updateUserOrder(orderNo, status);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

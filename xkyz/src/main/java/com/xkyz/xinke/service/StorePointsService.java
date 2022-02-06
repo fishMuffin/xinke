@@ -22,37 +22,43 @@ public class StorePointsService {
     @Autowired
     private StorePointsMapper storePointsMapper;
 
-    private static final Integer RANGE = 3; //返回条数
+    private static final Integer RANGE = 3; //返回条数 TODO 后期改成20
 
 
     public List<StorePoints> getPointsByXAndY(PointEntity pointEntity) {
 
         //1.获取所有网点数据
         List<StorePoints> storePoints = storePointsMapper.selectAll();
+        Map<Double, StorePoints> map = new TreeMap<>();
+        for (StorePoints s :
+                storePoints) {
+            PointEntity pointA = PointEntity.builder().x(s.getLongitude()).y(s.getLatitude()).build();
+            double distance = CoordinateUtil.distanceToPoint(pointA, pointEntity);//TODO 和网上工具算的结果不太一样
+            s.setDistanceFromHere(distance);
+            map.put(distance, s);
+        }
         //2.如果小于20条都返回
         if (storePoints.size() <= RANGE) {
-            return storePoints;
+            return extracted(map);
         } else {
             //3.如果多于20条则将距离最近的20条数据返回
-            Map<Double, StorePoints> map = new TreeMap<>();
-            for (StorePoints s :
-                    storePoints) {
-                PointEntity pointA = PointEntity.builder().x(s.getLongitude()).y(s.getLatitude()).build();
-                double distance = CoordinateUtil.distanceToPoint(pointA, pointEntity);
-                map.put(distance, s);
-            }
+
             Map<Double, StorePoints> resMap = new TreeMap<>();
             for (Map.Entry<Double, StorePoints> entry : map.entrySet()) {
                 resMap.put(entry.getKey(), entry.getValue());
                 //只存20条
                 if (resMap.size() >= RANGE) break;
             }
-            //map转换为list
-            List<StorePoints> storePointsList = resMap.values().stream()
-                    .collect(Collectors.toList());
-            return storePointsList;
+            return extracted(resMap);
         }
 
+
+    }
+
+    private List<StorePoints> extracted(Map<Double, StorePoints> resMap) {
+        List<StorePoints> storePointsList = resMap.values().stream()
+                .collect(Collectors.toList());
+        return storePointsList;
     }
 
 
