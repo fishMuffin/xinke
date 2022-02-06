@@ -1,6 +1,8 @@
 package com.xkyz.xinke.controller;
 
 import com.xkyz.xinke.model.UserOrder;
+import com.xkyz.xinke.pojo.ReturnMSG;
+import com.xkyz.xinke.pojo.UserOrderView;
 import com.xkyz.xinke.service.UserOrderService;
 import com.xkyz.xinke.service.WxService;
 import io.swagger.annotations.Api;
@@ -33,9 +35,9 @@ public class UserOrderController {
 
     @ApiOperation("创建订单")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/create")
-    public ResponseEntity<Integer> addUserOrder(UserOrder userOrder) {
+    public ResponseEntity<ReturnMSG> addUserOrder(UserOrder userOrder) {
         int i = userOrderService.addUserOrder(userOrder);
-        return new ResponseEntity<>(i, HttpStatus.CREATED);
+        return ResponseEntity.ok().body(new ReturnMSG("ok"));
     }
 
     @ApiOperation("获取订单信息")//作用在API方法上，对操作进行说明
@@ -45,19 +47,20 @@ public class UserOrderController {
         return ResponseEntity.ok(userOrder);
     }
 
-    @ApiOperation("根据token获取订单列表")//作用在API方法上，对操作进行说明
+    @ApiOperation("根据token和状态获取订单列表")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/list")
-    public ResponseEntity<List<UserOrder>> getUserOrderListByOpenId(@ApiParam("token")String token,@ApiParam("订单状态：1未结算，2已取消，3已发货")Integer status) {
-        List<UserOrder> list = userOrderService.getUserOrderListByOpenId(token,status);
+    public ResponseEntity<List<UserOrderView>> getUserOrderListByOpenId(@ApiParam("token")String token, @ApiParam("订单状态：1未结算，2已取消，3已发货")Integer status) {
+        List<UserOrderView> list = userOrderService.getUserOrderListByOpenId(token, status);
         return ResponseEntity.ok(list);
     }
 
     @ApiOperation("更新订单信息")
     @PostMapping(value = "/update")
-    public ResponseEntity<Boolean> updateUserOrder(
+    public ResponseEntity<ReturnMSG> updateUserOrder(
             @ApiParam("订单编号") String orderNo, @ApiParam("订单所需变更的状态:1未结算，2已取消，3已发货") Integer status) {
         int i = userOrderService.updateUserOrder(orderNo, status);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return ResponseEntity.ok().body(new ReturnMSG("ok"));
+
     }
 
     @ApiOperation("商家今日收益")

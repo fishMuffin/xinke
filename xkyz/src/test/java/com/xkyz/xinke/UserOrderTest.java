@@ -2,6 +2,7 @@
 //
 //import com.xkyz.xinke.controller.UserOrderController;
 //import com.xkyz.xinke.model.UserOrder;
+//import com.xkyz.xinke.pojo.UserOrderView;
 //import org.junit.jupiter.api.Test;
 //import org.springframework.beans.factory.annotation.Autowired;
 //import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +24,7 @@
 //
 //    @Test
 //    public void testGetUserOrderListByOpenId() {
-//        ResponseEntity<List<UserOrder>> list = userOrderController.getUserOrderListByOpenId("eee",1);
+//        ResponseEntity<List<UserOrderView>> list = userOrderController.getUserOrderListByOpenId("824da98e-f39d-4932-b508-495e6c3b64ff",1);
 //        list.getBody().stream().forEach(s -> System.out.println(s));
 //    }
 ////

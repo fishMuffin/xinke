@@ -42,10 +42,36 @@ https://blog.csdn.net/baidu_37895884/article/details/78184466?locationNum=7&fps=
  GRANT ALL PRIVILEGES ON *.* TO 'root'@'112.32.24.164' IDENTIFIED BY 'ycwycw123' WITH GRANT OPTION;
  GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'ycwycw123' WITH GRANT OPTION;
 ```
-
+```sql
+-- 查看现有用户,密码及允许连接的主机
+SELECT User,Host FROM user;
+```
 11.server pwd
 ```shell
 789123XKYz
+```
+12.命令行连接远程mysql数据库
+```shell
+#mysql -u 用户名 -p密码 -h 服务器IP地址 -P 服务器端MySQL端口号 -D 数据库名
+mysql -u root -p ycwycw123 -h 118.31.0.252 -P 3306 -D xinke;
+```
+
+13.使用SSH密钥对登录Ubuntu服务器:https://www.jianshu.com/p/38347bb6733d
+```shell
+chmod 600 /Users/klein/Desktop/id_rsa.pem
+```
+```shell
+ssh -i /Users/klein/Desktop/id_rsa.pem root@118.31.0.252
+```
+```shell
+scp -i /Users/klein/Desktop/id_rsa.pem ./xkyz-1.0-SNAPSHOT.jar root@118.31.0.252:/root/xinke/Jars
+```
+
+14.ubuntu重启mysql
+```shell
+sudo /etc/init.d/mysql start
+sudo /etc/init.d/mysql stop
+sudo /etc/init.d/mysql restart
 ```
 
 二.jekins配置:
