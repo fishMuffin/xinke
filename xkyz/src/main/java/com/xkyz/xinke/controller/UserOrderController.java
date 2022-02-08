@@ -1,8 +1,10 @@
 package com.xkyz.xinke.controller;
 
 import com.xkyz.xinke.model.UserOrder;
+import com.xkyz.xinke.pojo.IncomeView;
 import com.xkyz.xinke.pojo.ReturnMSG;
 import com.xkyz.xinke.pojo.UserOrderView;
+import com.xkyz.xinke.pojo.UserOrderWithCompanyView;
 import com.xkyz.xinke.service.UserOrderService;
 import com.xkyz.xinke.service.WxService;
 import io.swagger.annotations.Api;
@@ -24,7 +26,7 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "订单API")
+@Api(tags = "用户订单API")
 @RestController()
 @RequestMapping("/sys/order")
 public class UserOrderController {
@@ -41,21 +43,34 @@ public class UserOrderController {
     }
 
     @ApiOperation("获取订单信息")//作用在API方法上，对操作进行说明
-    @PostMapping(value = "/get")
-    public ResponseEntity<UserOrder> getUserOrderByOrderNo(String orderNo) {
-        UserOrder userOrder = userOrderService.getUserOrderByOrderNo(orderNo);
-        return ResponseEntity.ok(userOrder);
+    @GetMapping(value = "/get")
+    public ResponseEntity<UserOrderView> getUserOrderByOrderNo(String orderNo) {
+        UserOrderView userOrderView = userOrderService.getUserOrderByOrderNo(orderNo);
+        return ResponseEntity.ok(userOrderView);
     }
 
-    @ApiOperation("根据token和状态获取订单列表")//作用在API方法上，对操作进行说明
+    @ApiOperation("根据userToken和状态获取订单列表")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/list")
     public ResponseEntity<List<UserOrderView>> getUserOrderListByOpenId(@ApiParam("token")String token, @ApiParam("订单状态：1未结算，2已取消，3已发货")Integer status) {
         List<UserOrderView> list = userOrderService.getUserOrderListByOpenId(token, status);
         return ResponseEntity.ok(list);
     }
 
+    @ApiOperation("根据deliverToken和揽收状态获取订单列表")
+    @PostMapping(value = "/deliverOrderList")
+    public ResponseEntity<List<UserOrderWithCompanyView>> getUserOrderListByDeliverToken(@ApiParam("deliverToken")String deliverToken, @ApiParam("揽收状态：1.新任务，2未揽收，3已揽收")Integer deliverStatus) {
+        List<UserOrderWithCompanyView> list=userOrderService.getUserOrderListByDeliverToken(deliverToken,deliverStatus);
+        return ResponseEntity.ok(list);
+    }
+    @ApiOperation("根据网点id获取订单列表")
+    @PostMapping(value = "/getListByPointsId")
+    public ResponseEntity<List<UserOrderWithCompanyView>> getListByPointsId(@ApiParam("pointsId")Integer pointsId) {
+        List<UserOrderWithCompanyView> list=userOrderService.getListByPointsId(pointsId);
+        return ResponseEntity.ok(list);
+    }
+
     @ApiOperation("更新订单信息")
-    @PostMapping(value = "/update")
+    @GetMapping(value = "/update")
     public ResponseEntity<ReturnMSG> updateUserOrder(
             @ApiParam("订单编号") String orderNo, @ApiParam("订单所需变更的状态:1未结算，2已取消，3已发货") Integer status) {
         int i = userOrderService.updateUserOrder(orderNo, status);
@@ -65,17 +80,11 @@ public class UserOrderController {
 
     @ApiOperation("商家今日收益")
     @PostMapping(value = "/storeTodayIncome")
-    public ResponseEntity<Double> storeTodayIncome(
-            @ApiParam("商家token") String token) {
-        Double income = userOrderService.getStoreTodayIncome(token);
-        return ResponseEntity.ok(income);
+    public ResponseEntity<IncomeView> storeTodayIncome(
+            @ApiParam("网点ID") Integer pointsId) {
+        IncomeView incomeAndCount = userOrderService.getIncomeAndCount(pointsId);
+        return ResponseEntity.ok(incomeAndCount);
     }
-//    @ApiOperation("删除订单")
-//    @GetMapping(value = "/delete")
-//    public ResponseEntity<Boolean> deleteUserOrderByOrderNo(@ApiParam("订单编号") String orderNo) {
-//        int i = userOrderService.deleteUserOrderByOrderNo(orderNo);
-//        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//    }
 
     @PostMapping("/notify")
     @ApiOperation("微信支付通知")

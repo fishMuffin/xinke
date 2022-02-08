@@ -39,6 +39,7 @@ public class ExpressCompany {
     public Double first_price;
     @ApiModelProperty("续重价格")
     public Double additional_price;
+
 }
 //    CREATE TABLE `express_company`
 //        (

@@ -2,6 +2,7 @@ package com.xkyz.xinke.controller;
 
 import com.xkyz.xinke.model.DeliverTask;
 import com.xkyz.xinke.model.UserOrder;
+import com.xkyz.xinke.pojo.DeliverTaskView;
 import com.xkyz.xinke.service.DeliverTaskService;
 import com.xkyz.xinke.service.UserOrderService;
 import io.swagger.annotations.Api;
@@ -25,12 +26,6 @@ public class DeliverTaskController {
     @Autowired
     private DeliverTaskService deliverTaskService;
 
-    //    @ApiOperation("创建任务")
-//    @PostMapping(value = "/add")
-//    public ResponseEntity<Integer> addDeliverTask(@ApiParam("揽收员实体类") DeliverTask deliverTask) {
-//        int i = deliverTaskService.addDeliverTask(deliverTask);
-//        return new ResponseEntity<>(i, HttpStatus.CREATED);
-//    }
     @ApiOperation("获取揽收员任务详情")
     @PostMapping(value = "/get")
     public ResponseEntity<DeliverTask> getDeliverTask(@ApiParam("揽收员任务ID") Integer taskId) {
@@ -39,10 +34,10 @@ public class DeliverTaskController {
 
     }
 
-    @ApiOperation("根据状态获取揽收员任务列表")
+    @ApiOperation("根据揽收员token获取揽收员新任务列表")
     @PostMapping(value = "/list")
-    public ResponseEntity<List<DeliverTask>> getDeliverTaskList(@ApiParam("揽收员任务状态") Integer status) {
-        List<DeliverTask> list = deliverTaskService.getDeliverTaskList(status);
+    public ResponseEntity<List<DeliverTaskView>> getDeliverTaskList(@ApiParam("揽收员") String deliverToken) {
+        List<DeliverTaskView> list = deliverTaskService.getDeliverTaskList(deliverToken);
         return ResponseEntity.ok(list);
     }
 

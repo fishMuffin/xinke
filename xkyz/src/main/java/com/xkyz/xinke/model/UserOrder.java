@@ -62,6 +62,7 @@ public class UserOrder {
     private Double estimatedWeight;
     @ApiModelProperty("选择的快递公司id")
     private Integer expressCompanyId;
+    //TODO 添加快递单号
 }
 //`estimated_weight`   decimal(10, 2) DEFAULT NULL comment '预估重量',
 //        `express_company_id` int            DEFAULT NULL comment '选择的快递公司',

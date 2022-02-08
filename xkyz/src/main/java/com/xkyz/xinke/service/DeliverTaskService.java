@@ -3,13 +3,17 @@ package com.xkyz.xinke.service;
 import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.DeliverTaskMapper;
+import com.xkyz.xinke.mapper.StorePointsMapper;
 import com.xkyz.xinke.mapper.UserOrderMapper;
 import com.xkyz.xinke.model.DeliverTask;
+import com.xkyz.xinke.model.StorePoints;
 import com.xkyz.xinke.model.UserOrder;
+import com.xkyz.xinke.pojo.DeliverTaskView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,12 +21,22 @@ public class DeliverTaskService {
 
     @Autowired
     DeliverTaskMapper deliverTaskMapper;
+    @Autowired
+    StorePointsMapper storePointsMapper;
 
-    public List<DeliverTask> getDeliverTaskList(Integer status) {
+    public List<DeliverTaskView> getDeliverTaskList(String token) {
         Example example = new Example(DeliverTask.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("status", status);
-        return deliverTaskMapper.selectByExample(example);
+        criteria.andEqualTo("deliverToken", token);
+        criteria.andEqualTo("status", 1);
+        List<DeliverTask> deliverTasks = deliverTaskMapper.selectByExample(example);
+        //TODO 快递数量对不上 已揽收出现在新任务中
+        List<DeliverTaskView> resList = new ArrayList<>();
+        deliverTasks.stream().forEach(s -> {
+            StorePoints storePoints = storePointsMapper.selectByPrimaryKey(s.getPointsId());
+            resList.add(DeliverTaskView.builder().deliverToken(s.getDeliverToken()).ownerToken(s.getOwnerToken()).taskId(s.getTaskId()).storePoints(storePoints).expressAmount(s.getExpressAmount()).status(s.getStatus()).build());
+        });
+        return resList;
     }
 
 
@@ -49,7 +63,7 @@ public class DeliverTaskService {
         Example example = new Example(DeliverTask.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("taskId", res.getTaskId());
-        return deliverTaskMapper.updateByExampleSelective(res,example);
+        return deliverTaskMapper.updateByExampleSelective(res, example);
     }
 
     //TODO 更新重量和价格 + 图片上传

@@ -19,11 +19,13 @@ mvc:
 
 mybatis:
   type-aliases-package: com.xkyz.xinke.model
+  mapper-locations: classpath:/mapper/*.xml
 #  mapper-locations: classpath:com/xkyz/xinke/mapper/**/*.xml
 
 mybatis-plus:
-  mapper-locations: classpath*:/mapper/*.xml
+  mapper-locations: classpath:/mapper/*.xml
   #配置sql打印日志
+  typeAliasesPackage: com.xkyz.xinke.model
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     logging.level.com.lawt.repository.mapper: debug
