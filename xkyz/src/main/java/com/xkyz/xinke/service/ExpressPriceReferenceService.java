@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -23,20 +24,31 @@ public class ExpressPriceReferenceService {
     @Autowired
     ExpressPriceReferenceMapper expressPriceReferenceMapper;
 
-    public ExpressPriceReference getPrice(String destination, Integer expressCompanyId) {
+    public List<ExpressPriceReference> getPrice(String destination) {
         //获取list
-        Example example = new Example(ExpressPriceReference.class);
-        Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("expressCompanyId", expressCompanyId);
-        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectByExample(example);
+//        Example example = new Example(ExpressPriceReference.class);
+//        Example.Criteria criteria = example.createCriteria();
+//        criteria.andEqualTo("expressCompanyId", expressCompanyId);
+        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectAll();
+//        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectByExample(example);
         ExpressPriceReference res = ExpressPriceReference.builder().build();
+        String desTmp = dataConvert(destination);
+        List<ExpressPriceReference> resList=new ArrayList<>();
         for (ExpressPriceReference reference : list) {
-            if (reference.getDestinationProvince().contains(dataConvert(destination))) {
-                res = reference;
+            if (reference.getDestinationProvince().contains(desTmp)) {
+                reference.setDestinationProvince(destination);
+                resList.add(reference);
             }
         }
-        return res;
+        return resList;
     }
+
+
+    public int addList(List<ExpressPriceReference> list){
+        int i = expressPriceReferenceMapper.insertList(list);
+        return i;
+    }
+
 
     private String dataConvert(String destination) {
         if (destination.contains("市")) {

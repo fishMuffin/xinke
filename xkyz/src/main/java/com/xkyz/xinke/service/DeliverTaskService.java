@@ -23,6 +23,8 @@ public class DeliverTaskService {
     DeliverTaskMapper deliverTaskMapper;
     @Autowired
     StorePointsMapper storePointsMapper;
+    @Autowired
+    UserOrderMapper userOrderMapper;
 
     public List<DeliverTaskView> getDeliverTaskList(String token) {
         Example example = new Example(DeliverTask.class);
@@ -34,7 +36,9 @@ public class DeliverTaskService {
         List<DeliverTaskView> resList = new ArrayList<>();
         deliverTasks.stream().forEach(s -> {
             StorePoints storePoints = storePointsMapper.selectByPrimaryKey(s.getPointsId());
-            resList.add(DeliverTaskView.builder().deliverToken(s.getDeliverToken()).ownerToken(s.getOwnerToken()).taskId(s.getTaskId()).storePoints(storePoints).expressAmount(s.getExpressAmount()).status(s.getStatus()).build());
+            //这里从数据里重新查询，不使用DeliverTask表中的数据，不准确
+            Double expressAmount =  userOrderMapper.getCountByStatus(1);
+            resList.add(DeliverTaskView.builder().deliverToken(s.getDeliverToken()).ownerToken(s.getOwnerToken()).taskId(s.getTaskId()).storePoints(storePoints).expressAmount(expressAmount).status(s.getStatus()).build());
         });
         return resList;
     }

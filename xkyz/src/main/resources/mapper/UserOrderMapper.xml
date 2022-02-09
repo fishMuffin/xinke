@@ -5,7 +5,7 @@
 
     <select id="getStoreTodayIncome" resultType="double">
         select sum(price) FROM user_order
-        <where> 1=1
+        <where>1=1
             <if test="pointsId!=null and pointsId!=''">
                 and points_id = #{pointsId}
             </if>
@@ -16,7 +16,7 @@
     </select>
     <select id="getStoreAllIncome" resultType="double">
         select sum(price) FROM user_order
-        <where> 1=1
+        <where>1=1
             <if test="pointsId!=null and pointsId!=''">
                 and points_id = #{pointsId}
             </if>
@@ -24,12 +24,20 @@
     </select>
     <select id="getStoreTodayCount" resultType="double">
         select count(points_id) FROM user_order
-        <where> 1=1
+        <where>1=1
             <if test="pointsId!=null and pointsId!=''">
                 and points_id = #{pointsId}
             </if>
             <if test="orderUpdateTime!=null and orderUpdateTime!=''">
                 and order_update_time > #{orderUpdateTime}
+            </if>
+        </where>
+    </select>
+    <select id="getCountByStatus" resultType="double">
+        select count(points_id) FROM user_order
+        <where>1=1
+            <if test="status!=null and status!=''">
+                and status = #{status}
             </if>
         </where>
     </select>

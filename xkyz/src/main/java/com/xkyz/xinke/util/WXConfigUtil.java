@@ -14,6 +14,7 @@ public class WXConfigUtil implements WXPayConfig {
 //    public static final String KEY = "你的api key不是appSecret";
     public static final String KEY = "https://api.weixin.qq.com/sns/jscode2session";
     public static final String MCH_ID = "你的商户id";
+//    1620177995
 
     public WXConfigUtil() throws Exception {
         String certPath = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"/weixin/apiclient_cert.p12";//从微信商户平台下载的安全证书存放的路径

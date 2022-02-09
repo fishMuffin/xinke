@@ -57,12 +57,29 @@ public class UserOrderService {
         return userOrderMapper.delete(userOrder);
     }
 
-    public int updateUserOrder(String orderNo, Integer status) {
+
+    public int cancelUserOrder(String orderNo) {
+        UserOrder userOrder = getUserOrder(orderNo);
+        Example example = new Example(UserOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("orderNo", userOrder.getOrderNo());
+        userOrder.setStatus(2);
+        userOrder.setDeliverStatus(2);
+        userOrder.setOrderUpdateTime(System.currentTimeMillis()/1000);
+        return userOrderMapper.updateByExampleSelective(userOrder,example);
+    }
+
+    private UserOrder getUserOrder(String orderNo) {
         UserOrderView userOrderView = getUserOrderByOrderNo(orderNo);
         UserOrder userOrder = userOrderView.getUserOrder();
         if (userOrder == null) {
             throw new EmException(ExceptionEnums.USER_ORDER_NOT_EXIST);
         }
+        return userOrder;
+    }
+
+    public int updateUserOrder(String orderNo, Integer status) {
+        UserOrder userOrder = getUserOrder(orderNo);
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("orderNo", userOrder.getOrderNo());
@@ -124,7 +141,6 @@ public class UserOrderService {
         IncomeView incomeView = IncomeView.builder().incomeOfAll(storeAllIncome).incomeOfToday(storeTodayIncome).count(count).build();
         return incomeView;
     }
-
 
 
 }

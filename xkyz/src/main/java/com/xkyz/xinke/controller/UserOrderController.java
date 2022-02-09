@@ -42,6 +42,13 @@ public class UserOrderController {
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
     }
 
+    @ApiOperation("取消订单")
+    @PostMapping(value = "/cancel")
+    public ResponseEntity<ReturnMSG> cancelUserOrder(@ApiParam("orderNo")String orderNo) {
+        int i=userOrderService.cancelUserOrder(orderNo);
+        return ResponseEntity.ok().body(new ReturnMSG("ok"));
+    }
+
     @ApiOperation("获取订单信息")//作用在API方法上，对操作进行说明
     @GetMapping(value = "/get")
     public ResponseEntity<UserOrderView> getUserOrderByOrderNo(String orderNo) {

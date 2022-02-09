@@ -13,7 +13,7 @@ public class DeliverTaskView {
     public DeliverTaskView() {
     }
 
-    public DeliverTaskView(Integer taskId, String deliverToken, Integer expressAmount, Integer status, String ownerToken, StorePoints storePoints) {
+    public DeliverTaskView(Integer taskId, String deliverToken, Double expressAmount, Integer status, String ownerToken, StorePoints storePoints) {
         this.taskId = taskId;
         this.deliverToken = deliverToken;
         this.expressAmount = expressAmount;
@@ -24,7 +24,7 @@ public class DeliverTaskView {
 
     private Integer taskId;
     private String deliverToken;
-    private Integer expressAmount;
+    private Double expressAmount;
     private Integer status;
     private String ownerToken;
     private StorePoints storePoints;

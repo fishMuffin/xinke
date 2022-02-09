@@ -74,6 +74,15 @@ sudo /etc/init.d/mysql stop
 sudo /etc/init.d/mysql restart
 ```
 
+15.ubuntu terminal 下插入汉字乱码问题解决
+
+```sql
+-- #查看字符集
+show variables like 'character%';
+-- #设置客户端字符集为utf8
+set character_set_client=utf8;
+```
+
 二.jekins配置:
 1.以root用户启动以防权限不足 修改配置文件
 ```shell

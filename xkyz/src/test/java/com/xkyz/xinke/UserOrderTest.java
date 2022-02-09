@@ -3,6 +3,7 @@
 //import com.xkyz.xinke.controller.UserOrderController;
 //import com.xkyz.xinke.model.UserOrder;
 //import com.xkyz.xinke.pojo.IncomeView;
+//import com.xkyz.xinke.pojo.ReturnMSG;
 //import com.xkyz.xinke.pojo.UserOrderView;
 //import com.xkyz.xinke.pojo.UserOrderWithCompanyView;
 //import org.junit.jupiter.api.Test;
@@ -17,10 +18,16 @@
 //    @Autowired
 //    private UserOrderController userOrderController;
 //
+//    //    @Test
+////    public void testGetStoreTodayIncome() {
+////        ResponseEntity<IncomeView> incomeViewResponseEntity = userOrderController.storeTodayIncome(1);
+////        IncomeView body = incomeViewResponseEntity.getBody();
+////        System.out.println(body);
+////    }
 //    @Test
-//    public void testGetStoreTodayIncome() {
-//        ResponseEntity<IncomeView> incomeViewResponseEntity = userOrderController.storeTodayIncome(1);
-//        IncomeView body = incomeViewResponseEntity.getBody();
+//    public void testCancelOrder() {
+//        ResponseEntity<ReturnMSG> returnMSGResponseEntity = userOrderController.cancelUserOrder("dsfdsfgdsgfdgfd");
+//        ReturnMSG body = returnMSGResponseEntity.getBody();
 //        System.out.println(body);
 //    }
 //

@@ -11,8 +11,9 @@ import javax.persistence.Table;
 @ApiModel("快递公司价格参照表")
 @Data
 @Builder
-@Table(name = "express_company")
+@Table(name = "express_price_reference")
 public class ExpressPriceReference {
+
     public ExpressPriceReference() {
     }
 
@@ -30,6 +31,7 @@ public class ExpressPriceReference {
     @Id
     private Integer id;
     @ApiModelProperty("目标省份")
+
     public String destinationProvince;
     @ApiModelProperty("预计时效")
     public String aboutTime;

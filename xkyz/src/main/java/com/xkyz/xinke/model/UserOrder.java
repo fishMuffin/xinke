@@ -9,8 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserOrder {
-
-    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId) {
+    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId, String expressNo) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.stuffType = stuffType;
@@ -26,6 +25,7 @@ public class UserOrder {
         this.price = price;
         this.estimatedWeight = estimatedWeight;
         this.expressCompanyId = expressCompanyId;
+        this.expressNo = expressNo;
     }
 
     public UserOrder() {
@@ -62,7 +62,6 @@ public class UserOrder {
     private Double estimatedWeight;
     @ApiModelProperty("选择的快递公司id")
     private Integer expressCompanyId;
-    //TODO 添加快递单号
+    @ApiModelProperty("快递单号")
+    private String expressNo;
 }
-//`estimated_weight`   decimal(10, 2) DEFAULT NULL comment '预估重量',
-//        `express_company_id` int            DEFAULT NULL comment '选择的快递公司',
