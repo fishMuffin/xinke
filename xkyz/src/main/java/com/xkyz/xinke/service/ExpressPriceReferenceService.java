@@ -24,14 +24,13 @@ public class ExpressPriceReferenceService {
     @Autowired
     ExpressPriceReferenceMapper expressPriceReferenceMapper;
 
-    public List<ExpressPriceReference> getPrice(String destination) {
+    public List<ExpressPriceReference> getPrice(String destination,Integer companyId) {
         //获取list
-//        Example example = new Example(ExpressPriceReference.class);
-//        Example.Criteria criteria = example.createCriteria();
-//        criteria.andEqualTo("expressCompanyId", expressCompanyId);
-        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectAll();
-//        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectByExample(example);
-        ExpressPriceReference res = ExpressPriceReference.builder().build();
+        Example example = new Example(ExpressPriceReference.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("expressCompanyId", companyId);
+//        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectAll();
+        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectByExample(example);
         String desTmp = dataConvert(destination);
         List<ExpressPriceReference> resList=new ArrayList<>();
         for (ExpressPriceReference reference : list) {

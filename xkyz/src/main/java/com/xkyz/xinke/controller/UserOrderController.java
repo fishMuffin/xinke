@@ -1,12 +1,19 @@
 package com.xkyz.xinke.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.sun.jndi.toolkit.url.UrlUtil;
+import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.IncomeView;
 import com.xkyz.xinke.pojo.ReturnMSG;
 import com.xkyz.xinke.pojo.UserOrderView;
 import com.xkyz.xinke.pojo.UserOrderWithCompanyView;
 import com.xkyz.xinke.service.UserOrderService;
+import com.xkyz.xinke.service.UserService;
 import com.xkyz.xinke.service.WxService;
+import com.xkyz.xinke.util.HttpClientUtil;
+import com.xkyz.xinke.util.WXConfigUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -17,12 +24,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import sun.net.util.URLUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +41,8 @@ import java.util.Map;
 public class UserOrderController {
     @Autowired
     private UserOrderService userOrderService;
+    @Autowired
+    private UserService userService;
     @Autowired
     private WxService wxService;
 
@@ -93,6 +104,15 @@ public class UserOrderController {
         return ResponseEntity.ok(incomeAndCount);
     }
 
+//    public static final String URL_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=CODE&grant_type=authorization_code";
+//    @GetMapping(value = "getOpenId")
+//    public String getOpenId(@ApiParam(value = "code")String code){
+//        String url = URL_ACCESS_TOKEN.replace("APPID", WeChatConfig.APP_ID).replace("SECRET", WeChatConfig.SECRET_ID).replace("CODE", code);
+//        JSONObject jsonObject =UrlUtil.httpsRequest(url,"GET",null);
+//        String openid = jsonObject.getString("openid");
+//        return openid;
+//    }
+
     @PostMapping("/notify")
     @ApiOperation("微信支付通知")
     public String wxPayNotify(HttpServletRequest request) {
@@ -126,12 +146,50 @@ public class UserOrderController {
         }
     }
 
-    @PostMapping("/preparePay")
-    @ApiOperation("微信支付预备")
-    public String wxPayPrepare() throws Exception {
-//        Map map = wxService.doUnifiedOrder();
-        //TODO
-        return null;
-    }
+//    @PostMapping("/preparePay")
+//    @ApiOperation("微信支付预备")
+//    public String wxPayPrepare() throws Exception {
+////        Map map = wxService.doUnifiedOrder();
+//        //TODO
+//        return null;
+//    }
+//
+//    @GetMapping("/push")
+//    public String push(@ApiParam("openid")String token,@ApiParam("templateId")String templateId) {
+//        User openId = userService.getOpenIdBySkey(token);
+//        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
+//                + WXConfigUtil.APP_ID
+//                + "&secret="
+//                + WXConfigUtil.SECRET_ID;
+//        String result=HttpClientUtil.doGet(url);
+////        String result = HttpUtil.sendGet(url);
+//        JSONObject object = JSON.parseObject(result);
+//        String Access_Token = object.getString("access_token");
+//        Template template = new Template();
+//
+//        template.setTemplate_id(WXConfigUtil.TEMPLATE_ID);
+//        template.setTouser(openid);
+//        template.setPage("pages/index/index");
+//        List<TemplateParam> paras = new ArrayList<>();
+//        paras.add(new TemplateParam("time1", "2019-12-28 10:00:00"));
+//        paras.add(new TemplateParam("thing2", "监控1发现2人"));
+//        template.setTemplateParamList(paras);
+//        String requestUrl = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=ACCESS_TOKEN";
+//        requestUrl = requestUrl.replace("ACCESS_TOKEN", Access_Token);
+//
+//        System.out.println(template.toJSON());
+//        net.sf.json.JSONObject jsonResult = UrlUtil.httpsRequest(requestUrl, "POST", template.toJSON());
+//        if (jsonResult != null) {
+//            System.out.println(jsonResult);
+//            int errorCode = jsonResult.getInt("errcode");
+//            String errorMessage = jsonResult.getString("errmsg");
+//            if (errorCode == 0) {
+//                System.out.println("Send Success");
+//            } else {
+//                System.out.println("订阅消息发送失败:" + errorCode + "," + errorMessage);
+//            }
+//        }
+//        return null;
+//    }
 
 }

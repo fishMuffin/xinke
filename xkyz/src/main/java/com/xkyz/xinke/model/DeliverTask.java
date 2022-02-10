@@ -34,7 +34,7 @@ public class DeliverTask {
     private String deliverToken;
     @ApiModelProperty("快递数量")
     private Integer expressAmount;
-    @ApiModelProperty("揽收状态：1未揽收，2已揽收，3新任务")
+    @ApiModelProperty("揽收状态：1未揽收，2已揽收")
     private Integer status;
     @ApiModelProperty("快递公司id")
     private Integer expressCompanyId;

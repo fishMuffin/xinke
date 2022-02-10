@@ -44,7 +44,7 @@ public class UserOrder {
     //    情况，一般分为四种：新订单、教材配送中、已完成、已取消。 新订单：订单成功提交但未付款的订单状态； 教材配送中：用户已付款，等待收货的订单状态 ； 已完成：交易成功的订单状态； 已取消：订单成功提交但7天内未付款的订单状态。
     @ApiModelProperty("订单状态：1未结算，2已取消，3已发货")
     private Integer status;
-    @ApiModelProperty("揽收状态：1.新任务，2未揽收，3已揽收")
+    @ApiModelProperty("揽收状态：1未揽收，2已揽收")
     private Integer deliverStatus;
     @ApiModelProperty("下单时间")
     private Long orderTime;

@@ -95,6 +95,8 @@ https://www.jianshu.com/p/329818c45260
 https://www.cnblogs.com/weschen/p/6867885.html
 2.ubuntu安装maven：
 https://blog.csdn.net/weixx3/article/details/80331538
+3.微信订阅
+https://www.jianshu.com/p/34c8c719db4c
 
 
 

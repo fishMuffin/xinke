@@ -18,7 +18,7 @@
 //
 //    @Test
 //    public void testGetList() {
-//        ResponseEntity<List<ExpressPriceReference>> listResponseEntity = expressPriceReferenceController.getPrice("湖北省");
+//        ResponseEntity<List<ExpressPriceReference>> listResponseEntity = expressPriceReferenceController.getPrice("湖北省",1);
 //        List<ExpressPriceReference> list = listResponseEntity.getBody();
 //        list.stream().forEach(System.out::println);
 //    }

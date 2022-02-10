@@ -3,13 +3,10 @@ package com.xkyz.xinke.service;
 import com.alibaba.fastjson.JSONObject;
 import com.xkyz.xinke.mapper.UserMapper;
 import com.xkyz.xinke.model.User;
-import com.xkyz.xinke.model.UserAddress;
-import com.xkyz.xinke.model.UserProfile;
 import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.util.WechatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import tk.mybatis.mapper.entity.Example;
 
 import java.util.UUID;
 
@@ -22,6 +19,11 @@ public class UserService {
 
     public User selectOne(String openId) {
         User user = User.builder().openId(openId).build();
+        return userMapper.selectOne(user);
+    }
+
+    public User getOpenIdBySkey(String skey) {
+        User user = User.builder().skey(skey).build();
         return userMapper.selectOne(user);
     }
 

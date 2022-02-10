@@ -32,7 +32,6 @@ public class DeliverTaskService {
         criteria.andEqualTo("deliverToken", token);
         criteria.andEqualTo("status", 1);
         List<DeliverTask> deliverTasks = deliverTaskMapper.selectByExample(example);
-        //TODO 快递数量对不上 已揽收出现在新任务中
         List<DeliverTaskView> resList = new ArrayList<>();
         deliverTasks.stream().forEach(s -> {
             StorePoints storePoints = storePointsMapper.selectByPrimaryKey(s.getPointsId());
