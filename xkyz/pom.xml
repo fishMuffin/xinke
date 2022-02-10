@@ -271,6 +271,7 @@
                     <include>**/*.xml</include>
                     <include>**/*.properties</include>
                     <include>**/*.yaml</include>
+                    <include>**/*.p12</include>
                 </includes>
             </resource>
         </resources>

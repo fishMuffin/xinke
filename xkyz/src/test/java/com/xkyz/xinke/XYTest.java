@@ -12,6 +12,8 @@
 //import org.gavaghan.geodesy.GlobalCoordinates;
 //import org.junit.jupiter.api.Test;
 //
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 //import java.util.Map;
 //import java.util.TreeMap;
 //import java.util.UUID;
@@ -31,16 +33,23 @@
 //    }
 //
 //
+//    private String getCurrentDateFormat(){
+//        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//        String dateString = formatter.format(new Date());
+//        return dateString;
+//    }
+//
 //    @Test
 //    public void testJJ() {
+//        System.out.println(getCurrentDateFormat());
 ////        Long current = System.currentTimeMillis() / 1000;
 ////        System.out.println(System.currentTimeMillis() / 1000);
 ////        System.out.println(UUID.randomUUID().toString());
 ////        System.out.println(UUID.randomUUID().toString() + "-" + current);
 ////        System.out.println(TimeUtil.getTodayStartTime());
-//        System.out.println(dataConvert("上海市"));
-//        System.out.println(dataConvert("湖北省"));
-//        System.out.println(dataConvert("重庆"));
+////        System.out.println(dataConvert("上海市"));
+////        System.out.println(dataConvert("湖北省"));
+////        System.out.println(dataConvert("重庆"));
 //    }
 //
 //

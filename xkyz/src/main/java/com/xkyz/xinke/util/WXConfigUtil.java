@@ -19,14 +19,15 @@ public class WXConfigUtil implements WXPayConfig {
 //    public static final String MCH_ID = "你的商户id";
 //    1620177995
 
-    public WXConfigUtil() throws Exception {
-        String certPath = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"/weixin/apiclient_cert.p12";//从微信商户平台下载的安全证书存放的路径
-        File file = new File(certPath);
-        InputStream certStream = new FileInputStream(file);
-        this.certData = new byte[(int) file.length()];
-        certStream.read(this.certData);
-        certStream.close();
-    }
+//    public WXConfigUtil() throws Exception {
+//        String certPath = ClassUtils.getDefaultClassLoader().getResource("").getPath()+"resources/cert/apiclient_cert.p12";//从微信商户平台下载的安全证书存放的路径
+//        File file = new File(certPath);
+//        InputStream certStream = new FileInputStream(file);
+//        this.certData = new byte[(int) file.length()];
+//        certStream.read(this.certData);
+//        certStream.close();
+//    }
+
 
     @Override
     public String getAppID() {

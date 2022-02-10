@@ -1,22 +1,29 @@
 package com.xkyz.xinke;
 
-import com.xkyz.xinke.controller.ExpressCompanyController;
-import com.xkyz.xinke.controller.SendWxMessage;
-import com.xkyz.xinke.controller.StorePointsController;
-import com.xkyz.xinke.model.ExpressCompany;
-import com.xkyz.xinke.model.StorePoints;
-import com.xkyz.xinke.pojo.PointEntity;
+import com.xkyz.xinke.controller.SendWxMessageController;
+import com.xkyz.xinke.controller.WxPayController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
-import java.util.List;
+import java.util.Map;
 
 @SpringBootTest
 public class WxTest {
     @Autowired
-    private SendWxMessage sendWxMessage;
+    private SendWxMessageController sendWxMessage;
+    @Autowired
+    private WxPayController wxPayController;
+
+    @Test
+    public void testUnifiedOrder(){
+        ResponseEntity<Map<String, String>> mapResponseEntity = wxPayController.unifiedOrder();
+        Map<String, String> body = mapResponseEntity.getBody();
+        System.out.println(body);
+    }
+
+
 
     @Test
     public void testGetAddress() {
@@ -27,5 +34,10 @@ public class WxTest {
     public void testPushOne(){
         String s = sendWxMessage.pushOneUser();
         System.out.println(s);
+    }
+    @Test
+    public void testNotify(){
+        String s1 = sendWxMessage.wxNotify("824da98e-f39d-4932-b508-495e6c3b64ff");
+        System.out.println(s1);
     }
 }

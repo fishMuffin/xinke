@@ -22,9 +22,10 @@ public class UserService {
         return userMapper.selectOne(user);
     }
 
-    public User getOpenIdBySkey(String skey) {
+    public String getOpenIdBySkey(String skey) {
         User user = User.builder().skey(skey).build();
-        return userMapper.selectOne(user);
+        User res = userMapper.selectOne(user);
+        return res.getOpenId();
     }
 
     public int insert(User user) {

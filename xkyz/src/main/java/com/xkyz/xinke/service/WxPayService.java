@@ -1,11 +1,5 @@
 //package com.xkyz.xinke.service;
 //
-//import com.alibaba.dubbo.config.annotation.Reference;
-//import com.annaru.common.result.ResultMap;
-//import com.annaru.common.util.HttpContextUtils;
-//import com.annaru.upms.payment.config.WxPayAppConfig;
-//import com.annaru.upms.payment.service.WxPayService;
-//import com.annaru.upms.service.IOrderPaymentService;
 //import com.github.wxpay.sdk.WXPay;
 //import com.github.wxpay.sdk.WXPayUtil;
 //import org.apache.commons.lang3.StringUtils;

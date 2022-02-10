@@ -25,10 +25,13 @@ public enum ExceptionEnums {
     GOODS_ID_CANNOT_BE_NULL(400, "商品不能为空!"),
 
 
+
+
     SIGN_CHECK_FAILURE(500, "签名校验失败"),
     USER_ORDER_NOT_EXIST(501,"用户订单不存在"),
     DELIVER_TASK_NOT_EXIST(502,"揽收任务不存在"),
-
+    RUNTIME_EXCEPTION(503,"运行异常"),
+    UNIFIED_ORDER_FAILED(505,"微信支付统一下单失败"),
 
     USER_DATA_TYPE_ERROR(400, "用户数据类型无效!"),
     UNAUTHORIZED(403, "未授权!"),

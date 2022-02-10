@@ -1,49 +1,61 @@
-//package com.xkyz.xinke.controller;
-//
-//import com.xkyz.xinke.service.WxService;
-//import io.swagger.annotations.Api;
-//import io.swagger.annotations.ApiOperation;
-//import io.swagger.annotations.ApiParam;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.http.ResponseEntity;
-//import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.RestController;
-//
-//import javax.servlet.http.HttpServletRequest;
-//import java.util.Map;
-//
-//@Api(tags = "微信支付接口管理")
-//@RestController
-//@RequestMapping("/wxPay")
-//public class WxPayController{
-//
-//    @Autowired
-//    private WxService wxPayService;
-//
-//    /**
-//     * 统一下单接口
-//     */
-//    @ApiOperation(value = "统一下单", notes = "统一下单")
-//    @GetMapping("/unifiedOrder")
-//    public ResponseEntity<Map> unifiedOrder(
+package com.xkyz.xinke.controller;
+
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
+import com.xkyz.xinke.pojo.UserOrderView;
+import com.xkyz.xinke.service.UserOrderService;
+import com.xkyz.xinke.service.WxService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Map;
+
+@Api(tags = "微信支付接口管理")
+@RestController
+@RequestMapping("/sys/wxPay")
+public class WxPayController{
+    private final Logger logger = LoggerFactory.getLogger(WxPayController.class);
+    @Autowired
+    private WxService wxPayService;
+    @Autowired
+    private UserOrderService userOrderService;
+
+    /**
+     * 统一下单接口
+     */
+    @ApiOperation(value = "统一下单", notes = "统一下单")
+    @GetMapping("/unifiedOrder")
+    public ResponseEntity<Map<String, String>> unifiedOrder(
+//        @ApiParam(value = "订单金额") @RequestParam double amount, //TODO 先写死
+//        @ApiParam(value = "用户token") @RequestParam String userToken,
 //        @ApiParam(value = "订单号") @RequestParam String orderNo,
-//        @ApiParam(value = "订单金额") @RequestParam double amount,
-//        @ApiParam(value = "商品名称") @RequestParam String body,
-//                                  HttpServletRequest request) {
-//        try {
-//            // 1、验证订单是否存在
-//
-//            // 2、开始微信支付统一下单
-//            Map map = wxPayService.doUnifiedOrder(orderNo,amount,body);
-//            ResultMap resultMap = wxPayService.unifiedOrder(orderNo, orderNo, body);
-//            return resultMap;//系统通用的返回结果集，见文章末尾
-//        } catch (Exception e) {
-//            logger.error(e.getMessage());
-//            return ResultMap.error("运行异常，请联系管理员");
-//        }
-//    }
+                                  ) {
+        try {
+            String userToken="824da98e-f39d-4932-b508-495e6c3b64ff";
+            String orderNo="dsfdsfgdsgfdgfd";
+            Double amount=100.34;
+            String body="日用品";
+            // 1、验证订单是否存在
+            UserOrderView userOrderByOrderNo = userOrderService.getUserOrderByOrderNo(orderNo);
+            if(userOrderByOrderNo==null){
+                throw new EmException(ExceptionEnums.USER_ORDER_NOT_EXIST);
+            }
+            // 2、开始微信支付统一下单
+            Map map = wxPayService.doUnifiedOrder(orderNo,amount,body);
+            Map<String, String> stringStringMap = wxPayService.unifiedOrder(orderNo, amount, body);
+            return ResponseEntity.ok(stringStringMap);//系统通用的返回结果集，见文章末尾
+        } catch (Exception e) {
+            logger.error("WxPayController:"+e.getMessage());
+            throw new EmException(ExceptionEnums.RUNTIME_EXCEPTION);
+        }
+    }
 //
 //    /**
 //     * 微信支付异步通知
@@ -84,5 +96,5 @@
 //
 //        return wxPayService.refund(orderNo, amount, refundReason);
 //    }
-//
-//}
+
+}
