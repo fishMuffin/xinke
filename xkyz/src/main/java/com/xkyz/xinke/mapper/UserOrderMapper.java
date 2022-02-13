@@ -1,21 +1,25 @@
 package com.xkyz.xinke.mapper;
 
-import com.xkyz.xinke.model.UserAddress;
 import com.xkyz.xinke.model.UserOrder;
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Component;
+import tk.mybatis.mapper.common.Mapper;
+import tk.mybatis.mapper.common.special.InsertListMapper;
 
 import java.util.List;
 
-@Mapper
-public interface UserOrderMapper {
-    public UserOrder getUserOrderByOrderNo(String orderNo);
 
-//    public List<UserAddress> getUserAddressListByUserId(int userId);
-
-    public int addUserOrder(UserOrder userOrder);
-
-    public int deleteUserOrderByOrderNo(String orderNo);
-
-    public int updateUserOrder(UserOrder userOrder);
+@Component(value = "userOrderMapper")
+public interface UserOrderMapper extends Mapper<UserOrder>{
+    Double getStoreTodayIncome(
+            @Param("pointsId") Integer pointsId,
+            @Param("orderUpdateTime") Long orderUpdateTime);
+    Double getStoreAllIncome(
+            @Param("pointsId") Integer pointsId);
+    Double getStoreTodayCount(
+            @Param("pointsId") Integer pointsId,
+            @Param("orderUpdateTime") Long orderUpdateTime);
+    Double getCountByStatus(
+            @Param("status") Integer status);
 
 }

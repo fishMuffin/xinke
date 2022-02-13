@@ -4,6 +4,7 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
@@ -11,8 +12,17 @@ import javax.persistence.Table;
 @ApiModel("用户实体类")
 @Data
 @Builder
+@NoArgsConstructor
 @Table(name = "user")
 public class User {
+    public User(Integer id, String openId, String sessionKey, String skey, int role) {
+        this.id = id;
+        this.openId = openId;
+        this.sessionKey = sessionKey;
+        this.skey = skey;
+        this.role = role;
+    }
+
     @ApiModelProperty("地址id")
     @Id
     private Integer id;

@@ -6,12 +6,42 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.alibaba.druid.pool.DruidDataSource
     url: jdbc:mysql://localhost:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
+#    url: jdbc:mysql://118.31.0.252:3306/xinke?characterEncoding=utf8&useUnicode=true&useSSL=false
     username: root
     password: ycwycw123
+  resources:
+    static-locations: classpath:/static/images/,classpath:/resources,
+
+
 
 mvc:
   static-path-pattern: /static/**  #配置静态路径
 
 mybatis:
   type-aliases-package: com.xkyz.xinke.model
+  mapper-locations: classpath:/mapper/*.xml
 #  mapper-locations: classpath:com/xkyz/xinke/mapper/**/*.xml
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*.xml
+  #配置sql打印日志
+  typeAliasesPackage: com.xkyz.xinke.model
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    logging.level.com.lawt.repository.mapper: debug
+
+logging:
+  level:
+    com:
+      xkyz:
+        xinke:
+          mapper: debug
+em:
+  upload:
+    baseUrl:  118.31.0.252
+    allowTYpes:
+      - image/jpg
+      - image/jpeg
+      - image/png
+      - image/bmp
+
