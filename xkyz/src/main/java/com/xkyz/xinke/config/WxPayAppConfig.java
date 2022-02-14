@@ -6,7 +6,12 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resources;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
+import java.net.URL;
 
 /**
  * 配置我们自己的信息
@@ -15,70 +20,51 @@ import java.io.InputStream;
 @ConfigurationProperties(prefix = "pay.wxpay.app")
 @Data
 @Builder
+//public class WxPayAppConfig implements WXPayConfig {
 public class WxPayAppConfig implements WXPayConfig {
-    public WxPayAppConfig() {
+
+    public WxPayAppConfig(byte[] certData) {
+        this.certData = certData;
     }
 
-    public WxPayAppConfig(String appID, String mchID, String key, String certPath, int httpConnectTimeoutMs, int httpReadTimeoutMs, String payNotifyUrl, String refundNotifyUrl) {
-        this.appID = appID;
-        this.mchID = mchID;
-        this.key = key;
-        this.certPath = certPath;
-        this.httpConnectTimeoutMs = httpConnectTimeoutMs;
-        this.httpReadTimeoutMs = httpReadTimeoutMs;
-        this.payNotifyUrl = payNotifyUrl;
-        this.refundNotifyUrl = refundNotifyUrl;
+
+    private byte[] certData;
+
+    public WxPayAppConfig() throws Exception {
+//        URL resource = Resources.class.getClassLoader().getResource("cert/apiclient_cert.p12");
+//        String certPath = resource.getPath();
+        File file = new File("src/main/resources/cert/apiclient_cert.p12");
+//        File file = new File(certPath);
+//        InputStream certStream = this.getClass().getResourceAsStream("/properties/basecom.properties");
+        InputStream certStream = new FileInputStream(file);
+        this.certData = new byte[(int) file.length()];
+        certStream.read(this.certData);
+        certStream.close();
     }
 
-    /**
-     * appID
-     */
-    private String appID;
 
-    /**
-     * 商户号
-     */
-    private String mchID;
+    public String getAppID() {
+        return "wx79444d769f2eeabd";
+    }
 
-    /**
-     * API 密钥
-     */
-    private String key;
+    public String getMchID() {
+        return "1620177995";
+    }
 
-    /**
-     * API证书绝对路径 (本项目放在了 resources/cert/apiclient_cert.p12")
-     */
-    private String certPath;
+    public String getKey() {
+        return "88888888888888888888888888888888";
+    }
 
-    /**
-     * HTTP(S) 连接超时时间，单位毫秒
-     */
-    private int httpConnectTimeoutMs = 8000;
-
-    /**
-     * HTTP(S) 读数据超时时间，单位毫秒
-     */
-    private int httpReadTimeoutMs = 10000;
-
-    /**
-     * 微信支付异步通知地址
-     */
-    private String payNotifyUrl;
-
-    /**
-     * 微信退款异步通知地址
-     */
-    private String refundNotifyUrl;
-
-    /**
-     * 获取商户证书内容（这里证书需要到微信商户平台进行下载）
-     *
-     * @return 商户证书内容
-     */
-    @Override
     public InputStream getCertStream() {
-        InputStream certStream  =getClass().getClassLoader().getResourceAsStream(certPath);
-        return certStream;
+        ByteArrayInputStream certBis = new ByteArrayInputStream(this.certData);
+        return certBis;
     }
 
+    public int getHttpConnectTimeoutMs() {
+        return 8000;
+    }
+
+    public int getHttpReadTimeoutMs() {
+        return 10000;
+    }
 }

@@ -40,8 +40,8 @@ public class WxPayController{
         try {
             String userToken="824da98e-f39d-4932-b508-495e6c3b64ff";
             String orderNo="dsfdsfgdsgfdgfd";
-            Double amount=100.34;
-            String body="日用品";
+            Integer amount=100;
+            String body="新客驿站-统一下单";
             // 1、验证订单是否存在
             UserOrderView userOrderByOrderNo = userOrderService.getUserOrderByOrderNo(orderNo);
             if(userOrderByOrderNo==null){
