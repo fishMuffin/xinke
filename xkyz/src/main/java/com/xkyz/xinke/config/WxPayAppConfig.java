@@ -33,7 +33,8 @@ public class WxPayAppConfig implements WXPayConfig {
     public WxPayAppConfig() throws Exception {
 //        URL resource = Resources.class.getClassLoader().getResource("cert/apiclient_cert.p12");
 //        String certPath = resource.getPath();
-        File file = new File("src/main/resources/cert/apiclient_cert.p12");
+        File file = new File("src/main/resources/cert/apiclient_cert.p12");//测试环境
+//        File file = new File("/root/xinke/resources/apiclient_cert.p12");//正式环境
 //        File file = new File(certPath);
 //        InputStream certStream = this.getClass().getResourceAsStream("/properties/basecom.properties");
         InputStream certStream = new FileInputStream(file);

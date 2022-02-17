@@ -6,21 +6,21 @@ import com.github.wxpay.sdk.WXPayUtil;
 import com.xkyz.xinke.config.WxPayAppConfig;
 import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
+import com.xkyz.xinke.util.MyWxPayUtils;
 import com.xkyz.xinke.util.WXConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Slf4j
 public class WxService {
     private final Logger logger = LoggerFactory.getLogger(WxService.class);
     public static final String SPBILL_CREATE_IP = "118.31.0.252";//服务器ip地址
-    public static final String NOTIFY_URL = "http://www.example.com/wxpay/notify";// "回调接口地址";
+    public static final String NOTIFY_URL = "https://www.weixin.qq.com/wxpay/pay.php";// "回调接口地址";
     public static final String TRADE_TYPE_APP = "APP";//交易类型
 
     public static final String APP_ID = "wx79444d769f2eeabd";
@@ -77,7 +77,7 @@ public class WxService {
     public Map<String, String> unifiedOrder(String orderNo, Integer amount, String body) {
         Map<String, String> returnMap = new HashMap<>();
         Map<String, String> responseMap = new HashMap<>();
-        Map<String, String> requestMap = new HashMap<>();
+        Map<String, String> requestMap = new TreeMap<>();
         try {
             WxPayAppConfig config = new WxPayAppConfig();
             WXPay wxpay = new WXPay(config);
@@ -98,6 +98,8 @@ public class WxService {
 //            data.put("notify_url", "http://www.example.com/wxpay/notify");
 //            data.put("trade_type", "NATIVE");  // 此处指定为扫码支付
 //            data.put("product_id", "12");
+//            MyWxPayUtils myWxPayUtils = new MyWxPayUtils(config);
+//            Map<String, String> resultMap = myWxPayUtils.unifiedOrder(requestMap,config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
             Map<String, String> resultMap = wxpay.unifiedOrder(requestMap);
             //获取返回码
             String returnCode = resultMap.get("return_code");
@@ -138,7 +140,7 @@ public class WxService {
         try {
             WXConfigUtil config = new WXConfigUtil();
             WXPay wxpay = new WXPay(config);
-            Map<String, String> data = new HashMap<>();
+            Map<String, String> data = new TreeMap<>();
 
 //            requestMap.put("body", body);                                     // 商品描述
 //            requestMap.put("out_trade_no", orderNo);                          // 商户订单号
@@ -149,9 +151,9 @@ public class WxService {
 //            Map<String, String> resultMap = wxpay.unifiedOrder(requestMap);
 
             //生成商户订单号，不可重复
-//            data.put("appid", APP_ID);
-//            data.put("mch_id", MCH_ID);
-//            data.put("nonce_str", WXPayUtil.generateNonceStr());
+            data.put("appid", APP_ID);
+            data.put("mch_id", MCH_ID);
+            data.put("nonce_str", WXPayUtil.generateNonceStr());
 //            String body = "订单支付";
             data.put("body", body);
             data.put("out_trade_no", orderNo);
@@ -167,7 +169,16 @@ public class WxService {
 //            data.put("sign", WXPayUtil.generateSignature(data, KEY,
 //                    WXPayConstants.SignType.MD5));
             //使用官方API请求预付订单
-            Map<String, String> response = wxpay.unifiedOrder(data);
+//            wxpay.requestWithoutCert()
+//                        MyWxPayUtils myWxPayUtils = new MyWxPayUtils(config);
+//            Map<String, String> response = myWxPayUtils.unifiedOrder(data,config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
+            Map<String, String> reqMap=new LinkedHashMap<>(data);
+            reqMap.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
+//            data.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
+//            Map<String, String> response = wxpay.unifiedOrder(data);
+            String respXml = wxpay.requestWithoutCert("https://api.mch.weixin.qq.com/pay/unifiedorder", reqMap, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
+            Map<String, String> response = wxpay.processResponseXml(respXml);
+//            return this.processResponseXml(respXml);
             if ("SUCCESS".equals(response.get("return_code"))) {//主要返回以下5个参数
                 Map<String, String> param = new HashMap<>();
                 param.put("appid", config.getAppID());
