@@ -175,9 +175,9 @@ public class WxService {
             Map<String, String> reqMap=new LinkedHashMap<>(data);
             reqMap.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
 //            data.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
-//            Map<String, String> response = wxpay.unifiedOrder(data);
-            String respXml = wxpay.requestWithoutCert("https://api.mch.weixin.qq.com/pay/unifiedorder", reqMap, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
-            Map<String, String> response = wxpay.processResponseXml(respXml);
+            Map<String, String> response = wxpay.unifiedOrder(data);
+//            String respXml = wxpay.requestWithoutCert("https://api.mch.weixin.qq.com/pay/unifiedorder", reqMap, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
+//            Map<String, String> response = wxpay.processResponseXml(respXml);
 //            return this.processResponseXml(respXml);
             if ("SUCCESS".equals(response.get("return_code"))) {//主要返回以下5个参数
                 Map<String, String> param = new HashMap<>();
@@ -192,7 +192,7 @@ public class WxService {
                 return param;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new Exception("下单失败");
         }
         throw new Exception("下单失败");
