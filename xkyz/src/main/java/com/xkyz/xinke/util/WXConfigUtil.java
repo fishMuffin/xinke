@@ -13,7 +13,7 @@ public class WXConfigUtil implements WXPayConfig {
     public static final String APP_ID = "wx79444d769f2eeabd";
     public static final String SECRET_ID = "ed2d7b0b4ed7719a96f03d3abd2c7d85";
 //    public static final String KEY = "你的api key不是appSecret";
-    public static final String KEY = "https://api.weixin.qq.com/sns/jscode2session";
+    public static final String KEY = "Xkyz8888Xkyz8888Xkyz8888Xkyz8888";
     public static final String MCH_ID = "1620177995";
 
 //    public static final String MCH_ID = "你的商户id";
