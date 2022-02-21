@@ -12,6 +12,12 @@ spring:
   resources:
     static-locations: classpath:/static/images/,classpath:/resources,
 
+  cloud:
+    alicloud:
+      access-key: "LTAI5tNRPAKPDczj51UR529L"
+      secret-key: "EaTb3ckYUe6GVc7Lon3kxV0kp9cwj4"
+      oss:
+        endpoint: "https://oss-cn-beijing.aliyuncs.com"
 
 
 mvc:

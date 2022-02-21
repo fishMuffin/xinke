@@ -112,6 +112,15 @@ public class UserOrderService {
         List<UserOrder> list = userOrderMapper.selectByExample(example);
         return getUserOrderWithCompanyViews(list);
     }
+    public List<UserOrderWithCompanyView> getNewList(String deliverToken, Integer deliverStatus,Integer pointsId) {
+        Example example = new Example(UserOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("deliverToken", deliverToken);
+        criteria.andEqualTo("deliverStatus", deliverStatus);
+        criteria.andEqualTo("pointsId", pointsId);
+        List<UserOrder> list = userOrderMapper.selectByExample(example);
+        return getUserOrderWithCompanyViews(list);
+    }
     public List<UserOrderWithCompanyView> getListByPointsId(Integer pointsId) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
