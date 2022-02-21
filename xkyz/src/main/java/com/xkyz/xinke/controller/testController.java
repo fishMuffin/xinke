@@ -15,7 +15,7 @@ import java.util.Date;
 @RestController
 @RequestMapping("/api/test")
 public class testController {
-    private static final Logger logger = LoggerFactory.getLogger(testController.class);
+
     @Autowired
     private UploadService uploadService;
 
@@ -24,12 +24,12 @@ public class testController {
         return "hello world!";
     }
 
-    @PostMapping("/upload")
-    public ResponseEntity<String> testUpload(@RequestParam("file") MultipartFile file) {// TODO 服务器不好使 本地上传没问题
-        logger.info("testController,time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " fileName:" + file.getOriginalFilename());
-        String s = uploadService.uploadImage(file);
-        return ResponseEntity.ok(s);
-    }
+//    @PostMapping("/upload")
+//    public ResponseEntity<String> testUpload(@RequestParam("file") MultipartFile file) {// TODO 服务器不好使 本地上传没问题
+//        logger.info("testController,time:" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()) + " fileName:" + file.getOriginalFilename());
+//        String s = uploadService.uploadImage(file);
+//        return ResponseEntity.ok(s);
+//    }
 
     //
 }

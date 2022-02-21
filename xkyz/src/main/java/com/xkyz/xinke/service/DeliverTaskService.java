@@ -7,7 +7,6 @@ import com.xkyz.xinke.mapper.StorePointsMapper;
 import com.xkyz.xinke.mapper.UserOrderMapper;
 import com.xkyz.xinke.model.DeliverTask;
 import com.xkyz.xinke.model.StorePoints;
-import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.DeliverTaskView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

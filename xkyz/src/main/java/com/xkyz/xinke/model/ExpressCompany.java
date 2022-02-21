@@ -14,9 +14,6 @@ import javax.persistence.Table;
 @Table(name = "express_company")
 public class ExpressCompany {
 
-    public ExpressCompany() {
-    }
-
     public ExpressCompany(Integer id, String companyName, String companyImageUrl, String arrival_time, Double first_price, Double additional_price) {
         this.id = id;
         this.companyName = companyName;
@@ -24,6 +21,9 @@ public class ExpressCompany {
         this.arrival_time = arrival_time;
         this.first_price = first_price;
         this.additional_price = additional_price;
+    }
+
+    public ExpressCompany() {
     }
 
     @ApiModelProperty("id")

@@ -1,18 +1,14 @@
 package com.xkyz.xinke.controller;
 
 import com.xkyz.xinke.model.DeliverTask;
-import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.DeliverTaskView;
 import com.xkyz.xinke.service.DeliverTaskService;
-import com.xkyz.xinke.service.UserOrderService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

@@ -76,10 +76,18 @@ public class UserOrderController {
 
     @ApiOperation("根据deliverToken和揽收状态获取订单列表")
     @PostMapping(value = "/deliverOrderList")
-    public ResponseEntity<List<UserOrderWithCompanyView>> getUserOrderListByDeliverToken(@ApiParam("deliverToken")String deliverToken, @ApiParam("揽收状态：1.新任务，2未揽收，3已揽收")Integer deliverStatus) {
+    public ResponseEntity<List<UserOrderWithCompanyView>> getUserOrderListByDeliverToken(@ApiParam("deliverToken")String deliverToken, @ApiParam("揽收状态：1.未揽收，2已揽收")Integer deliverStatus) {
         List<UserOrderWithCompanyView> list=userOrderService.getUserOrderListByDeliverToken(deliverToken,deliverStatus);
         return ResponseEntity.ok(list);
     }
+
+    @ApiOperation("新任务下点击获取未揽收列表")
+    @PostMapping(value = "/newUnReceivedList")
+    public ResponseEntity<List<UserOrderWithCompanyView>> getNewList(@ApiParam("deliverToken")String deliverToken, @ApiParam("揽收状态：1.未揽收，2已揽收")Integer deliverStatus,@ApiParam("店铺ID")Integer pointsId) {
+        List<UserOrderWithCompanyView> list=userOrderService.getNewList(deliverToken,deliverStatus,pointsId);
+        return ResponseEntity.ok(list);
+    }
+
     @ApiOperation("根据网点id获取订单列表")
     @PostMapping(value = "/getListByPointsId")
     public ResponseEntity<List<UserOrderWithCompanyView>> getListByPointsId(@ApiParam("pointsId")Integer pointsId) {
