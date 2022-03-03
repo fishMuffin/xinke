@@ -21,7 +21,7 @@ public class WxService {
     private final Logger logger = LoggerFactory.getLogger(WxService.class);
     public static final String SPBILL_CREATE_IP = "118.31.0.252";//服务器ip地址
     public static final String NOTIFY_URL = "https://www.weixin.qq.com/wxpay/pay.php";// "回调接口地址";
-    public static final String TRADE_TYPE_APP = "APP";//交易类型
+    public static final String TRADE_TYPE_APP = "JSAPI";//交易类型
 
     public static final String APP_ID = "wx79444d769f2eeabd";
     public static final String SECRET_ID = "ed2d7b0b4ed7719a96f03d3abd2c7d85";
@@ -134,67 +134,79 @@ public class WxService {
         }
     }
 
-    public Map doUnifiedOrder(String orderNo, Integer amount, String body) throws Exception {
+    public Map doUnifiedOrder(String orderNo, Integer amount, String body,String openId) throws Exception {
 
 
-        try {
-            WXConfigUtil config = new WXConfigUtil();
-            WXPay wxpay = new WXPay(config);
-            Map<String, String> data = new TreeMap<>();
+        WXConfigUtil config = new WXConfigUtil();
+        WXPay wxpay = new WXPay(config);
+        Map<String, String> data = new TreeMap<>();
 
-//            requestMap.put("body", body);                                     // 商品描述
-//            requestMap.put("out_trade_no", orderNo);                          // 商户订单号
-//            requestMap.put("total_fee", String.valueOf((int)(amount*100)));   // 总金额
-//            requestMap.put("spbill_create_ip", HttpContextUtils.getIpAddr()); // 终端IP
-//            requestMap.put("trade_type", "APP");                              // App支付类型
-//            requestMap.put("notify_url", wxPayAppConfig.getPayNotifyUrl());   // 接收微信支付异步通知回调地址
-//            Map<String, String> resultMap = wxpay.unifiedOrder(requestMap);
-
-            //生成商户订单号，不可重复
-            data.put("appid", APP_ID);
-            data.put("mch_id", MCH_ID);
-            data.put("nonce_str", WXPayUtil.generateNonceStr());
+        //生成商户订单号，不可重复
+        data.put("appid", APP_ID);
+        data.put("mch_id", MCH_ID);
+        data.put("nonce_str", WXPayUtil.generateNonceStr());
 //            String body = "订单支付";
-            data.put("body", body);
-            data.put("out_trade_no", orderNo);
-            data.put("total_fee", String.valueOf(amount));//总金额
-            //自己的服务器IP地址
-            data.put("spbill_create_ip", SPBILL_CREATE_IP);
-            //异步通知地址（请注意必须是外网）
-            data.put("notify_url", NOTIFY_URL);
-            //交易类型
-            data.put("trade_type", TRADE_TYPE_APP);
-            //附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
+        data.put("body", body);
+        data.put("openid", openId);
+        data.put("out_trade_no", orderNo);
+        data.put("total_fee", String.valueOf(amount));//总金额
+        //自己的服务器IP地址
+        data.put("spbill_create_ip", SPBILL_CREATE_IP);
+        //异步通知地址（请注意必须是外网）
+        data.put("notify_url", NOTIFY_URL);
+        //交易类型
+        data.put("trade_type", TRADE_TYPE_APP);
+        //附加数据，在查询API和支付通知中原样返回，该字段主要用于商户携带订单的自定义数据
 //            data.put("attach", "");
 //            data.put("sign", WXPayUtil.generateSignature(data, KEY,
 //                    WXPayConstants.SignType.MD5));
-            //使用官方API请求预付订单
+        //使用官方API请求预付订单
 //            wxpay.requestWithoutCert()
 //                        MyWxPayUtils myWxPayUtils = new MyWxPayUtils(config);
 //            Map<String, String> response = myWxPayUtils.unifiedOrder(data,config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
-            Map<String, String> reqMap=new LinkedHashMap<>(data);
-            reqMap.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
-//            data.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
-            Map<String, String> response = wxpay.unifiedOrder(data);
-//            String respXml = wxpay.requestWithoutCert("https://api.mch.weixin.qq.com/pay/unifiedorder", reqMap, config.getHttpConnectTimeoutMs(), config.getHttpReadTimeoutMs());
-//            Map<String, String> response = wxpay.processResponseXml(respXml);
-//            return this.processResponseXml(respXml);
-            if ("SUCCESS".equals(response.get("return_code"))) {//主要返回以下5个参数
-                Map<String, String> param = new HashMap<>();
-                param.put("appid", config.getAppID());
-                param.put("partnerid", response.get("mch_id"));
-                param.put("prepayid", response.get("prepay_id"));
-                param.put("package", "Sign=WXPay");
-                param.put("noncestr", WXPayUtil.generateNonceStr());
-                param.put("timestamp", System.currentTimeMillis() / 1000 + "");
-                param.put("sign", WXPayUtil.generateSignature(param, config.getKey(),
-                        WXPayConstants.SignType.MD5));
-                return param;
-            }
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new Exception("下单失败");
+        Map<String, String> reqMap = new LinkedHashMap<>(data);
+        reqMap.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
+        Map<String, String> response = wxpay.unifiedOrder(data);
+//        result_code -> FAIL
+        if ("SUCCESS".equals(response.get("return_code"))&&(!"FAIL".equals(response.get("result_code")))) {//主要返回以下5个参数
+            Map<String, String> param = new HashMap<>();
+            String prepayId = response.get("prepay_id");
+            // 组装参数package_str 为什么这样？ 因为二次签名微信规定这样的格式
+            String package_str = "prepay_id="+prepayId;
+            param.put("appId", config.getAppID());
+//            param.put("mch_id", response.get("mch_id"));
+//            param.put("prepay_id", response.get("prepay_id"));
+
+//            param.put("prepayid", response.get("prepay_id"));
+            param.put("package", package_str);
+
+            param.put("noncestr", WXPayUtil.generateNonceStr());
+            param.put("signType", WXPayConstants.SignType.MD5.name());
+            param.put("timestamp", System.currentTimeMillis() / 1000 + "");
+            Map<String, String> tmpParam = new LinkedHashMap<>(param);
+            param.put("sign", WXPayUtil.generateSignature(tmpParam, config.getKey(),
+                    WXPayConstants.SignType.MD5));
+            param.put("partnerid", prepayId);
+            param.put("packageValue", "Sign=WXPay");
+            return param;
+
+
+//            String prepayId = response.get("prepay_id");
+//            63         // 组装参数package_str 为什么这样？ 因为二次签名微信规定这样的格式
+//            64         String package_str = "prepay_id="+prepayId;
+//            65         Map<String,String> payParameters = new HashMap<>();
+//            66         long epochSecond = Instant.now().getEpochSecond();
+//            67         payParameters.put("appId",WxConfig.appId);
+//            68         payParameters.put("nonceStr", WxUtil.generateNonceStr());
+//            69         payParameters.put("package", package_str);
+//            70         payParameters.put("signType", SignType.MD5.name());
+//            71         payParameters.put("timeStamp", String.valueOf(epochSecond));
+//            72         // 二次签名
+//            73         payParameters.put("paySign", WxUtil.generateSignature(payParameters, WxConfig.key, SignType.MD5));
+//            74         // 返回签名后的map
+//            75         return payParameters;
+
         }
-        throw new Exception("下单失败");
+        return response;
     }
 }
