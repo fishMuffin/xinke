@@ -2,6 +2,7 @@ package com.xkyz.xinke;
 
 import com.xkyz.xinke.controller.ExpressPriceReferenceController;
 import com.xkyz.xinke.model.ExpressPriceReference;
+import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import com.xkyz.xinke.service.ExpressPriceReferenceService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,8 @@ public class ExpressPriceReferenceTest {
 
     @Test
     public void testGetList() {
-        ResponseEntity<List<ExpressPriceReference>> listResponseEntity = expressPriceReferenceController.getPrice("湖北省",1);
-        List<ExpressPriceReference> list = listResponseEntity.getBody();
+        ResponseEntity<List<ExpressPriceReferenceView>> price = expressPriceReferenceController.getPrice("湖北省", 1);
+        List<ExpressPriceReferenceView> list = price.getBody();
         list.stream().forEach(System.out::println);
     }
 

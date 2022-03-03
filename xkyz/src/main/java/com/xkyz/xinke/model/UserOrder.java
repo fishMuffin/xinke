@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserOrder {
-    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId, String expressNo) {
+    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId, String expressNo, String imageUrl) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.stuffType = stuffType;
@@ -26,6 +26,7 @@ public class UserOrder {
         this.estimatedWeight = estimatedWeight;
         this.expressCompanyId = expressCompanyId;
         this.expressNo = expressNo;
+        this.imageUrl = imageUrl;
     }
 
     public UserOrder() {
@@ -64,4 +65,6 @@ public class UserOrder {
     private Integer expressCompanyId;
     @ApiModelProperty("快递单号")
     private String expressNo;
+    @ApiModelProperty("图片url")
+    private String imageUrl;
 }

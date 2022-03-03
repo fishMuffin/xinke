@@ -12,6 +12,7 @@ import com.xkyz.xinke.pojo.IncomeView;
 import com.xkyz.xinke.pojo.UserOrderView;
 import com.xkyz.xinke.pojo.UserOrderWithCompanyView;
 import com.xkyz.xinke.util.TimeUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -43,10 +44,10 @@ public class UserOrderService {
     public int addUserOrder(UserOrder userOrder) {
         //订单创建状态给默认值:status--1未结算 deliverStatus--1.新任务
         //TODO 实际价格 = 首重价格 + (总重量 - 1) * 续重价格
-        Long current=System.currentTimeMillis()/1000;
+        Long current = System.currentTimeMillis() / 1000;
         userOrder.setOrderTime(current);
         userOrder.setOrderUpdateTime(current);
-        userOrder.setOrderNo(UUID.randomUUID().toString()+"-"+current);
+        userOrder.setOrderNo(UUID.randomUUID().toString().substring(0,32));
         userOrder.setStatus(1);
         userOrder.setDeliverStatus(1);
         return userOrderMapper.insert(userOrder);
@@ -65,8 +66,8 @@ public class UserOrderService {
         criteria.andEqualTo("orderNo", userOrder.getOrderNo());
         userOrder.setStatus(2);
         userOrder.setDeliverStatus(2);
-        userOrder.setOrderUpdateTime(System.currentTimeMillis()/1000);
-        return userOrderMapper.updateByExampleSelective(userOrder,example);
+        userOrder.setOrderUpdateTime(System.currentTimeMillis() / 1000);
+        return userOrderMapper.updateByExampleSelective(userOrder, example);
     }
 
     private UserOrder getUserOrder(String orderNo) {
@@ -78,25 +79,33 @@ public class UserOrderService {
         return userOrder;
     }
 
-    public int updateUserOrder(String orderNo, Integer status) {
-        UserOrder userOrder = getUserOrder(orderNo);
+    public int updateUserOrder(UserOrder updateUser) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("orderNo", userOrder.getOrderNo());
-        userOrder.setStatus(status);
+        criteria.andEqualTo("orderNo", updateUser.getOrderNo());
+//        userOrder.setStatus(updateUser.getStatus());
+//        userOrder.setPrice(updateUser.getPrice());
+//        userOrder.setExpressCompanyId(updateUser.getExpressCompanyId());
+//        userOrder.setStuffType(updateUser.getStuffType());
+//        userOrder.setStuffType(updateUser.getStuffType());
+        if (this.getUserOrderByOrderNo(updateUser.getOrderNo())==null) throw new EmException(ExceptionEnums.USER_ORDER_NOT_EXIST);
+        updateUser.setDeliverStatus(2);
+        updateUser.setStatus(1);
+        updateUser.setOrderUpdateTime(System.currentTimeMillis() / 1000);
+        if (StringUtils.isEmpty(updateUser.getImageUrl())) throw new EmException(ExceptionEnums.IMAGE_URL_NOT_EXIST);
         //更新数据 订单更新时间 方便后期商家查询当日收益
-        userOrder.setOrderUpdateTime(System.currentTimeMillis()/1000);
-        return userOrderMapper.updateByExampleSelective(userOrder,example);
+        updateUser.setOrderUpdateTime(System.currentTimeMillis() / 1000);
+        return userOrderMapper.updateByExampleSelective(updateUser, example);
     }
 
-    public List<UserOrderView> getUserOrderListByOpenId(String token,Integer status) {
+    public List<UserOrderView> getUserOrderListByOpenId(String token, Integer status) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("userToken", token);
         criteria.andEqualTo("status", status);
         List<UserOrder> list = userOrderMapper.selectByExample(example);
-        List<UserOrderView> resList=new ArrayList<>();
-        list.stream().forEach(s->{
+        List<UserOrderView> resList = new ArrayList<>();
+        list.stream().forEach(s -> {
             UserAddress sendAddress = userAddressMapper.selectByPrimaryKey(s.getSendAddress());
             UserAddress receiveAddress = userAddressMapper.selectByPrimaryKey(s.getReceiveAddress());
             UserOrderView userOrderView = UserOrderView.builder().userOrder(s).sendAddress(sendAddress).receiveAddress(receiveAddress).build();
@@ -104,6 +113,7 @@ public class UserOrderService {
         });
         return resList;
     }
+
     public List<UserOrderWithCompanyView> getUserOrderListByDeliverToken(String deliverToken, Integer deliverStatus) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
@@ -112,7 +122,8 @@ public class UserOrderService {
         List<UserOrder> list = userOrderMapper.selectByExample(example);
         return getUserOrderWithCompanyViews(list);
     }
-    public List<UserOrderWithCompanyView> getNewList(String deliverToken, Integer deliverStatus,Integer pointsId) {
+
+    public List<UserOrderWithCompanyView> getNewList(String deliverToken, Integer deliverStatus, Integer pointsId) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("deliverToken", deliverToken);
@@ -121,6 +132,7 @@ public class UserOrderService {
         List<UserOrder> list = userOrderMapper.selectByExample(example);
         return getUserOrderWithCompanyViews(list);
     }
+
     public List<UserOrderWithCompanyView> getListByPointsId(Integer pointsId) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
@@ -143,10 +155,10 @@ public class UserOrderService {
 
 
     public IncomeView getIncomeAndCount(Integer pointsId) {
-        Long theBeginOfToday=TimeUtil.getTodayStartTime();
+        Long theBeginOfToday = TimeUtil.getTodayStartTime();
         Double storeTodayIncome = userOrderMapper.getStoreTodayIncome(pointsId, theBeginOfToday);
         Double storeAllIncome = userOrderMapper.getStoreAllIncome(pointsId);
-        Double count = userOrderMapper.getStoreTodayCount(pointsId,theBeginOfToday);
+        Double count = userOrderMapper.getStoreTodayCount(pointsId, theBeginOfToday);
         IncomeView incomeView = IncomeView.builder().incomeOfAll(storeAllIncome).incomeOfToday(storeTodayIncome).count(count).build();
         return incomeView;
     }

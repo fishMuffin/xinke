@@ -53,16 +53,27 @@ public class XYTest {
     }
 
 
+
+
     @Test
     public void testXY() {
 //        32.876791
 //        115.790469
 //        new
-        PointEntity pointA = new PointEntity(32.876791, 115.790469);
-        PointEntity pointB = new PointEntity(31.876791, 111.790469);
-        double v = CoordinateUtil.distanceToPoint(pointA, pointB);
-        System.out.println(v);
+//        PointEntity pointA = new PointEntity(32.876791, 115.790469);
+//        PointEntity pointB = new PointEntity(31.876791, 111.790469);
+//        double v = CoordinateUtil.distanceToPoint(pointA, pointB);
+//        System.out.println(v);
+
+        System.out.println(UUID.randomUUID().toString().length());
+        System.out.println(UUID.randomUUID().toString().substring(0,32).length());
+        System.out.println(
+
+        );
+
     }
+
+
 
     @Test
     public void testSortedTree() {
