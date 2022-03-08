@@ -16,6 +16,10 @@ public class WXConfigUtil implements WXPayConfig {
     public static final String KEY = "Xkyz8888Xkyz8888Xkyz8888Xkyz8888";
     public static final String MCH_ID = "1620177995";
 
+
+
+    public static final String certPath = "/root/xinke/resources/apiclient_cert.p12";
+
 //    public static final String MCH_ID = "你的商户id";
 //    1620177995
 
@@ -50,6 +54,7 @@ public class WXConfigUtil implements WXPayConfig {
         ByteArrayInputStream certBis = new ByteArrayInputStream(this.certData);
         return certBis;
     }
+
 
     @Override
     public int getHttpConnectTimeoutMs() {

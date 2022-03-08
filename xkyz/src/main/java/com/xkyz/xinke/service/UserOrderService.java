@@ -70,6 +70,17 @@ public class UserOrderService {
         return userOrderMapper.updateByExampleSelective(userOrder, example);
     }
 
+    public int finishOrder(String orderNo) {
+        UserOrder userOrder = getUserOrder(orderNo);
+        Example example = new Example(UserOrder.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("orderNo", userOrder.getOrderNo());
+        userOrder.setStatus(3);
+//        userOrder.setDeliverStatus(2);//TODO 待确认揽收员状态 是否变更
+        userOrder.setOrderUpdateTime(System.currentTimeMillis() / 1000);
+        return userOrderMapper.updateByExampleSelective(userOrder, example);
+    }
+
     private UserOrder getUserOrder(String orderNo) {
         UserOrderView userOrderView = getUserOrderByOrderNo(orderNo);
         UserOrder userOrder = userOrderView.getUserOrder();

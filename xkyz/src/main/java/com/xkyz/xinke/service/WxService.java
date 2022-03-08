@@ -134,7 +134,7 @@ public class WxService {
         }
     }
 
-    public Map doUnifiedOrder(String orderNo, Integer amount, String body,String openId) throws Exception {
+    public Map doUnifiedOrder(String orderNo, Integer amount, String body, String openId) throws Exception {
 
 
         WXConfigUtil config = new WXConfigUtil();
@@ -168,11 +168,11 @@ public class WxService {
         reqMap.put("sign", WXPayUtil.generateSignature(data, config.getKey(), WXPayConstants.SignType.MD5));
         Map<String, String> response = wxpay.unifiedOrder(data);
 //        result_code -> FAIL
-        if ("SUCCESS".equals(response.get("return_code"))&&(!"FAIL".equals(response.get("result_code")))) {//主要返回以下5个参数
+        if ("SUCCESS".equals(response.get("return_code")) && (!"FAIL".equals(response.get("result_code")))) {//主要返回以下5个参数
             Map<String, String> param = new HashMap<>();
             String prepayId = response.get("prepay_id");
             // 组装参数package_str 为什么这样？ 因为二次签名微信规定这样的格式
-            String package_str = "prepay_id="+prepayId;
+            String package_str = "prepay_id=" + prepayId;
             param.put("appId", config.getAppID());
 //            param.put("mch_id", response.get("mch_id"));
 //            param.put("prepay_id", response.get("prepay_id"));
@@ -180,9 +180,9 @@ public class WxService {
 //            param.put("prepayid", response.get("prepay_id"));
             param.put("package", package_str);
 
-            param.put("noncestr", WXPayUtil.generateNonceStr());
+            param.put("nonceStr", WXPayUtil.generateNonceStr());
             param.put("signType", WXPayConstants.SignType.MD5.name());
-            param.put("timestamp", System.currentTimeMillis() / 1000 + "");
+            param.put("timeStamp", System.currentTimeMillis() / 1000 + "");
             Map<String, String> tmpParam = new LinkedHashMap<>(param);
             param.put("sign", WXPayUtil.generateSignature(tmpParam, config.getKey(),
                     WXPayConstants.SignType.MD5));
@@ -209,4 +209,104 @@ public class WxService {
         }
         return response;
     }
+
+
+////    @Autowired
+////    WeixinMiniProgramPayProperties weixinPayProperties;
+//
+////    @Override
+//    public Map enterprice2User(String logKey, String orderNumber, String openId, String fee, String body) throws Exception
+//    {
+//        //1.参数封装
+//        Map param = new HashMap();
+//        param.put("mch_appid", weixinPayProperties.getAppid());// 商户账号appid
+//        param.put("mchid", weixinPayProperties.getMchId());// 商户
+////        param.put("mch_id", weixinPayProperties.getMchId());// 商户
+//        param.put("nonce_str", WXPayUtil.generateNonceStr());// 随机字符串
+//        param.put("partner_trade_no", orderNumber);// 交易订单号
+////        param.put("out_trade_no", orderNumber);// 交易订单号
+//        param.put("openid", openId); // 用户openid
+//        param.put("check_name", "NO_CHECK"); // 校验用户姓名选项
+//        param.put("amount", fee); // 金额
+////        param.put("total_fee", fee); // 金额
+//        param.put("desc", body);
+////        param.put("body", body); // 商品描述
+//        param.put("spbill_create_ip", weixinPayProperties.getSpbillCreateIp());
+//
+//        logger.info(logKey + " weixinPayProperties" + weixinPayProperties);
+//        String sign = WXPayUtil.generateSignature(param, weixinPayProperties.getPartnerkey());
+//        param.put("sign", sign);
+//        logger.info(logKey + " weixinService#enterprice2User:" + param);
+//
+////        HttpClient httpClient = new HttpClient(weixinPayProperties.getWechatTransfersUrl());
+////        httpClient.setHttps(true);
+////        httpClient.setXmlParam(xml2String(param));
+////        httpClient.post();
+////
+////        String xmlResult = httpClient.getContent();
+////        Map<String, String> mapResult = WXPayUtil.xmlToMap(xmlResult);
+//
+//        String xmlResult = WXHttpCertUtils.doPost(weixinPayProperties.getWechatTransfersUrl(), xml2String(param));
+//        Map<String, String> mapResult = WXPayUtil.xmlToMap(xmlResult);
+//        logger.info(logKey + " weixinService#enterprice2User.wxpay.mp.result:" + mapResult);
+//
+//        Map<String, String> result = new HashMap<>();
+//        result.put("code", "500");
+//        result.put("message", "系统错误");
+//
+//        // {mchid=1520737191, mch_appid=wx2f030dd8ebda3a63, err_code=NOTENOUGH, return_msg=支付失败, result_code=FAIL, err_code_des=余额不足, return_code=SUCCESS}
+//        // 转账成功
+//        if("SUCCESS".equalsIgnoreCase(mapResult.get("result_code")))
+//        {
+//            result.put("code", "200");
+//            result.put("message", "支付成功");
+//        }
+//        // 转帐失败
+//        else if ("FAIL".equalsIgnoreCase(mapResult.get("result_code")))
+//        {
+//            result.put("code", "500");
+//            // 系统错误需要重试[请先调用查询接口，查看此次付款结果，如结果为不明确状态（如订单号不存在），请务必使用原商户订单号进行重试。
+//            if ("SYSTEMERROR".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+////                result.put("message", "支付成功");]
+//            }
+//            // 金额超限
+//            else if("AMOUNT_LIMIT".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+//                result.put("message", "金额超限");
+//            }
+//            // 余额不足
+//            else if("NOTENOUGH".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+////                result.put("message", "支付成功");
+//            }
+//            // 超过频率限制，请稍后再试。
+//            else if("FREQ_LIMIT".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+//                result.put("message", "超过频率限制，请稍后再试。");
+//            }
+//            // 已经达到今日付款总额上限/已达到付款给此用户额度上限
+//            else if("MONEY_LIMIT".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+//                result.put("message", "已经达到今日付款总额上限");
+//            }
+//            // 无法给非实名用户付款
+//            else if ("V2_ACCOUNT_SIMPLE_BAN".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+//                result.put("message", "无法给非实名用户付款");
+//            }
+//            // 该用户今日付款次数超过限制,如有需要请登录微信支付商户平台更改API安全配置
+//            else if("SENDNUM_LIMIT".equalsIgnoreCase(mapResult.get("err_code")))
+//            {
+//                result.put("message", "今日付款次数超过限制");
+//            }
+//        }
+//        else
+//        {
+//            // 系统错误
+//            result.put("code", "500");
+//            result.put("message", "系统错误");
+//        }
+//
+//        return result;
 }

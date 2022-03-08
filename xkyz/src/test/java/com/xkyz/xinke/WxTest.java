@@ -25,8 +25,15 @@ public class WxTest {
 //            String orderNo="dsfdsfgdsgfdgfd";
 //            Integer amount=100;
         ResponseEntity<Map<String, String>> mapResponseEntity = wxPayController.
-                unifiedOrder(100.0,"824da98e-f39d-4932-b508-495e6c3b64ff","34435345436666");
+                unifiedOrder(100.0,"824da98e-f39d-4932-b508-495e6c3b64ff","fghfh");
         Map<String, String> body = mapResponseEntity.getBody();
+        System.out.println(body);
+    }
+
+    @Test
+    public void testTransfer(){
+        ResponseEntity<String> transfer = wxPayController.transfer("824da98e-f39d-4932-b508-495e6c3b64ff");
+        String body = transfer.getBody();
         System.out.println(body);
     }
 

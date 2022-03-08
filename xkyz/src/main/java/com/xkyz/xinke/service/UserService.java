@@ -3,12 +3,16 @@ package com.xkyz.xinke.service;
 import com.alibaba.fastjson.JSONObject;
 import com.xkyz.xinke.mapper.UserMapper;
 import com.xkyz.xinke.model.User;
+import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.util.WechatUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
@@ -22,8 +26,23 @@ public class UserService {
         return userMapper.selectOne(user);
     }
 
-    public String getOpenIdBySkey(String skey) {
-        User user = User.builder().skey(skey).build();
+    public List<String> getListByPointId(Integer pointId){
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("pointId", pointId);
+        List<User> users = userMapper.selectByExample(example);
+        List<String> list = users.stream().map(User::getOpenId).collect(Collectors.toList());
+        return list;
+    }
+
+    public Integer getPointsOwnerByUserToken(String userToken){
+        User user = User.builder().skey(userToken).role(1).build();
+        User res = userMapper.selectOne(user);
+        return res.getPointId();
+    }
+
+    public String getOpenIdBySkey(String userToken) {
+        User user = User.builder().skey(userToken).build();
         User res = userMapper.selectOne(user);
         return res.getOpenId();
     }

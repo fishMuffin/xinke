@@ -82,11 +82,17 @@ public class UserOrderTest {
         ReturnMSG body = ggg.getBody();
         System.out.println(body);
     }
-//
-//    @Test
-//    public void testGetStoreTodayIncome() {
-//        ResponseEntity<Double> entity = userOrderController.storeTodayIncome("eee");
-//        Double body = entity.getBody();
-//        System.out.println(body);
-//    }
+
+    @Test
+    public void testFinishOrder() {
+        ResponseEntity<ReturnMSG> ggg = userOrderController.finishOrder("fghfh");
+        ReturnMSG body = ggg.getBody();
+        System.out.println(body);
+    }
+    @Test
+    public void testGetStoreTodayIncome() {
+        ResponseEntity<IncomeView> entity = userOrderController.storeTodayIncome("824da98e-f39d-4932-b508-495e6c3b64ff");
+        IncomeView body = entity.getBody();
+        System.out.println(body);
+    }
 }

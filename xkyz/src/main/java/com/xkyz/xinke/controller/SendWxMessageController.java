@@ -32,6 +32,9 @@ public class SendWxMessageController {
 
     @Autowired
     UserService userService;
+
+    private static final String ORDER_DELIVER_MESSAGE="3pm3PCy-t4Ao2TRoXrdfxaMNejKD2aPi7xWG83sZNxs";//订单配送通知
+    private static final String TRANSFER_ACCEPTED="yPcewsYwfohO1cBHO1-xVjViUUdqXH6rTCTLSiHSjLY";//提现到账通知
     /*
      * 发送订阅消息
      * */
@@ -53,7 +56,7 @@ public class SendWxMessageController {
         //拼接推送的模版
         WxMssVo wxMssVo = new WxMssVo();
         wxMssVo.setTouser(openid);//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
-        wxMssVo.setTemplate_id("yPcewsYwfohO1cBHO1-xVjViUUdqXH6rTCTLSiHSjLY");//订阅消息模板id
+        wxMssVo.setTemplate_id(TRANSFER_ACCEPTED);//订阅消息模板id
         wxMssVo.setPage("pages/index/index");//TODO 后期改成传参数
 
         Map<String, TemplateData> m = new HashMap<>(5);
@@ -67,6 +70,30 @@ public class SendWxMessageController {
                 restTemplate.postForEntity(url, wxMssVo, String.class);
         return responseEntity.getBody();
     }
+
+    //订单配送
+    public String pushOrderMessage(String openid,String pointsName,String phoneNumber,Double amount,String deliverName) {
+        RestTemplate restTemplate = new RestTemplate();
+        //这里简单起见我们每次都获取最新的access_token（时间开发中，应该在access_token快过期时再重新获取）
+        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + getAccessToken();
+        //拼接推送的模版
+        WxMssVo wxMssVo = new WxMssVo();
+        wxMssVo.setTouser(openid);//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+        wxMssVo.setTemplate_id(ORDER_DELIVER_MESSAGE);//订阅消息模板id
+        wxMssVo.setPage("pages/index/index");//TODO 后期改成传参数
+        Map<String, TemplateData> m = new HashMap<>(5);
+        m.put("thing2", new TemplateData(pointsName));
+        m.put("date3", new TemplateData(getCurrentDateFormat()));
+        m.put("amount19", new TemplateData(amount+""));
+        m.put("thing25", new TemplateData(deliverName));
+        m.put("phone_number5", new TemplateData(phoneNumber));
+        wxMssVo.setData(m);
+        ResponseEntity<String> responseEntity =
+                restTemplate.postForEntity(url, wxMssVo, String.class);
+        return responseEntity.getBody();
+    }
+
+
     private String getCurrentDateFormat(){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String dateString = formatter.format(new Date());

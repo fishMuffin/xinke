@@ -1,9 +1,5 @@
 package com.xkyz.xinke.controller;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.sun.jndi.toolkit.url.UrlUtil;
-import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.IncomeView;
 import com.xkyz.xinke.pojo.ReturnMSG;
@@ -11,37 +7,42 @@ import com.xkyz.xinke.pojo.UserOrderView;
 import com.xkyz.xinke.pojo.UserOrderWithCompanyView;
 import com.xkyz.xinke.service.UserOrderService;
 import com.xkyz.xinke.service.UserService;
+import com.xkyz.xinke.service.WechatTransferService;
 import com.xkyz.xinke.service.WxService;
-import com.xkyz.xinke.util.HttpClientUtil;
-import com.xkyz.xinke.util.WXConfigUtil;
+import com.xkyz.xinke.util.MoneyUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import sun.net.util.URLUtil;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
+import java.math.BigDecimal;
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = "用户订单API")
 @RestController()
 @RequestMapping("/sys/order")
 public class UserOrderController {
+    private static final Logger logger = LoggerFactory.getLogger(UserOrderController.class);
     @Autowired
     private UserOrderService userOrderService;
     @Autowired
     private UserService userService;
     @Autowired
     private WxService wxService;
+    @Autowired
+    private WechatTransferService wechatTransferService;
 
     @ApiOperation("创建订单")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/create")
@@ -54,6 +55,13 @@ public class UserOrderController {
     @PostMapping(value = "/cancel")
     public ResponseEntity<ReturnMSG> cancelUserOrder(@ApiParam("orderNo") String orderNo) {
         int i = userOrderService.cancelUserOrder(orderNo);
+        return ResponseEntity.ok().body(new ReturnMSG("ok"));
+    }
+
+    @ApiOperation("订单付款完成后改变订单状态")
+    @PostMapping(value = "/finishPay")
+    public ResponseEntity<ReturnMSG> finishOrder(@ApiParam("orderNo") String orderNo) {
+        int i = userOrderService.finishOrder(orderNo);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
     }
 
@@ -104,8 +112,25 @@ public class UserOrderController {
     @ApiOperation("商家今日收益")
     @PostMapping(value = "/storeTodayIncome")
     public ResponseEntity<IncomeView> storeTodayIncome(
-            @ApiParam("网点ID") Integer pointsId) {
+            @ApiParam("商家token") String userToken) {
+        Integer pointsId = userService.getPointsOwnerByUserToken(userToken);
         IncomeView incomeAndCount = userOrderService.getIncomeAndCount(pointsId);
+        Double incomeOfAll = incomeAndCount.getIncomeOfAll();
+        BigDecimal incomeOfAllDecimal = new BigDecimal(incomeOfAll);
+        List<String> list = userService.getListByPointId(pointsId);
+        logger.info("userOrderController storeTodayIncome OpenIdList:"+list.toString());
+        if(!list.isEmpty()){
+            //减去提现的
+            //TODO 判断下，如果提现金额大于总金额，要拒绝，然后给个提示信息
+            for (String s : list) {
+                BigDecimal transferDecimal = wechatTransferService.getWechatTransferByOpenId(s);
+                logger.info("userOrderController storeTodayIncome reduce:"+transferDecimal);
+                incomeOfAllDecimal=MoneyUtil.moneySub(incomeOfAllDecimal, transferDecimal);
+            }
+            String tmp = MoneyUtil.formatMoneyToTow(incomeOfAllDecimal);
+            Double aDouble = Double.valueOf(tmp);
+            incomeAndCount.setIncomeOfAll(aDouble);
+        }
         return ResponseEntity.ok(incomeAndCount);
     }
 
