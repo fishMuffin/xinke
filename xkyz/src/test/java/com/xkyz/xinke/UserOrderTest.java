@@ -61,13 +61,13 @@ public class UserOrderTest {
         list.getBody().stream().forEach(s -> System.out.println(s));
     }
 //
-//    @Test
-//    public void testAddUserOrder() {
-//        ResponseEntity<Integer> integerResponseEntity = userOrderController.addUserOrder(UserOrder.builder().orderNo("dfgfdg").orderTime(1646213325L).receiveAddress(5).sendAddress(1).status(1).openId("oVoNf5GAzZ3WULwRYyj4yppG4y6U").price(543.55).stuffType("衣服").build());
-//        Integer body = integerResponseEntity.getBody();
-//        System.out.println(body);
-//
-//    }
+    @Test
+    public void testAddUserOrder() {
+        ResponseEntity<ReturnMSG> returnMSGResponseEntity = userOrderController.addUserOrder(UserOrder.builder().orderNo("dfgfdg").orderTime(1646213325L).pointsId(1).receiveAddress(8).sendAddress(9).status(1).deliverToken("824da98e-f39d-4932-b508-495e6c3b64ff").userToken("824da98e-f39d-4932-b508-495e6c3b64ff").price(543.55).stuffType("衣服").build());
+        ReturnMSG body = returnMSGResponseEntity.getBody();
+        System.out.println(body);
+
+    }
 ////
 ////    @Test
 ////    public void testDeleteUserOrderByOrderId() {

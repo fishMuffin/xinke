@@ -76,6 +76,11 @@ sudo /etc/init.d/mysql restart
 
 15.ubuntu terminal 下插入汉字乱码问题解决
 
+16.mysql 备份
+```shell
+mysqldump --no-defaults -h localhost -u root -p xinke >tmp.sql
+```
+
 ```sql
 -- #查看字符集
 show variables like 'character%';

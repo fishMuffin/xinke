@@ -1,14 +1,12 @@
 package com.xkyz.xinke.controller;
 
 import com.xkyz.xinke.model.UserOrder;
+import com.xkyz.xinke.model.UserProfile;
 import com.xkyz.xinke.pojo.IncomeView;
 import com.xkyz.xinke.pojo.ReturnMSG;
 import com.xkyz.xinke.pojo.UserOrderView;
 import com.xkyz.xinke.pojo.UserOrderWithCompanyView;
-import com.xkyz.xinke.service.UserOrderService;
-import com.xkyz.xinke.service.UserService;
-import com.xkyz.xinke.service.WechatTransferService;
-import com.xkyz.xinke.service.WxService;
+import com.xkyz.xinke.service.*;
 import com.xkyz.xinke.util.MoneyUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -43,11 +41,26 @@ public class UserOrderController {
     private WxService wxService;
     @Autowired
     private WechatTransferService wechatTransferService;
+    @Autowired
+    private SendWxMessageService sendWxMessageService;
+    @Autowired
+    private StorePointsService storePointsService;
+    @Autowired
+    private UserProfileService userProfileService;
+    @Autowired
+    private UserAddressService userAddressService;
 
     @ApiOperation("创建订单")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/create")
     public ResponseEntity<ReturnMSG> addUserOrder(UserOrder userOrder) {
         int i = userOrderService.addUserOrder(userOrder);
+        String userOpenId = userService.getOpenIdBySkey(userOrder.getUserToken());
+        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
+        String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
+        String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
+        String deliverName = userProfileService.getNameByUserToken(userOrder.getDeliverToken());
+        // 调用通知 给揽收员通知 TODO 后期跳转url
+        String s = sendWxMessageService.pushMessageToDeliver(deliverOpenId,userOpenId,pointsName,phoneNumber,userOrder.getPrice(),deliverName);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
     }
 
@@ -105,6 +118,13 @@ public class UserOrderController {
     public ResponseEntity<ReturnMSG> updateUserOrder(
             @ApiParam("订单所需变更的信息：orderNo，图片url必填，") UserOrder userOrder) {
         int i = userOrderService.updateUserOrder(userOrder);
+        //TODO 给用户通知
+        String userOpenId = userService.getOpenIdBySkey(userOrder.getUserToken());
+        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
+        String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
+        String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
+        String addressName = userAddressService.getUserAddressNameByAddressId(userOrder.getReceiveAddress());
+        String s = sendWxMessageService.pushMessageToUser(deliverOpenId,userOpenId,userOrder.getStuffType(),pointsName,userOrder.getEstimatedWeight(),phoneNumber,addressName);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
 
     }
@@ -118,14 +138,14 @@ public class UserOrderController {
         Double incomeOfAll = incomeAndCount.getIncomeOfAll();
         BigDecimal incomeOfAllDecimal = new BigDecimal(incomeOfAll);
         List<String> list = userService.getListByPointId(pointsId);
-        logger.info("userOrderController storeTodayIncome OpenIdList:"+list.toString());
-        if(!list.isEmpty()){
+        logger.info("userOrderController storeTodayIncome OpenIdList:" + list.toString());
+        if (!list.isEmpty()) {
             //减去提现的
             //TODO 判断下，如果提现金额大于总金额，要拒绝，然后给个提示信息
             for (String s : list) {
                 BigDecimal transferDecimal = wechatTransferService.getWechatTransferByOpenId(s);
-                logger.info("userOrderController storeTodayIncome reduce:"+transferDecimal);
-                incomeOfAllDecimal=MoneyUtil.moneySub(incomeOfAllDecimal, transferDecimal);
+                logger.info("userOrderController storeTodayIncome reduce:" + transferDecimal);
+                incomeOfAllDecimal = MoneyUtil.moneySub(incomeOfAllDecimal, transferDecimal);
             }
             String tmp = MoneyUtil.formatMoneyToTow(incomeOfAllDecimal);
             Double aDouble = Double.valueOf(tmp);

@@ -1,11 +1,16 @@
 package com.xkyz.xinke.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xkyz.xinke.controller.ImageUploadController;
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.UserMapper;
 import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.util.WechatUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -18,6 +23,8 @@ import java.util.stream.Collectors;
 public class UserService {
     public static final String APPID = "wx79444d769f2eeabd";
     public static final String SECRET = "ed2d7b0b4ed7719a96f03d3abd2c7d85";
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     UserMapper userMapper;
 
@@ -26,7 +33,7 @@ public class UserService {
         return userMapper.selectOne(user);
     }
 
-    public List<String> getListByPointId(Integer pointId){
+    public List<String> getListByPointId(Integer pointId) {
         Example example = new Example(User.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("pointId", pointId);
@@ -35,15 +42,17 @@ public class UserService {
         return list;
     }
 
-    public Integer getPointsOwnerByUserToken(String userToken){
+    public Integer getPointsOwnerByUserToken(String userToken) {
         User user = User.builder().skey(userToken).role(1).build();
         User res = userMapper.selectOne(user);
         return res.getPointId();
     }
 
     public String getOpenIdBySkey(String userToken) {
+        logger.info("UserService--getOpenIdBySkey:" + userToken);
         User user = User.builder().skey(userToken).build();
         User res = userMapper.selectOne(user);
+        if (res == null) throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);
         return res.getOpenId();
     }
 

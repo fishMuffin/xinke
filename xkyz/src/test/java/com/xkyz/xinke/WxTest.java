@@ -1,6 +1,8 @@
 package com.xkyz.xinke;
 
-import com.xkyz.xinke.controller.SendWxMessageController;
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
+import com.xkyz.xinke.service.SendWxMessageService;
 import com.xkyz.xinke.controller.WxPayController;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +12,11 @@ import org.springframework.http.ResponseEntity;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.TreeMap;
 
 @SpringBootTest
 public class WxTest {
     @Autowired
-    private SendWxMessageController sendWxMessage;
+    private SendWxMessageService sendWxMessage;
     @Autowired
     private WxPayController wxPayController;
 
@@ -35,6 +36,13 @@ public class WxTest {
         ResponseEntity<String> transfer = wxPayController.transfer("824da98e-f39d-4932-b508-495e6c3b64ff");
         String body = transfer.getBody();
         System.out.println(body);
+    }
+
+    @Test
+    public void testExeception(){
+        throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);
+//        System.out.println(ExceptionEnums.INVALID_USER_TOKEN.getCode()+""+ExceptionEnums.INVALID_USER_TOKEN.getMsg());
+
     }
 
     @Test

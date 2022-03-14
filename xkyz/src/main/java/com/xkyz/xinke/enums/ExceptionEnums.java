@@ -1,12 +1,8 @@
 package com.xkyz.xinke.enums;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
-@AllArgsConstructor
-@NoArgsConstructor
 public enum ExceptionEnums {
     PRICE_CANNOT_BE_NULL(400, "价格不能为空!"),
     BRAND_NOT_FOUND(404, "品牌不存在!"),
@@ -35,6 +31,8 @@ public enum ExceptionEnums {
     UNIFIED_ORDER_FAILED(505,"微信支付统一下单失败"),
     INVALID_USER_TOKEN(506,"无效的用户token"),
     TRANSFER_NOT_EXIST(507,"转账记录不存在"),
+    POINTS_ID_NOT_EXIST(508,"网点ID不存在"),
+    INVALID_USER_ADDRESS_ID(509,"无效的用户地址id"),
 
     USER_DATA_TYPE_ERROR(400, "用户数据类型无效!"),
     UNAUTHORIZED(403, "未授权!"),
@@ -43,4 +41,13 @@ public enum ExceptionEnums {
     ;
     private int code;
     private String msg;
+
+    ExceptionEnums() {
+    }
+
+    ExceptionEnums(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
 }
