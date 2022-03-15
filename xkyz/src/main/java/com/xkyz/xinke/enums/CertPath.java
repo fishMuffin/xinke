@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public enum CertPath {
-//    PROD_PATH("src/main/resources/cert/apiclient_cert.p12"),//发布测试
-    PROD_PATH("/root/xinke/resources/apiclient_cert.p12"),
+    PROD_PATH("src/main/resources/cert/apiclient_cert.p12"),//发布测试
+//    PROD_PATH("/root/xinke/resources/apiclient_cert.p12"),
 
 
     ;

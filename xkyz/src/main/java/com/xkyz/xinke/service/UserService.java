@@ -9,6 +9,7 @@ import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.util.WechatUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,14 @@ public class UserService {
         return list;
     }
 
+    public List<User> getListByRole(Integer role) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("role", role);
+        List<User> users = userMapper.selectByExample(example);
+        return users;
+    }
+
     public Integer getPointsOwnerByUserToken(String userToken) {
         User user = User.builder().skey(userToken).role(1).build();
         User res = userMapper.selectOne(user);
@@ -50,6 +59,7 @@ public class UserService {
 
     public String getOpenIdBySkey(String userToken) {
         logger.info("UserService--getOpenIdBySkey:" + userToken);
+        if (StringUtils.isEmpty(userToken)) throw new EmException(ExceptionEnums.USER_TOKEN_CANNOT_BE_EMPTY);
         User user = User.builder().skey(userToken).build();
         User res = userMapper.selectOne(user);
         if (res == null) throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);

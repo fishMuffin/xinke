@@ -45,6 +45,8 @@ public class WxTest {
 
     }
 
+
+
     @Test
     public void testMap(){
         Map<String,String> map=new HashMap<>();

@@ -102,7 +102,7 @@ public class SendWxMessageService {
      */
 
     @ApiOperation("用户创建订单后给揽收员通知")
-    public String pushMessageToDeliver(String deliverOpenid,String userOpenid,String pointsName,String phoneNumber,Double amount,String deliverName) {
+    public String pushMessageToDeliver(String userOpenid,String pointsName,String phoneNumber,Double amount,String deliverName) {
         RestTemplate restTemplate = new RestTemplate();
         //这里简单起见我们每次都获取最新的access_token（时间开发中，应该在access_token快过期时再重新获取）
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + getAccessToken();

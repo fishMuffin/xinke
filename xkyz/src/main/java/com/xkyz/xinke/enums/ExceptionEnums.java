@@ -30,9 +30,11 @@ public enum ExceptionEnums {
     IMAGE_URL_NOT_EXIST(504,"图片URL不存在！"),
     UNIFIED_ORDER_FAILED(505,"微信支付统一下单失败"),
     INVALID_USER_TOKEN(506,"无效的用户token"),
+
     TRANSFER_NOT_EXIST(507,"转账记录不存在"),
     POINTS_ID_NOT_EXIST(508,"网点ID不存在"),
     INVALID_USER_ADDRESS_ID(509,"无效的用户地址id"),
+    USER_TOKEN_CANNOT_BE_EMPTY(506,"用户token不能为空"),
 
     USER_DATA_TYPE_ERROR(400, "用户数据类型无效!"),
     UNAUTHORIZED(403, "未授权!"),

@@ -1,7 +1,7 @@
 package com.xkyz.xinke.controller;
 
+import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
-import com.xkyz.xinke.model.UserProfile;
 import com.xkyz.xinke.pojo.IncomeView;
 import com.xkyz.xinke.pojo.ReturnMSG;
 import com.xkyz.xinke.pojo.UserOrderView;
@@ -49,20 +49,26 @@ public class UserOrderController {
     private UserProfileService userProfileService;
     @Autowired
     private UserAddressService userAddressService;
-
+//    userToken=35740a06-fe2f-4ef8-981b-d12101ec790c,
     @ApiOperation("创建订单")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/create")
     public ResponseEntity<ReturnMSG> addUserOrder(UserOrder userOrder) {
+        logger.info("UserOrderController--addUserOrder--userOrder:" + userOrder.toString());
         int i = userOrderService.addUserOrder(userOrder);
-        String userOpenId = userService.getOpenIdBySkey(userOrder.getUserToken());
-        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
-        String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
-        String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
-        String deliverName = userProfileService.getNameByUserToken(userOrder.getDeliverToken());
-        // 调用通知 给揽收员通知 TODO 后期跳转url
-        String s = sendWxMessageService.pushMessageToDeliver(deliverOpenId,userOpenId,pointsName,phoneNumber,userOrder.getPrice(),deliverName);
+//        String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
+//        String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
+//        Double price = userOrder.getPrice();
+////        角色:1-商家,2-用户,3-揽收员
+//        List<User> delivers = userService.getListByRole(3);
+//        delivers.stream().forEach(s->{
+//            String deliverName = userProfileService.getNameByUserToken(s.getSkey());
+//            String sendRes = sendWxMessageService.pushMessageToDeliver(s.getOpenId(), pointsName, phoneNumber, price, deliverName);
+//            logger.info("UserOrderController--addUserOrder0--sendRes:"+sendRes);
+//        });
+
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
     }
+
 
     @ApiOperation("取消订单")
     @PostMapping(value = "/cancel")
@@ -124,7 +130,7 @@ public class UserOrderController {
         String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
         String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
         String addressName = userAddressService.getUserAddressNameByAddressId(userOrder.getReceiveAddress());
-        String s = sendWxMessageService.pushMessageToUser(deliverOpenId,userOpenId,userOrder.getStuffType(),pointsName,userOrder.getEstimatedWeight(),phoneNumber,addressName);
+        String s = sendWxMessageService.pushMessageToUser(deliverOpenId, userOpenId, userOrder.getStuffType(), pointsName, userOrder.getEstimatedWeight(), phoneNumber, addressName);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
 
     }
