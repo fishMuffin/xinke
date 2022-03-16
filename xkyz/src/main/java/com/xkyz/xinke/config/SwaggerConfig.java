@@ -53,7 +53,7 @@ public class SwaggerConfig {
         });
         //设置要显示的Swagger环境
         Profiles profiles = Profiles.of("dev");
-        //获取项目环境：是生产环境还是发布环境
+        //获取项目环境：是生产环境还是环境
         boolean flag = environment.acceptsProfiles(profiles);
         return new Docket(DocumentationType.SWAGGER_2)
                 //添加全局状态码

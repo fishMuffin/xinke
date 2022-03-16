@@ -1,19 +1,31 @@
 package com.xkyz.xinke.service;
 
 import com.alibaba.fastjson.JSONObject;
+import com.xkyz.xinke.controller.ImageUploadController;
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.UserMapper;
 import com.xkyz.xinke.model.User;
+import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.util.WechatUtil;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService {
     public static final String APPID = "wx79444d769f2eeabd";
     public static final String SECRET = "ed2d7b0b4ed7719a96f03d3abd2c7d85";
+    private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+
     @Autowired
     UserMapper userMapper;
 
@@ -22,9 +34,35 @@ public class UserService {
         return userMapper.selectOne(user);
     }
 
-    public String getOpenIdBySkey(String skey) {
-        User user = User.builder().skey(skey).build();
+    public List<String> getListByPointId(Integer pointId) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("pointId", pointId);
+        List<User> users = userMapper.selectByExample(example);
+        List<String> list = users.stream().map(User::getOpenId).collect(Collectors.toList());
+        return list;
+    }
+
+    public List<User> getListByRole(Integer role) {
+        Example example = new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("role", role);
+        List<User> users = userMapper.selectByExample(example);
+        return users;
+    }
+
+    public Integer getPointsOwnerByUserToken(String userToken) {
+        User user = User.builder().skey(userToken).role(1).build();
         User res = userMapper.selectOne(user);
+        return res.getPointId();
+    }
+
+    public String getOpenIdBySkey(String userToken) {
+        logger.info("UserService--getOpenIdBySkey:" + userToken);
+        if (StringUtils.isEmpty(userToken)) throw new EmException(ExceptionEnums.USER_TOKEN_CANNOT_BE_EMPTY);
+        User user = User.builder().skey(userToken).build();
+        User res = userMapper.selectOne(user);
+        if (res == null) throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);
         return res.getOpenId();
     }
 
@@ -52,7 +90,7 @@ public class UserService {
 //         5.根据返回的User实体类，判断用户是否是新用户，是的话，将用户信息存到数据库；不是的话，更新最新登录时间
         User userExam = User.builder().openId(openId).build();
         User user = userMapper.selectOne(userExam);
-        int role = 1;
+        int role = user.getRole();
 // uuid生成唯一key，用于维护微信小程序用户与服务端的会话
         String skey = UUID.randomUUID().toString();
         if (user == null) {

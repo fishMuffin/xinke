@@ -1,6 +1,7 @@
 package com.xkyz.xinke.config;
 
 import com.github.wxpay.sdk.WXPayConfig;
+import com.xkyz.xinke.enums.CertPath;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -33,8 +34,7 @@ public class WxPayAppConfig implements WXPayConfig {
     public WxPayAppConfig() throws Exception {
 //        URL resource = Resources.class.getClassLoader().getResource("cert/apiclient_cert.p12");
 //        String certPath = resource.getPath();
-//        File file = new File("src/main/resources/cert/apiclient_cert.p12");//测试环境
-        File file = new File("/root/xinke/resources/apiclient_cert.p12");//正式环境
+        File file = new File(CertPath.PROD_PATH.getName());//
 //        File file = new File(certPath);
 //        InputStream certStream = this.getClass().getResourceAsStream("/properties/basecom.properties");
         InputStream certStream = new FileInputStream(file);
@@ -55,6 +55,9 @@ public class WxPayAppConfig implements WXPayConfig {
     public String getKey() {
         return "88888888888888888888888888888888";
     }
+//    public String getCertPath() {
+//        return "/root/xinke/resources/apiclient_cert.p12";
+//    }
 
     public InputStream getCertStream() {
         ByteArrayInputStream certBis = new ByteArrayInputStream(this.certData);

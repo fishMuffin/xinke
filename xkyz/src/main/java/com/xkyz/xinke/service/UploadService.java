@@ -1,18 +1,20 @@
 package com.xkyz.xinke.service;
 
-import com.aliyun.oss.*;
+import com.aliyun.oss.ClientException;
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
-import com.xkyz.xinke.controller.testController;
 import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.pojo.UploadProperties;
+import com.xkyz.xinke.pojo.UploadVideoProperties;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,13 +22,10 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.UUID;
 
 @Service
 @Slf4j
-@EnableConfigurationProperties(UploadProperties.class)
+@EnableConfigurationProperties({UploadProperties.class,UploadVideoProperties.class})
 public class UploadService {
     private static final Logger logger = LoggerFactory.getLogger(UploadService.class);
 
@@ -34,12 +33,29 @@ public class UploadService {
 //    private static final String FILE_DESTINATION = "/Users/klein/Desktop";
 
 
-    private static final String END_POINTS="https://oss-cn-beijing.aliyuncs.com";
-    private static final String ACCESS_KEY="LTAI5tNRPAKPDczj51UR529L";
-    private static final String ACCESS_KEY_SECRET="EaTb3ckYUe6GVc7Lon3kxV0kp9cwj4";
+    private static final String END_POINTS = "https://oss-cn-beijing.aliyuncs.com";
+    private static final String ACCESS_KEY = "LTAI5tNRPAKPDczj51UR529L";
+    private static final String ACCESS_KEY_SECRET = "EaTb3ckYUe6GVc7Lon3kxV0kp9cwj4";
     @Autowired
     private UploadProperties properties;
 
+    @Autowired
+    private UploadVideoProperties uploadVideoProperties;
+
+    private File transferToFile(MultipartFile multipartFile) {
+//        选择用缓冲区来实现这个转换即使用java 创建的临时文件 使用 MultipartFile.transferto()方法 。
+        File file = null;
+        try {
+            String originalFilename = multipartFile.getOriginalFilename();
+            String[] filename = originalFilename.split("\\.");
+            file = File.createTempFile(filename[0], filename[1]);
+            multipartFile.transferTo(file);
+            file.deleteOnExit();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return file;
+    }
 
     public String uploadImageOss(MultipartFile file) throws IOException {
 
@@ -54,8 +70,13 @@ public class UploadService {
             throw new EmException(ExceptionEnums.INVALID_FILE_TYPE);
         }
 
+        file.getBytes();
+        File des = transferToFile(file);
+
+
         //目标路径
-        File dest = new File(file.getOriginalFilename());
+//        File dest = new File(FILE_DESTINATION,file.getOriginalFilename());
+//        file.transferTo(dest);
         // Endpoint以华东1（杭州）为例，其它Region请按实际情况填写。
         // 阿里云账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM用户进行API访问或日常运维，请登录RAM控制台创建RAM用户。
 
@@ -79,7 +100,7 @@ public class UploadService {
         try {
 
             // 创建PutObjectRequest对象。
-            new PutObjectRequest(bucketName, objectName, dest);
+            PutObjectRequest putObjectRequest = new PutObjectRequest(bucketName, objectName, des);
             // 如果需要上传时设置存储类型和访问权限，请参考以下示例代码。
             // ObjectMetadata metadata = new ObjectMetadata();
             // metadata.setHeader(OSSHeaders.OSS_STORAGE_CLASS, StorageClass.Standard.toString());
@@ -87,7 +108,8 @@ public class UploadService {
             // putObjectRequest.setMetadata(metadata);
 
             // 上传文件。
-            url="http://"+bucketName+"."+endpointStr+"/"+objectName;
+            ossClient.putObject(putObjectRequest);
+            url = "http://" + bucketName + "." + endpointStr + "/" + objectName;
             return url;
 
         } catch (OSSException oe) {
@@ -108,5 +130,9 @@ public class UploadService {
             }
         }
         return url;
+    }
+
+    public void testVideoProperties() {
+        System.out.println(uploadVideoProperties.getAllowTypes());
     }
 }

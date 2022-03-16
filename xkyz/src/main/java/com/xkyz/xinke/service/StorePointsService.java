@@ -1,6 +1,8 @@
 package com.xkyz.xinke.service;
 
 import com.vividsolutions.jts.geom.Point;
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.StorePointsMapper;
 import com.xkyz.xinke.mapper.UserAddressMapper;
 import com.xkyz.xinke.mapper.UserProfileMapper;
@@ -24,6 +26,12 @@ public class StorePointsService {
 
     private static final Integer RANGE = 3; //返回条数 TODO 后期改成20
 
+
+    public String getPointsNameById(Integer pointId){
+        StorePoints storePoints = storePointsMapper.selectByPrimaryKey(pointId);
+        if (storePoints==null) throw new EmException(ExceptionEnums.POINTS_ID_NOT_EXIST);
+        return storePoints.getPointName();
+    }
 
     public List<StorePoints> getPointsByXAndY(PointEntity pointEntity) {
 

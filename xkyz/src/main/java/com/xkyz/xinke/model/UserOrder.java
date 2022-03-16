@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 @Builder
 public class UserOrder {
-    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId, String expressNo) {
+    public UserOrder(Integer orderId, String orderNo, String stuffType, Integer sendAddress, Integer receiveAddress, Integer status, Integer deliverStatus, Long orderTime, Long orderUpdateTime, String userToken, String deliverToken, Integer pointsId, Double price, Double estimatedWeight, Integer expressCompanyId, String expressNo, String imageUrl) {
         this.orderId = orderId;
         this.orderNo = orderNo;
         this.stuffType = stuffType;
@@ -26,6 +26,7 @@ public class UserOrder {
         this.estimatedWeight = estimatedWeight;
         this.expressCompanyId = expressCompanyId;
         this.expressNo = expressNo;
+        this.imageUrl = imageUrl;
     }
 
     public UserOrder() {
@@ -42,7 +43,7 @@ public class UserOrder {
     @ApiModelProperty("收件地址")
     private Integer receiveAddress;
     //    情况，一般分为四种：新订单、教材配送中、已完成、已取消。 新订单：订单成功提交但未付款的订单状态； 教材配送中：用户已付款，等待收货的订单状态 ； 已完成：交易成功的订单状态； 已取消：订单成功提交但7天内未付款的订单状态。
-    @ApiModelProperty("订单状态：1未结算，2已取消，3已发货")
+    @ApiModelProperty("订单状态：1未结算，2已付款，3已取消")
     private Integer status;
     @ApiModelProperty("揽收状态：1未揽收，2已揽收")
     private Integer deliverStatus;
@@ -64,4 +65,6 @@ public class UserOrder {
     private Integer expressCompanyId;
     @ApiModelProperty("快递单号")
     private String expressNo;
+    @ApiModelProperty("图片url")
+    private String imageUrl;
 }

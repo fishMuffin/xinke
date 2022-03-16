@@ -3,12 +3,15 @@ package com.xkyz.xinke.service;
 import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.DeliverTaskMapper;
+import com.xkyz.xinke.mapper.ExpressCompanyMapper;
 import com.xkyz.xinke.mapper.ExpressPriceReferenceMapper;
 import com.xkyz.xinke.mapper.StorePointsMapper;
 import com.xkyz.xinke.model.DeliverTask;
+import com.xkyz.xinke.model.ExpressCompany;
 import com.xkyz.xinke.model.ExpressPriceReference;
 import com.xkyz.xinke.model.StorePoints;
 import com.xkyz.xinke.pojo.DeliverTaskView;
+import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,20 +26,32 @@ public class ExpressPriceReferenceService {
 
     @Autowired
     ExpressPriceReferenceMapper expressPriceReferenceMapper;
+    @Autowired
+    ExpressCompanyService expressCompanyService;
 
-    public List<ExpressPriceReference> getPrice(String destination,Integer companyId) {
+    public List<ExpressPriceReferenceView> getPrice(String destination, Integer companyId) {
         //获取list
+        ExpressCompany company = expressCompanyService.getCompanyById(companyId);
         Example example = new Example(ExpressPriceReference.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("expressCompanyId", companyId);
-//        List<ExpressPriceReference> list = expressPriceReferenceMapper.selectAll();
         List<ExpressPriceReference> list = expressPriceReferenceMapper.selectByExample(example);
         String desTmp = dataConvert(destination);
-        List<ExpressPriceReference> resList=new ArrayList<>();
+        List<ExpressPriceReferenceView> resList=new ArrayList<>();
         for (ExpressPriceReference reference : list) {
             if (reference.getDestinationProvince().contains(desTmp)) {
                 reference.setDestinationProvince(destination);
-                resList.add(reference);
+                ExpressPriceReferenceView expressPriceReferenceView = ExpressPriceReferenceView.builder()
+                        .expressCompanyId(reference.getExpressCompanyId())
+                        .aboutTime(reference.getAboutTime())
+                        .destinationProvince(reference.getDestinationProvince())
+                        .expressCompanyName(company.getCompanyName())
+                        .firstKilogram(reference.getFirstKilogram())
+                        .id(reference.getId())
+                        .perFromOneToThirty(reference.getPerFromOneToThirty())
+                        .perFromThirty(reference.getPerFromThirty())
+                        .build();
+                resList.add(expressPriceReferenceView);
             }
         }
         return resList;

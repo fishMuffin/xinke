@@ -5,6 +5,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.xkyz.xinke.pojo.PointEntity;
 import com.xkyz.xinke.util.CoordinateUtil;
+import com.xkyz.xinke.util.MoneyUtil;
 import com.xkyz.xinke.util.TimeUtil;
 import org.gavaghan.geodesy.Ellipsoid;
 import org.gavaghan.geodesy.GeodeticCalculator;
@@ -12,6 +13,7 @@ import org.gavaghan.geodesy.GeodeticCurve;
 import org.gavaghan.geodesy.GlobalCoordinates;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
@@ -53,16 +55,38 @@ public class XYTest {
     }
 
 
+
+
     @Test
     public void testXY() {
 //        32.876791
 //        115.790469
 //        new
-        PointEntity pointA = new PointEntity(32.876791, 115.790469);
-        PointEntity pointB = new PointEntity(31.876791, 111.790469);
-        double v = CoordinateUtil.distanceToPoint(pointA, pointB);
-        System.out.println(v);
+//        PointEntity pointA = new PointEntity(32.876791, 115.790469);
+//        PointEntity pointB = new PointEntity(31.876791, 111.790469);
+//        double v = CoordinateUtil.distanceToPoint(pointA, pointB);
+//        System.out.println(v);
+
+        System.out.println(UUID.randomUUID().toString().length());
+        System.out.println(UUID.randomUUID().toString().substring(0,32).length());
+        System.out.println(
+
+        );
+
     }
+
+    @Test
+    public void testReduce(){
+        BigDecimal bigDecimal = new BigDecimal(33.25);
+        BigDecimal bigDecimal2 = new BigDecimal(22.145);
+        BigDecimal res = MoneyUtil.moneySub(bigDecimal, bigDecimal2);
+        String s = MoneyUtil.formatMoney(res + "");
+        String s1 = MoneyUtil.formatMoneyToTow(res);
+        System.out.println(s);
+        System.out.println(s1);
+    }
+
+
 
     @Test
     public void testSortedTree() {

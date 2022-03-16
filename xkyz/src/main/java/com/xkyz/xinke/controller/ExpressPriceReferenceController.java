@@ -3,6 +3,7 @@ package com.xkyz.xinke.controller;
 import com.xkyz.xinke.model.DeliverTask;
 import com.xkyz.xinke.model.ExpressPriceReference;
 import com.xkyz.xinke.pojo.DeliverTaskView;
+import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import com.xkyz.xinke.service.DeliverTaskService;
 import com.xkyz.xinke.service.ExpressCompanyService;
 import com.xkyz.xinke.service.ExpressPriceReferenceService;
@@ -29,9 +30,9 @@ public class ExpressPriceReferenceController {
 
     @ApiOperation("根据目的地返回各个快递公司的价格")
     @GetMapping(value = "/get")
-    public ResponseEntity<List<ExpressPriceReference>> getPrice(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination,@ApiParam("快递公司id") Integer companyId) {
-        List<ExpressPriceReference> referenceList = expressPriceReferenceService.getPrice(destination,companyId);
-        return ResponseEntity.ok(referenceList);
+    public ResponseEntity<List<ExpressPriceReferenceView>> getPrice(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination, @ApiParam("快递公司id") Integer companyId) {
+        List<ExpressPriceReferenceView> price = expressPriceReferenceService.getPrice(destination, companyId);
+        return ResponseEntity.ok(price);
     }
 
     @ApiOperation("导入数据专用（前端勿调用，后期删除）")

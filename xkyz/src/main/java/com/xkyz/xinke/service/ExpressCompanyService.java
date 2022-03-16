@@ -26,5 +26,8 @@ public class ExpressCompanyService {
         return list;
     }
 
+    public ExpressCompany getCompanyById(Integer companyId){
+        return expressCompanyMapper.selectByPrimaryKey(companyId);
+    }
 
 }

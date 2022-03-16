@@ -14,8 +14,18 @@
 //@Data
 //@Builder
 //public class OssConfig {
+//    public OssConfig() {
+//    }
 //
-//        private String endpoint;
+//    public OssConfig(String endpoint, String accessKeyId, String accessKeySecret, String bucketName, String urlPrefix) {
+//        this.endpoint = endpoint;
+//        this.accessKeyId = accessKeyId;
+//        this.accessKeySecret = accessKeySecret;
+//        this.bucketName = bucketName;
+//        this.urlPrefix = urlPrefix;
+//    }
+//
+//    private String endpoint;
 //        private String accessKeyId;
 //        private String accessKeySecret;
 //        private String bucketName;

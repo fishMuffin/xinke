@@ -1,5 +1,7 @@
 package com.xkyz.xinke.service;
 
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.UserAddressMapper;
 import com.xkyz.xinke.mapper.UserProfileMapper;
 import com.xkyz.xinke.model.UserAddress;
@@ -22,7 +24,16 @@ public class UserAddressService {
     private UserProfileMapper userProfileMapper;
 
     public UserAddress getUserAddressByAddressId(int addressId) {
-        return userAddressMapper.selectByPrimaryKey(addressId);
+        UserAddress userAddress = userAddressMapper.selectByPrimaryKey(addressId);
+        if(userAddress==null) throw new EmException(ExceptionEnums.INVALID_USER_ADDRESS_ID);
+        return userAddress;
+    }
+
+    public String getUserAddressNameByAddressId(int addressId) {
+        UserAddress address = this.getUserAddressByAddressId(addressId);
+        String addressStr=address.getProvince()+" "+address.getCity()+" "+address.getDistrict()+" "+address.getAddressDetail();
+        return addressStr;
+
     }
 
     public List<UserAddressWithUserProfileView>  getUserAddressListByUserId(String token) {
