@@ -47,7 +47,9 @@ public class UserOrderTest {
     @Test
     public void testGetUserOrderListByDeliverToken() {
         ResponseEntity<List<UserOrderWithCompanyView>> list = userOrderController.getUserOrderListByDeliverToken("2", 2);
+        ResponseEntity<List<UserOrderWithCompanyView>> list1 = userOrderController.getUserOrderListByDeliverToken("", 2);
         list.getBody().stream().forEach(s -> System.out.println(s));
+        list1.getBody().stream().forEach(s -> System.out.println(s));
     }
     @Test
     public void testGetUserOrderListByDeliverOpenId() {
@@ -57,7 +59,7 @@ public class UserOrderTest {
 
     @Test
     public void testNewList() {
-        ResponseEntity<List<UserOrderWithCompanyView>> list = userOrderController.getNewList("2",1,1);
+        ResponseEntity<List<UserOrderWithCompanyView>> list = userOrderController.getNewList(2,5);
         list.getBody().stream().forEach(s -> System.out.println(s));
     }
 //

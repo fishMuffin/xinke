@@ -25,19 +25,21 @@ public class DeliverTaskService {
     @Autowired
     UserOrderMapper userOrderMapper;
 
-    public List<DeliverTaskView> getDeliverTaskList(String token) {
+    public List<DeliverTaskView> getDeliverTaskList() {
         Example example = new Example(DeliverTask.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("deliverToken", token);
         criteria.andEqualTo("status", 1);
         List<DeliverTask> deliverTasks = deliverTaskMapper.selectByExample(example);
         List<DeliverTaskView> resList = new ArrayList<>();
-        deliverTasks.stream().forEach(s -> {
+        for (DeliverTask s : deliverTasks) {
             StorePoints storePoints = storePointsMapper.selectByPrimaryKey(s.getPointsId());
             //这里从数据里重新查询，不使用DeliverTask表中的数据，不准确
-            Double expressAmount =  userOrderMapper.getCountByStatus(1);
+            Double expressAmount =  userOrderMapper.getCountByStatus(1,s.getPointsId());
+            if(expressAmount==0.0){
+                continue;
+            }
             resList.add(DeliverTaskView.builder().deliverToken(s.getDeliverToken()).ownerToken(s.getOwnerToken()).taskId(s.getTaskId()).storePoints(storePoints).expressAmount(expressAmount).status(s.getStatus()).build());
-        });
+        }
         return resList;
     }
 

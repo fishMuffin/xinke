@@ -62,9 +62,10 @@ public class UserOrderService {
     public int cancelUserOrder(String orderNo) {
         UserOrder userOrder = getUserOrder(orderNo);
         Example example = new Example(UserOrder.class);
+
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("orderNo", userOrder.getOrderNo());
-        userOrder.setStatus(2);
+        userOrder.setStatus(3);
         userOrder.setDeliverStatus(2);
         userOrder.setOrderUpdateTime(System.currentTimeMillis() / 1000);
         return userOrderMapper.updateByExampleSelective(userOrder, example);
@@ -128,16 +129,18 @@ public class UserOrderService {
     public List<UserOrderWithCompanyView> getUserOrderListByDeliverToken(String deliverToken, Integer deliverStatus) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("deliverToken", deliverToken);
+        if(!StringUtils.isEmpty(deliverToken)){
+            criteria.andEqualTo("deliverToken", deliverToken);
+        }
         criteria.andEqualTo("deliverStatus", deliverStatus);
         List<UserOrder> list = userOrderMapper.selectByExample(example);
         return getUserOrderWithCompanyViews(list);
     }
 
-    public List<UserOrderWithCompanyView> getNewList(String deliverToken, Integer deliverStatus, Integer pointsId) {
+    public List<UserOrderWithCompanyView> getNewList( Integer deliverStatus, Integer pointsId) {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("deliverToken", deliverToken);
+//        criteria.andEqualTo("deliverToken", deliverToken);
         criteria.andEqualTo("deliverStatus", deliverStatus);
         criteria.andEqualTo("pointsId", pointsId);
         List<UserOrder> list = userOrderMapper.selectByExample(example);

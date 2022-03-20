@@ -15,12 +15,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @ApiOperation("添加用户接口")//作用在API方法上，对操作进行说明
-//    @PostMapping(value = "/add")
-//    public String add(UserProfile user) {
-//        return "success";
-//    }
-
     @GetMapping("/login")
     @ResponseBody
     public ResponseEntity<ReturnUser> user_login(@RequestParam(value = "js_code") String jsCode
@@ -29,11 +23,21 @@ public class UserController {
         return ResponseEntity.ok(login);
     }
 
-//    @ApiOperation("更新用户")
-//    @PostMapping(value = "/update")
-//    public String update(
-//            UserProfile user) {
-//        return "success";
-//    }
+    @GetMapping("/getUserPhone")
+    @ResponseBody
+    public ResponseEntity<String> getUserPhone(@RequestParam(value = "js_code") String jsCode
+    ) {
+        String phoneNumber = userService.getPhoneNumber(jsCode);
+        return ResponseEntity.ok(phoneNumber);
+    }
+
+    @GetMapping("/parseUserInfo")
+    @ResponseBody
+    public ResponseEntity<String> parseUserInfo(@RequestParam(value = "js_code") String jsCode,
+                                                String encryptedData, String iv
+    ) {
+        String phoneNumber = userService.parseUserInfo(encryptedData,jsCode,iv);
+        return ResponseEntity.ok(phoneNumber);
+    }
 
 }

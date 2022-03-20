@@ -2,14 +2,8 @@ package com.xkyz.xinke.service;
 
 import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
-import com.xkyz.xinke.mapper.DeliverTaskMapper;
-import com.xkyz.xinke.mapper.ExpressCompanyMapper;
-import com.xkyz.xinke.mapper.ExpressPriceReferenceMapper;
-import com.xkyz.xinke.mapper.StorePointsMapper;
-import com.xkyz.xinke.model.DeliverTask;
-import com.xkyz.xinke.model.ExpressCompany;
-import com.xkyz.xinke.model.ExpressPriceReference;
-import com.xkyz.xinke.model.StorePoints;
+import com.xkyz.xinke.mapper.*;
+import com.xkyz.xinke.model.*;
 import com.xkyz.xinke.pojo.DeliverTaskView;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import org.apache.commons.lang3.StringUtils;
@@ -27,6 +21,8 @@ public class ExpressPriceReferenceService {
     @Autowired
     ExpressPriceReferenceMapper expressPriceReferenceMapper;
     @Autowired
+    ExpressPriceReferenceJituMapper expressPriceReferenceJituMapper;
+    @Autowired
     ExpressCompanyService expressCompanyService;
 
     public List<ExpressPriceReferenceView> getPrice(String destination, Integer companyId) {
@@ -37,7 +33,7 @@ public class ExpressPriceReferenceService {
         criteria.andEqualTo("expressCompanyId", companyId);
         List<ExpressPriceReference> list = expressPriceReferenceMapper.selectByExample(example);
         String desTmp = dataConvert(destination);
-        List<ExpressPriceReferenceView> resList=new ArrayList<>();
+        List<ExpressPriceReferenceView> resList = new ArrayList<>();
         for (ExpressPriceReference reference : list) {
             if (reference.getDestinationProvince().contains(desTmp)) {
                 reference.setDestinationProvince(destination);
@@ -58,7 +54,23 @@ public class ExpressPriceReferenceService {
     }
 
 
-    public int addList(List<ExpressPriceReference> list){
+    public ExpressPriceReferenceJitu getPriceForJitu(String destination) {
+        List<ExpressPriceReferenceJitu> list = expressPriceReferenceJituMapper.selectAll();
+        String desTmp = dataConvert(destination);
+        ExpressPriceReferenceJitu res=null;
+        for (ExpressPriceReferenceJitu reference : list) {
+            if (reference.getDestinationProvince().contains(desTmp)) {
+                res=reference;
+            }
+        }
+        if (res==null){
+            throw new EmException(ExceptionEnums.INVALID_DESC);
+        }
+        return res;
+    }
+
+
+    public int addList(List<ExpressPriceReference> list) {
         int i = expressPriceReferenceMapper.insertList(list);
         return i;
     }
@@ -67,10 +79,10 @@ public class ExpressPriceReferenceService {
     private String dataConvert(String destination) {
         if (destination.contains("市")) {
             int i = destination.indexOf("市");
-            return destination.substring(0,i);
+            return destination.substring(0, i);
         } else if (destination.contains("省")) {
             int i = destination.indexOf("省");
-            return destination.substring(0,i);
+            return destination.substring(0, i);
         } else {
             return destination;
         }

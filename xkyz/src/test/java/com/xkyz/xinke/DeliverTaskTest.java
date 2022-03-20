@@ -20,7 +20,7 @@ public class DeliverTaskTest {
 
     @Test
     public void testGetList() {
-        ResponseEntity<List<DeliverTaskView>> list = deliverTaskController.getDeliverTaskList("824da98e-f39d-4932-b508-495e6c3b64ff");
+        ResponseEntity<List<DeliverTaskView>> list = deliverTaskController.getDeliverTaskList();
         list.getBody().stream().forEach(s -> System.out.println(s));
     }
 //    @Test

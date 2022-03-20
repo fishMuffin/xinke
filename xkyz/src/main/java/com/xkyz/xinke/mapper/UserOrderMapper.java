@@ -20,6 +20,8 @@ public interface UserOrderMapper extends Mapper<UserOrder>{
             @Param("pointsId") Integer pointsId,
             @Param("orderUpdateTime") Long orderUpdateTime);
     Double getCountByStatus(
-            @Param("status") Integer status);
+            @Param("deliverStatus") Integer deliverStatus,
+            @Param("pointsId") Integer pointsId
+    );
 
 }

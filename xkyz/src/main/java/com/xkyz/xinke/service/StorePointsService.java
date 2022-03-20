@@ -24,7 +24,7 @@ public class StorePointsService {
     @Autowired
     private StorePointsMapper storePointsMapper;
 
-    private static final Integer RANGE = 3; //返回条数 TODO 后期改成20
+    private static final Integer RANGE = 40; //一页最多返回条数
 
 
     public String getPointsNameById(Integer pointId){

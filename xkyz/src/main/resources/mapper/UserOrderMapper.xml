@@ -36,8 +36,11 @@
     <select id="getCountByStatus" resultType="double">
         select count(points_id) FROM user_order
         <where>1=1
-            <if test="status!=null and status!=''">
-                and status = #{status}
+            <if test="deliverStatus!=null and deliverStatus!=''">
+                and deliver_status = #{deliverStatus}
+            </if>
+            <if test="pointsId!=null and pointsId!=''">
+                and points_id = #{pointsId}
             </if>
         </where>
     </select>
