@@ -11,6 +11,8 @@ import com.xkyz.xinke.model.UserAddress;
 import com.xkyz.xinke.pojo.PointEntity;
 import com.xkyz.xinke.pojo.UserAddressWithUserProfileView;
 import com.xkyz.xinke.util.CoordinateUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tk.mybatis.mapper.entity.Example;
@@ -20,14 +22,16 @@ import java.util.stream.Collectors;
 
 @Service
 public class StorePointsService {
+    private static final Logger logger = LoggerFactory.getLogger(StorePointsService.class);
 
     @Autowired
     private StorePointsMapper storePointsMapper;
 
-    private static final Integer RANGE = 3; //返回条数 TODO 后期改成20
+    private static final Integer RANGE = 40; //一页最多返回条数
 
 
     public String getPointsNameById(Integer pointId){
+        logger.info("StorePointsService--getPointsNameById--pointId:" + pointId);
         StorePoints storePoints = storePointsMapper.selectByPrimaryKey(pointId);
         if (storePoints==null) throw new EmException(ExceptionEnums.POINTS_ID_NOT_EXIST);
         return storePoints.getPointName();

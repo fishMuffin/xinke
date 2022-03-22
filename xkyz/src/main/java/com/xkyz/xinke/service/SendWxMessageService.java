@@ -102,14 +102,14 @@ public class SendWxMessageService {
      */
 
     @ApiOperation("用户创建订单后给揽收员通知")
-    public String pushMessageToDeliver(String userOpenid,String pointsName,String phoneNumber,Double amount,String deliverName) {
+    public String pushMessageToUser(String userOpenid,String pointsName,String phoneNumber,Double amount,String deliverName) {
         RestTemplate restTemplate = new RestTemplate();
         //这里简单起见我们每次都获取最新的access_token（时间开发中，应该在access_token快过期时再重新获取）
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + getAccessToken();
         //拼接推送的模版
         WxMssVo wxMssVo = new WxMssVo();
         wxMssVo.setTouser(userOpenid);//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
-        wxMssVo.setTemplate_id(MES_FOR_USER);//订阅消息模板id
+        wxMssVo.setTemplate_id(MES_FOR_DELIVER);//订阅消息模板id
         wxMssVo.setPage("pages/index/index");//TODO 后期改成传参数
         Map<String, TemplateData> m = new HashMap<>(5);
         m.put("thing2", new TemplateData(pointsName));
@@ -140,27 +140,27 @@ public class SendWxMessageService {
      * 收货地址
      * {{thing4.DATA}}
      */
-    @ApiOperation("揽收员揽收后给用户通知")
-    public String pushMessageToUser(String deliverOpenId,String openid,String goodsName,String pointsName,Double weight,String phoneNumber,String receiveAddress) {
-        RestTemplate restTemplate = new RestTemplate();
-        //这里简单起见我们每次都获取最新的access_token（时间开发中，应该在access_token快过期时再重新获取）
-        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + getAccessToken();
-        //拼接推送的模版
-        WxMssVo wxMssVo = new WxMssVo();
-        wxMssVo.setTouser(openid);//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
-        wxMssVo.setTemplate_id(MES_FOR_DELIVER);//订阅消息模板id
-        wxMssVo.setPage("pages/index/index");//TODO 后期改成传参数
-        Map<String, TemplateData> m = new HashMap<>(5);
-        m.put("thing1", new TemplateData(goodsName));
-        m.put("thing7", new TemplateData(pointsName));
-        m.put("character_string6.DATA", new TemplateData(weight+""));
-        m.put("phone_number5.DATA", new TemplateData(phoneNumber));
-        m.put("thing4.DATA", new TemplateData(receiveAddress));
-        wxMssVo.setData(m);
-        ResponseEntity<String> responseEntity =
-                restTemplate.postForEntity(url, wxMssVo, String.class);
-        return responseEntity.getBody();
-    }
+//    @ApiOperation("揽收员揽收后给用户通知")
+//    public String pushMessageToUser(String deliverOpenId,String openid,String goodsName,String pointsName,Double weight,String phoneNumber,String receiveAddress) {
+//        RestTemplate restTemplate = new RestTemplate();
+//        //这里简单起见我们每次都获取最新的access_token（时间开发中，应该在access_token快过期时再重新获取）
+//        String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + getAccessToken();
+//        //拼接推送的模版
+//        WxMssVo wxMssVo = new WxMssVo();
+//        wxMssVo.setTouser(openid);//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
+//        wxMssVo.setTemplate_id(MES_FOR_DELIVER);//订阅消息模板id
+//        wxMssVo.setPage("pages/index/index");//TODO 后期改成传参数
+//        Map<String, TemplateData> m = new HashMap<>(5);
+//        m.put("thing1", new TemplateData(goodsName));
+//        m.put("thing7", new TemplateData(pointsName));
+//        m.put("character_string6.DATA", new TemplateData(weight+""));
+//        m.put("phone_number5.DATA", new TemplateData(phoneNumber));
+//        m.put("thing4.DATA", new TemplateData(receiveAddress));
+//        wxMssVo.setData(m);
+//        ResponseEntity<String> responseEntity =
+//                restTemplate.postForEntity(url, wxMssVo, String.class);
+//        return responseEntity.getBody();
+//    }
 
 
     private String getCurrentDateFormat(){

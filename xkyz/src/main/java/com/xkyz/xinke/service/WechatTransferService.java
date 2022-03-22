@@ -43,11 +43,13 @@ public class WechatTransferService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("openId", openId);
         List<WechatTransfer> wechatTransfers = wechatTransferMapper.selectByExample(example);
-        BigDecimal res=new BigDecimal("0");
-        for (WechatTransfer wechatTransfer : wechatTransfers) {
-            BigDecimal tmp = new BigDecimal(wechatTransfer.getAmount());
-            res=MoneyUtil.moneyAdd(res,tmp);
-        }
+        Integer income=wechatTransfers.size()*2;
+//        BigDecimal res=new BigDecimal("0");
+//        for (WechatTransfer wechatTransfer : wechatTransfers) {
+//            BigDecimal tmp = new BigDecimal(wechatTransfer.getAmount());
+//            res=MoneyUtil.moneyAdd(res,tmp);
+//        }
+        BigDecimal res=new BigDecimal(income);
         return res;
     }
 

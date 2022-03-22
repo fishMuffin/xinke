@@ -98,7 +98,7 @@ public class UserOrderController {
         return ResponseEntity.ok(list);
     }
 
-    @ApiOperation("根据deliverToken和揽收状态获取订单列表")
+    @ApiOperation("获取未揽收和已揽收列表,其中已揽收需要加揽收员deliverToken,未揽收列表该字段给空字符串")
     @PostMapping(value = "/deliverOrderList")
     public ResponseEntity<List<UserOrderWithCompanyView>> getUserOrderListByDeliverToken(@ApiParam("deliverToken") String deliverToken, @ApiParam("揽收状态：1.未揽收，2已揽收") Integer deliverStatus) {
         List<UserOrderWithCompanyView> list = userOrderService.getUserOrderListByDeliverToken(deliverToken, deliverStatus);
@@ -107,8 +107,8 @@ public class UserOrderController {
 
     @ApiOperation("新任务下点击获取未揽收列表")
     @PostMapping(value = "/newUnReceivedList")
-    public ResponseEntity<List<UserOrderWithCompanyView>> getNewList(@ApiParam("deliverToken") String deliverToken, @ApiParam("揽收状态：1.未揽收，2已揽收") Integer deliverStatus, @ApiParam("店铺ID") Integer pointsId) {
-        List<UserOrderWithCompanyView> list = userOrderService.getNewList(deliverToken, deliverStatus, pointsId);
+    public ResponseEntity<List<UserOrderWithCompanyView>> getNewList(@ApiParam("揽收状态：1.未揽收，2已揽收") Integer deliverStatus, @ApiParam("店铺ID") Integer pointsId) {
+        List<UserOrderWithCompanyView> list = userOrderService.getNewList(deliverStatus, pointsId);
         return ResponseEntity.ok(list);
     }
 
@@ -123,14 +123,17 @@ public class UserOrderController {
     @PostMapping(value = "/update")
     public ResponseEntity<ReturnMSG> updateUserOrder(
             @ApiParam("订单所需变更的信息：orderNo，图片url必填，") UserOrder userOrder) {
-        int i = userOrderService.updateUserOrder(userOrder);
+        userOrderService.updateUserOrder(userOrder);
         //TODO 给用户通知
         String userOpenId = userService.getOpenIdBySkey(userOrder.getUserToken());
-        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
+//        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
         String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
         String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
-        String addressName = userAddressService.getUserAddressNameByAddressId(userOrder.getReceiveAddress());
-        String s = sendWxMessageService.pushMessageToUser(deliverOpenId, userOpenId, userOrder.getStuffType(), pointsName, userOrder.getEstimatedWeight(), phoneNumber, addressName);
+//        String addressName = userAddressService.getUserAddrescsNameByAddressId(userOrder.getReceiveAddress());
+        String deliverName = userProfileService.getNameByUserToken(userOrder.getDeliverToken());
+        String s = sendWxMessageService.pushMessageToUser(userOpenId,pointsName,phoneNumber,userOrder.getPrice(),deliverName);
+        logger.info("UserOrderController--updateUserOrder--pushMessageToUser:" + s);
+        userOrderService.updateUserOrder(userOrder);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
 
     }
@@ -147,7 +150,6 @@ public class UserOrderController {
         logger.info("userOrderController storeTodayIncome OpenIdList:" + list.toString());
         if (!list.isEmpty()) {
             //减去提现的
-            //TODO 判断下，如果提现金额大于总金额，要拒绝，然后给个提示信息
             for (String s : list) {
                 BigDecimal transferDecimal = wechatTransferService.getWechatTransferByOpenId(s);
                 logger.info("userOrderController storeTodayIncome reduce:" + transferDecimal);
@@ -160,14 +162,6 @@ public class UserOrderController {
         return ResponseEntity.ok(incomeAndCount);
     }
 
-//    public static final String URL_ACCESS_TOKEN = "https://api.weixin.qq.com/sns/jscode2session?appid=APPID&secret=SECRET&js_code=CODE&grant_type=authorization_code";
-//    @GetMapping(value = "getOpenId")
-//    public String getOpenId(@ApiParam(value = "code")String code){
-//        String url = URL_ACCESS_TOKEN.replace("APPID", WeChatConfig.APP_ID).replace("SECRET", WeChatConfig.SECRET_ID).replace("CODE", code);
-//        JSONObject jsonObject =UrlUtil.httpsRequest(url,"GET",null);
-//        String openid = jsonObject.getString("openid");
-//        return openid;
-//    }
 
     @PostMapping("/notify")
     @ApiOperation("微信支付通知")
@@ -202,50 +196,5 @@ public class UserOrderController {
         }
     }
 
-//    @PostMapping("/preparePay")
-//    @ApiOperation("微信支付预备")
-//    public String wxPayPrepare() throws Exception {
-////        Map map = wxService.doUnifiedOrder();
-//        //TODO
-//        return null;
-//    }
-//
-//    @GetMapping("/push")
-//    public String push(@ApiParam("openid")String token,@ApiParam("templateId")String templateId) {
-//        User openId = userService.getOpenIdBySkey(token);
-//        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="
-//                + WXConfigUtil.APP_ID
-//                + "&secret="
-//                + WXConfigUtil.SECRET_ID;
-//        String result=HttpClientUtil.doGet(url);
-////        String result = HttpUtil.sendGet(url);
-//        JSONObject object = JSON.parseObject(result);
-//        String Access_Token = object.getString("access_token");
-//        Template template = new Template();
-//
-//        template.setTemplate_id(WXConfigUtil.TEMPLATE_ID);
-//        template.setTouser(openid);
-//        template.setPage("pages/index/index");
-//        List<TemplateParam> paras = new ArrayList<>();
-//        paras.add(new TemplateParam("time1", "2019-12-28 10:00:00"));
-//        paras.add(new TemplateParam("thing2", "监控1发现2人"));
-//        template.setTemplateParamList(paras);
-//        String requestUrl = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=ACCESS_TOKEN";
-//        requestUrl = requestUrl.replace("ACCESS_TOKEN", Access_Token);
-//
-//        System.out.println(template.toJSON());
-//        net.sf.json.JSONObject jsonResult = UrlUtil.httpsRequest(requestUrl, "POST", template.toJSON());
-//        if (jsonResult != null) {
-//            System.out.println(jsonResult);
-//            int errorCode = jsonResult.getInt("errcode");
-//            String errorMessage = jsonResult.getString("errmsg");
-//            if (errorCode == 0) {
-//                System.out.println("Send Success");
-//            } else {
-//                System.out.println("订阅消息发送失败:" + errorCode + "," + errorMessage);
-//            }
-//        }
-//        return null;
-//    }
 
 }
