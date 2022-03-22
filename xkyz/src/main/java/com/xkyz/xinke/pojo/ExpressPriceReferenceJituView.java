@@ -1,4 +1,4 @@
-package com.xkyz.xinke.model;
+package com.xkyz.xinke.pojo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,15 +8,13 @@ import lombok.Data;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@ApiModel("快递公司价格参照表_极兔")
 @Data
 @Builder
-@Table(name = "express_price_reference_jitu")
-public class ExpressPriceReferenceJitu {
-    public ExpressPriceReferenceJitu() {
+public class ExpressPriceReferenceJituView {
+    public ExpressPriceReferenceJituView() {
     }
 
-    public ExpressPriceReferenceJitu(Integer id, String destinationProvince, Double onePointFiveKilogram, Double oneKilogram, Double twoKilogram, Double threeKilogram, Double perFromThreeToTenContinue, Double perFromTenFirst, Double perFromTenContinue, Integer expressCompanyId) {
+    public ExpressPriceReferenceJituView(Integer id, String destinationProvince, Double onePointFiveKilogram, Double oneKilogram, Double twoKilogram, Double threeKilogram, Double perFromThreeToTenContinue, Double perFromTenFirst, Double perFromTenContinue, Integer expressCompanyId, String expressCompanyName) {
         this.id = id;
         this.destinationProvince = destinationProvince;
         this.onePointFiveKilogram = onePointFiveKilogram;
@@ -27,29 +25,23 @@ public class ExpressPriceReferenceJitu {
         this.perFromTenFirst = perFromTenFirst;
         this.perFromTenContinue = perFromTenContinue;
         this.expressCompanyId = expressCompanyId;
+        this.expressCompanyName = expressCompanyName;
     }
 
     @ApiModelProperty("id")
     @Id
     private Integer id;
-    @ApiModelProperty("目标省份")
-    public String destinationProvince;
-    @ApiModelProperty("0.5公斤以内价格")
-    public Double onePointFiveKilogram;
-    @ApiModelProperty("1公斤以内价格")
-    public Double oneKilogram;
-    @ApiModelProperty("2公斤以内价格")
-    public Double twoKilogram;
-    @ApiModelProperty("3公斤以内价格")
-    public Double ThreeKilogram;
-    @ApiModelProperty("3-10公斤内每kg价格")
-    public Double perFromThreeToTenContinue;
-    @ApiModelProperty("10公斤以上首重")
-    public Double perFromTenFirst;
-    @ApiModelProperty("10公斤以上续重")
-    public Double perFromTenContinue;
-    @ApiModelProperty("快递公司id")
-    public Integer expressCompanyId;
+    private String destinationProvince;
+    private Double onePointFiveKilogram;
+    private Double oneKilogram;
+    private Double twoKilogram;
+    private Double ThreeKilogram;
+    private Double perFromThreeToTenContinue;
+    private Double perFromTenFirst;
+    private Double perFromTenContinue;
+    private Integer expressCompanyId;
+    private String expressCompanyName;
+
 }
 //    CREATE TABLE `express_price_reference_jitu` (
 //        `id` int(11) NOT NULL AUTO_INCREMENT,

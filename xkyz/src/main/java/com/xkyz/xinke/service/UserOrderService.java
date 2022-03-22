@@ -36,7 +36,8 @@ public class UserOrderService {
         UserOrder order = userOrderMapper.selectOne(userOrder);
         UserAddress sendAddress = userAddressMapper.selectByPrimaryKey(order.getSendAddress());
         UserAddress receiveAddress = userAddressMapper.selectByPrimaryKey(order.getReceiveAddress());
-        UserOrderView userOrderView = UserOrderView.builder().sendAddress(sendAddress).receiveAddress(receiveAddress).userOrder(order).build();
+        ExpressCompany expressCompany = expressCompanyMapper.selectByPrimaryKey(order.getExpressCompanyId());
+        UserOrderView userOrderView = UserOrderView.builder().sendAddress(sendAddress).receiveAddress(receiveAddress).userOrder(order).expressCompany(expressCompany).build();
         return userOrderView;
     }
 
@@ -172,6 +173,8 @@ public class UserOrderService {
         Long theBeginOfToday = TimeUtil.getTodayStartTime();
         Double storeTodayIncome = userOrderMapper.getStoreTodayIncome(pointsId, theBeginOfToday);
         Double storeAllIncome = userOrderMapper.getStoreAllIncome(pointsId);
+        storeTodayIncome*=2;
+        storeAllIncome*=2;
         Double count = userOrderMapper.getStoreTodayCount(pointsId, theBeginOfToday);
         IncomeView incomeView = IncomeView.builder().incomeOfAll(storeAllIncome).incomeOfToday(storeTodayIncome).count(count).build();
         return incomeView;

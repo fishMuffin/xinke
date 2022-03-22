@@ -4,6 +4,7 @@ import com.xkyz.xinke.model.DeliverTask;
 import com.xkyz.xinke.model.ExpressPriceReference;
 import com.xkyz.xinke.model.ExpressPriceReferenceJitu;
 import com.xkyz.xinke.pojo.DeliverTaskView;
+import com.xkyz.xinke.pojo.ExpressPriceReferenceJituView;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import com.xkyz.xinke.service.DeliverTaskService;
 import com.xkyz.xinke.service.ExpressCompanyService;
@@ -38,8 +39,8 @@ public class ExpressPriceReferenceController {
 
     @ApiOperation("根据目的地返回极兔的价格")
     @GetMapping(value = "/getPriceForJitu")
-    public ResponseEntity<ExpressPriceReferenceJitu> getPriceForJitu(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination) {
-        ExpressPriceReferenceJitu priceForJitu = expressPriceReferenceService.getPriceForJitu(destination);
+    public ResponseEntity<ExpressPriceReferenceJituView> getPriceForJitu(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination) {
+        ExpressPriceReferenceJituView priceForJitu = expressPriceReferenceService.getPriceForJitu(destination);
         return ResponseEntity.ok(priceForJitu);
     }
 

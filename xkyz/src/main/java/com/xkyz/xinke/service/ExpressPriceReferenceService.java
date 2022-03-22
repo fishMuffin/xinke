@@ -5,6 +5,7 @@ import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.*;
 import com.xkyz.xinke.model.*;
 import com.xkyz.xinke.pojo.DeliverTaskView;
+import com.xkyz.xinke.pojo.ExpressPriceReferenceJituView;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,13 +55,25 @@ public class ExpressPriceReferenceService {
     }
 
 
-    public ExpressPriceReferenceJitu getPriceForJitu(String destination) {
+    public ExpressPriceReferenceJituView getPriceForJitu(String destination) {
+        ExpressCompany company = expressCompanyService.getCompanyById(5);
         List<ExpressPriceReferenceJitu> list = expressPriceReferenceJituMapper.selectAll();
         String desTmp = dataConvert(destination);
-        ExpressPriceReferenceJitu res=null;
-        for (ExpressPriceReferenceJitu reference : list) {
-            if (reference.getDestinationProvince().contains(desTmp)) {
-                res=reference;
+        ExpressPriceReferenceJituView res=null;
+        for (ExpressPriceReferenceJitu r : list) {
+            if (r.getDestinationProvince().contains(desTmp)) {
+                res = ExpressPriceReferenceJituView.builder().id(r.getId())
+                        .perFromTenContinue(r.perFromTenContinue)
+                        .expressCompanyId(r.expressCompanyId)
+                        .expressCompanyName(company.getCompanyName())
+                        .oneKilogram(r.oneKilogram)
+                        .onePointFiveKilogram(r.onePointFiveKilogram)
+                        .perFromTenFirst(r.perFromTenFirst)
+                        .perFromThreeToTenContinue(r.perFromThreeToTenContinue)
+                        .ThreeKilogram(r.ThreeKilogram)
+                        .twoKilogram(r.twoKilogram)
+                        .destinationProvince(r.destinationProvince).build();
+
             }
         }
         if (res==null){

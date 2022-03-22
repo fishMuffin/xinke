@@ -4,7 +4,7 @@
 <mapper namespace="com.xkyz.xinke.mapper.UserOrderMapper">
 
     <select id="getStoreTodayIncome" resultType="double">
-        select sum(price) FROM user_order
+        select count(price) FROM user_order
         <where>1=1
             <if test="pointsId!=null and pointsId!=''">
                 and points_id = #{pointsId}
@@ -15,7 +15,7 @@
         </where>
     </select>
     <select id="getStoreAllIncome" resultType="double">
-        select sum(price) FROM user_order
+        select count(price) FROM user_order
         <where>1=1
             <if test="pointsId!=null and pointsId!=''">
                 and points_id = #{pointsId}

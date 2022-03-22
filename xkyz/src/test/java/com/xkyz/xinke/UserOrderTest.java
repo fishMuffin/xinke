@@ -32,12 +32,12 @@ public class UserOrderTest {
 //    }
 
 
-//    @Test
-//    public void testGetUserOrderByUserId() {
-//        ResponseEntity<UserOrderView> list = userOrderController.getUserOrderByOrderNo("dsfdsfgdsg1");
-//        UserOrderView body = list.getBody();
-//        System.out.println(body);
-//    }
+    @Test
+    public void testGetUserOrderByUserId() {
+        ResponseEntity<UserOrderView> list = userOrderController.getUserOrderByOrderNo("0ff28d1c-a76d-4b0e-96e9-eb6e9dd8");
+        UserOrderView body = list.getBody();
+        System.out.println(body);
+    }
 
     @Test
     public void testGetUserOrderListByOpenId() {
@@ -80,7 +80,7 @@ public class UserOrderTest {
 //
     @Test
     public void testUpdateUserOrderByOrderId() {
-        ResponseEntity<ReturnMSG> ggg = userOrderController.updateUserOrder(UserOrder.builder().orderNo("ggg").price(1000.00).stuffType("4").estimatedWeight(100.00).imageUrl("www.baidu.com").expressCompanyId(3).build());
+        ResponseEntity<ReturnMSG> ggg = userOrderController.updateUserOrder(UserOrder.builder().orderNo("1070bcf7-0afd-415d-84f8-1fe6ce12").userToken("35740a06-fe2f-4ef8-981b-d12101ec790c").deliverToken("824da98e-f39d-4932-b508-495e6c3b64ff").price(1000.00).stuffType("4").estimatedWeight(100.00).imageUrl("www.baidu.com").pointsId(5).expressCompanyId(9).build());
         ReturnMSG body = ggg.getBody();
         System.out.println(body);
     }
@@ -93,7 +93,7 @@ public class UserOrderTest {
     }
     @Test
     public void testGetStoreTodayIncome() {
-        ResponseEntity<IncomeView> entity = userOrderController.storeTodayIncome("824da98e-f39d-4932-b508-495e6c3b64ff");
+        ResponseEntity<IncomeView> entity = userOrderController.storeTodayIncome("6532a4b9-2628-4aa2-9f52-4eec87382289");
         IncomeView body = entity.getBody();
         System.out.println(body);
     }

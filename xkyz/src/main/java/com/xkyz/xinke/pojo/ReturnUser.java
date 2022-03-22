@@ -8,4 +8,6 @@ import lombok.Data;
 public class ReturnUser {
     private String token;
     private int role;
+    private String portraitUrl;
+    private String wxName;
 }

@@ -1,5 +1,6 @@
 package com.xkyz.xinke.pojo;
 
+import com.xkyz.xinke.model.ExpressCompany;
 import com.xkyz.xinke.model.UserAddress;
 import com.xkyz.xinke.model.UserOrder;
 import io.swagger.annotations.ApiModel;
@@ -12,7 +13,8 @@ import lombok.Data;
 public class UserOrderView {
 
 
-    public UserOrderView(UserAddress sendAddress, UserOrder userOrder, UserAddress receiveAddress) {
+    public UserOrderView(ExpressCompany expressCompany, UserAddress sendAddress, UserOrder userOrder, UserAddress receiveAddress) {
+        this.expressCompany = expressCompany;
         this.sendAddress = sendAddress;
         this.userOrder = userOrder;
         this.receiveAddress = receiveAddress;
@@ -22,6 +24,7 @@ public class UserOrderView {
     }
 
 
+    private ExpressCompany expressCompany;
     private UserAddress sendAddress;
     private UserOrder userOrder;
     private UserAddress receiveAddress;

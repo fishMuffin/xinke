@@ -123,14 +123,17 @@ public class UserOrderController {
     @PostMapping(value = "/update")
     public ResponseEntity<ReturnMSG> updateUserOrder(
             @ApiParam("订单所需变更的信息：orderNo，图片url必填，") UserOrder userOrder) {
-        int i = userOrderService.updateUserOrder(userOrder);
+        userOrderService.updateUserOrder(userOrder);
         //TODO 给用户通知
         String userOpenId = userService.getOpenIdBySkey(userOrder.getUserToken());
-        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
+//        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
         String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
         String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
-        String addressName = userAddressService.getUserAddressNameByAddressId(userOrder.getReceiveAddress());
-        String s = sendWxMessageService.pushMessageToUser(deliverOpenId, userOpenId, userOrder.getStuffType(), pointsName, userOrder.getEstimatedWeight(), phoneNumber, addressName);
+//        String addressName = userAddressService.getUserAddrescsNameByAddressId(userOrder.getReceiveAddress());
+        String deliverName = userProfileService.getNameByUserToken(userOrder.getDeliverToken());
+        String s = sendWxMessageService.pushMessageToUser(userOpenId,pointsName,phoneNumber,userOrder.getPrice(),deliverName);
+        logger.info("UserOrderController--updateUserOrder--pushMessageToUser:" + s);
+        userOrderService.updateUserOrder(userOrder);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
 
     }
@@ -147,7 +150,6 @@ public class UserOrderController {
         logger.info("userOrderController storeTodayIncome OpenIdList:" + list.toString());
         if (!list.isEmpty()) {
             //减去提现的
-            //TODO 判断下，如果提现金额大于总金额，要拒绝，然后给个提示信息
             for (String s : list) {
                 BigDecimal transferDecimal = wechatTransferService.getWechatTransferByOpenId(s);
                 logger.info("userOrderController storeTodayIncome reduce:" + transferDecimal);

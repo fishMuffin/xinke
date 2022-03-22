@@ -5,8 +5,10 @@ import com.xkyz.xinke.controller.ImageUploadController;
 import com.xkyz.xinke.enums.ExceptionEnums;
 import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.mapper.UserMapper;
+import com.xkyz.xinke.mapper.UserProfileMapper;
 import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
+import com.xkyz.xinke.model.UserProfile;
 import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.util.WechatUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -28,6 +30,8 @@ public class UserService {
 
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    UserProfileMapper userProfileMapper;
 
     public User selectOne(String openId) {
         User user = User.builder().openId(openId).build();
@@ -70,45 +74,36 @@ public class UserService {
         return userMapper.insert(user);
     }
 
-    public String getPhoneNumber(String jsCode){
-        logger.info("UserService--getPhoneNumber--jsCode:"+jsCode);
+    public String getPhoneNumber(String jsCode) {
+        logger.info("UserService--getPhoneNumber--jsCode:" + jsCode);
         JSONObject user = WechatUtil.getUserInfoWithinPhone(jsCode);
         String phone_info = user.getString("phone_info");
-        logger.info("UserService--getPhoneNumber--phone_info:"+phone_info);
+        logger.info("UserService--getPhoneNumber--phone_info:" + phone_info);
         return phone_info;
     }
 
-    public String parseUserInfo(String encryptedData, String code, String iv){
-        logger.info("UserService--parseUserInfo--code:"+code);
-        String phone_info=WechatUtil.parseUserInfo(encryptedData,code,iv);
-        logger.info("UserService--parseUserInfo--code:"+code);
+    public String parseUserInfo(String encryptedData, String code, String iv) {
+        logger.info("UserService--parseUserInfo--code:" + code);
+        String phone_info = WechatUtil.parseUserInfo(encryptedData, code, iv);
+        logger.info("UserService--parseUserInfo--code:" + code);
         return phone_info;
+    }
+
+
+    public int updateUserOrder(String jsCode, String portraitUrl, String wxName) {
+
+        Example example = new Example(UserProfile.class);
+        Example.Criteria criteria = example.createCriteria();
+        criteria.andEqualTo("skey", jsCode);
+        UserProfile userProfile = UserProfile.builder().portrait_url(portraitUrl).wx_name(wxName).build();
+        return userProfileMapper.updateByExampleSelective(userProfile, example);
     }
 
     public ReturnUser login(String jsCode) {
-
-        // 用户非敏感信息：rawData
-        // 签名：signature
-//        JSONObject rawDataJson = JSON.parseObject(rawData);
-        // 1.接收小程序发送的code
-        // 2.开发者服务器 登录凭证校验接口 appi + appsecret + code
         JSONObject SessionKeyOpenId = WechatUtil.getSessionKeyOrOpenId(jsCode);
-
-        // 3.接收微信接口服务 获取返回的参数
         String openId = SessionKeyOpenId.getString("openid");
         String sessionKey = SessionKeyOpenId.getString("session_key");
-        if(openId==null||sessionKey==null) throw new EmException(ExceptionEnums.INVALID_USER_CODE);
-//        Example example = new Example(User.class);
-//        Example.Criteria criteria = example.createCriteria();
-//        criteria.andEqualTo("openId", openId);
-//        List<User> users = userMapper.selectByExample(example);
-//        User user = users.get(0);
-        // 4.校验签名 小程序发送的签名signature与服务器端生成的签名signature2 = sha1(rawData + sessionKey)
-//        String signature2 = DigestUtils.sha1Hex(rawData + sessionKey);
-//        if (!signature.equals(signature2)) {
-//            throw new EmException(ExceptionEnums.SIGN_CHECK_FAILURE);
-//        }
-//         5.根据返回的User实体类，判断用户是否是新用户，是的话，将用户信息存到数据库；不是的话，更新最新登录时间
+        if (openId == null || sessionKey == null) throw new EmException(ExceptionEnums.INVALID_USER_CODE);
         User userExam = User.builder().openId(openId).build();
         User user = userMapper.selectOne(userExam);
 
@@ -116,13 +111,16 @@ public class UserService {
         String skey = UUID.randomUUID().toString();
         if (user == null) {
             User build = User.builder().openId(openId).sessionKey(sessionKey).skey(skey).role(2).build();
-            logger.info("UserService--login--userToInsert:"+build.toString());
-            int insert = userMapper.insert(build);
+            UserProfile userProfile = UserProfile.builder().skey(skey).build();
+            logger.info("UserService--login--userToInsert:" + build.toString());
+            userMapper.insert(build);
+            userProfileMapper.insert(userProfile);
             return ReturnUser.builder().token(skey).role(2).build();
         } else {
             int role = user.getRole();
             skey = user.getSkey();
-            return ReturnUser.builder().token(skey).role(role).build();
+            UserProfile userProfile = userProfileMapper.selectOne(UserProfile.builder().skey(skey).build());
+            return ReturnUser.builder().token(skey).role(role).wxName(userProfile.getWx_name()).portraitUrl(userProfile.getPortrait_url()).build();
         }
     }
 
