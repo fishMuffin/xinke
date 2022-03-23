@@ -26,11 +26,14 @@ public class WechatTransferService {
     @Autowired
     UserService userService;
 
-    public int addDeliverTask(String userToken,Double amount) {
+    public void addDeliverTask(String userToken, Double amount) {
         String openIdBySkey = userService.getOpenIdBySkey(userToken);
-        if(StringUtils.isBlank(openIdBySkey)) throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);
+        if (StringUtils.isBlank(openIdBySkey)) throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);
+//        WechatTransfer transfer = wechatTransferMapper.selectOne(WechatTransfer.builder().openId(openIdBySkey).build());
+//        if(transfer==null){
         WechatTransfer wechatTransfer = WechatTransfer.builder().openId(openIdBySkey).amount(amount).build();
-        return wechatTransferMapper.insert(wechatTransfer);
+        wechatTransferMapper.insert(wechatTransfer);
+//        }
     }
 
 //    public WechatTransfer getWechatTransferByOpenId(String openId) {
@@ -43,13 +46,11 @@ public class WechatTransferService {
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("openId", openId);
         List<WechatTransfer> wechatTransfers = wechatTransferMapper.selectByExample(example);
-        Integer income=wechatTransfers.size()*2;
-//        BigDecimal res=new BigDecimal("0");
-//        for (WechatTransfer wechatTransfer : wechatTransfers) {
-//            BigDecimal tmp = new BigDecimal(wechatTransfer.getAmount());
-//            res=MoneyUtil.moneyAdd(res,tmp);
-//        }
-        BigDecimal res=new BigDecimal(income);
+        BigDecimal res=new BigDecimal("0");
+        for (WechatTransfer wechatTransfer : wechatTransfers) {
+            BigDecimal tmp = new BigDecimal(wechatTransfer.getAmount());
+            res=MoneyUtil.moneyAdd(res,tmp);
+        }
         return res;
     }
 

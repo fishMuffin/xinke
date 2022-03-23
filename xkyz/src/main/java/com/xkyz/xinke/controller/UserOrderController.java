@@ -142,6 +142,7 @@ public class UserOrderController {
     @PostMapping(value = "/storeTodayIncome")
     public ResponseEntity<IncomeView> storeTodayIncome(
             @ApiParam("商家token") String userToken) {
+        logger.info("userOrderController storeTodayIncome userToken:" + userToken);
         Integer pointsId = userService.getPointsOwnerByUserToken(userToken);
         IncomeView incomeAndCount = userOrderService.getIncomeAndCount(pointsId);
         Double incomeOfAll = incomeAndCount.getIncomeOfAll();

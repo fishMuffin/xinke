@@ -35,7 +35,7 @@ public class WechatTransterController {
     @ApiOperation("添加微信转账")
     @PostMapping(value = "/add")
     public ResponseEntity<ReturnMSG> addWechatTransfer(@ApiParam("userToken") String userToken, @ApiParam("转账金额") Double amount) {
-        int i = wechatTransferService.addDeliverTask(userToken,amount);
+        wechatTransferService.addDeliverTask(userToken,amount);
         return ResponseEntity.ok(new ReturnMSG("ok"));
     }
 

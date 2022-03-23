@@ -26,6 +26,7 @@ public class ExpressPriceReferenceService {
     @Autowired
     ExpressCompanyService expressCompanyService;
 
+    //京东快递
     public List<ExpressPriceReferenceView> getPrice(String destination, Integer companyId) {
         //获取list
         ExpressCompany company = expressCompanyService.getCompanyById(companyId);
@@ -55,6 +56,7 @@ public class ExpressPriceReferenceService {
     }
 
 
+    //极兔
     public ExpressPriceReferenceJituView getPriceForJitu(String destination) {
         ExpressCompany company = expressCompanyService.getCompanyById(5);
         List<ExpressPriceReferenceJitu> list = expressPriceReferenceJituMapper.selectAll();

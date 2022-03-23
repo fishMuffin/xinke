@@ -12,6 +12,7 @@
             <if test="orderUpdateTime!=null and orderUpdateTime!=''">
                 and order_update_time > #{orderUpdateTime}
             </if>
+            and status=2
         </where>
     </select>
     <select id="getStoreAllIncome" resultType="double">
@@ -20,6 +21,7 @@
             <if test="pointsId!=null and pointsId!=''">
                 and points_id = #{pointsId}
             </if>
+            and status=2
         </where>
     </select>
     <select id="getStoreTodayCount" resultType="double">

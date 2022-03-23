@@ -31,6 +31,7 @@ public class UserOrderService {
     @Autowired
     ExpressCompanyMapper expressCompanyMapper;
 
+
     public UserOrderView getUserOrderByOrderNo(String orderNo) {
         UserOrder userOrder = UserOrder.builder().orderNo(orderNo).build();
         UserOrder order = userOrderMapper.selectOne(userOrder);
@@ -77,7 +78,7 @@ public class UserOrderService {
         Example example = new Example(UserOrder.class);
         Example.Criteria criteria = example.createCriteria();
         criteria.andEqualTo("orderNo", userOrder.getOrderNo());
-        userOrder.setStatus(3);
+        userOrder.setStatus(2);
 //        userOrder.setDeliverStatus(2);//TODO 待确认揽收员状态 是否变更
         userOrder.setOrderUpdateTime(System.currentTimeMillis() / 1000);
         return userOrderMapper.updateByExampleSelective(userOrder, example);
