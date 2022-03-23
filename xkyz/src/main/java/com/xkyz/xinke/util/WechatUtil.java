@@ -57,6 +57,7 @@ public class WechatUtil {
         //小程序端返回的code
 //        requestUrlParam.put("js_code", code);
 //        requestUrlParam.put("access_token", accessToken);
+        //TODO invalid accessToken 原因未知,待后续查证
         JSONObject jsonObject = JSON.parseObject(HttpClientUtil.doPost(postRequestUrl));
         return jsonObject;
     }

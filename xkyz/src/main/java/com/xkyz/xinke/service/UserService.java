@@ -90,11 +90,13 @@ public class UserService {
     }
 
 
-    public int updateUserOrder(String jsCode, String portraitUrl, String wxName) {
-
+    public int updateUserOrder(String userToken, String portraitUrl, String wxName) {
+        logger.info("UserService--updateUserOrder--userToken:" + userToken+" portraitUrl"+portraitUrl+" wxName"+wxName);
+        String openIdBySkey = this.getOpenIdBySkey(userToken);
+        if(StringUtils.isEmpty(openIdBySkey)) throw new EmException(ExceptionEnums.INVALID_USER_TOKEN);
         Example example = new Example(UserProfile.class);
         Example.Criteria criteria = example.createCriteria();
-        criteria.andEqualTo("skey", jsCode);
+        criteria.andEqualTo("skey", userToken);
         UserProfile userProfile = UserProfile.builder().portrait_url(portraitUrl).wx_name(wxName).build();
         return userProfileMapper.updateByExampleSelective(userProfile, example);
     }

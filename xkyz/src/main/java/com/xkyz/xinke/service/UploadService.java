@@ -58,7 +58,7 @@ public class UploadService {
     }
 
     public String uploadImageOss(MultipartFile file) throws IOException {
-
+        //TODO 图片需要压缩 有大小限制
         String endpointStr = "oss-cn-beijing.aliyuncs.com";
         String contentType = file.getContentType();
         if (!properties.getAllowTypes().contains(contentType)) {
