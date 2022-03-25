@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -41,8 +42,25 @@ public class UserOrderTest {
 
     @Test
     public void testGetUserOrderListByOpenId() {
-        ResponseEntity<List<UserOrderView>> list = userOrderController.getUserOrderListByOpenId("824da98e-f39d-4932-b508-495e6c3b64ff",1);
+        ResponseEntity<List<UserOrderView>> list = userOrderController.getUserOrderListByOpenId("52a814d2-99cc-4301-ab15-1e3cf06d435e", 2);
+
+        Collections.sort(list.getBody(),new UpdateTimeComparator());
+
         list.getBody().stream().forEach(s -> System.out.println(s));
+
+
+
+
+        // List<UserOrderView> body = list.getBody();
+
+        //降序
+//        body.sort(Comparator.comparing(new UserOrder().getOrderUpdateTime()));
+//        List<UserInfo> userInfoList = new ArrayList<UserInfo>();
+
+//降序
+//        userInfoList.sort(Comparator.comparing(UserInfo::getCreateTime).reversed());
+
+
     }
     @Test
     public void testGetUserOrderListByDeliverToken() {

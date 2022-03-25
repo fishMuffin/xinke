@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserOrderView {
+public class UserOrderView implements Comparable  {
 
 
     public UserOrderView(ExpressCompany expressCompany, UserAddress sendAddress, UserOrder userOrder, UserAddress receiveAddress) {
@@ -28,5 +28,9 @@ public class UserOrderView {
     private UserAddress sendAddress;
     private UserOrder userOrder;
     private UserAddress receiveAddress;
+    @Override
+    public int compareTo(Object o){
+        return this.getUserOrder().getOrderUpdateTime().compareTo(this.getUserOrder().getOrderUpdateTime());
+    }
 
 }
