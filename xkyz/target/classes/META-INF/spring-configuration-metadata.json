@@ -1,0 +1,47 @@
+{
+  "groups": [
+    {
+      "name": "em.upload",
+      "type": "com.xkyz.xinke.pojo.UploadProperties",
+      "sourceType": "com.xkyz.xinke.pojo.UploadProperties"
+    },
+    {
+      "name": "hah.upload",
+      "type": "com.xkyz.xinke.pojo.UploadVideoProperties",
+      "sourceType": "com.xkyz.xinke.pojo.UploadVideoProperties"
+    },
+    {
+      "name": "pay.wxpay.app",
+      "type": "com.xkyz.xinke.config.WxPayAppConfig",
+      "sourceType": "com.xkyz.xinke.config.WxPayAppConfig"
+    }
+  ],
+  "properties": [
+    {
+      "name": "em.upload.allow-types",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.xkyz.xinke.pojo.UploadProperties"
+    },
+    {
+      "name": "em.upload.base-url",
+      "type": "java.lang.String",
+      "sourceType": "com.xkyz.xinke.pojo.UploadProperties"
+    },
+    {
+      "name": "hah.upload.allow-types",
+      "type": "java.util.List<java.lang.String>",
+      "sourceType": "com.xkyz.xinke.pojo.UploadVideoProperties"
+    },
+    {
+      "name": "hah.upload.base-name",
+      "type": "java.lang.String",
+      "sourceType": "com.xkyz.xinke.pojo.UploadVideoProperties"
+    },
+    {
+      "name": "pay.wxpay.app.cert-data",
+      "type": "java.lang.Byte[]",
+      "sourceType": "com.xkyz.xinke.config.WxPayAppConfig"
+    }
+  ],
+  "hints": []
+}

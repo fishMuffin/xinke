@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xkyz.xinke.mapper.UserOrderMapper">
+
+    <select id="getStoreTodayIncome" resultType="double">
+        select count(price) FROM user_order
+        <where>1=1
+            <if test="pointsId!=null and pointsId!=''">
+                and points_id = #{pointsId}
+            </if>
+            <if test="orderUpdateTime!=null and orderUpdateTime!=''">
+                and order_update_time > #{orderUpdateTime}
+            </if>
+            and status=2
+        </where>
+    </select>
+    <select id="getStoreAllIncome" resultType="double">
+        select count(price) FROM user_order
+        <where>1=1
+            <if test="pointsId!=null and pointsId!=''">
+                and points_id = #{pointsId}
+            </if>
+            and status=2
+        </where>
+    </select>
+    <select id="getStoreTodayCount" resultType="double">
+        select count(points_id) FROM user_order
+        <where>1=1
+            <if test="pointsId!=null and pointsId!=''">
+                and points_id = #{pointsId}
+            </if>
+            <if test="orderUpdateTime!=null and orderUpdateTime!=''">
+                and order_update_time > #{orderUpdateTime}
+            </if>
+        </where>
+    </select>
+    <select id="getCountByStatus" resultType="double">
+        select count(points_id) FROM user_order
+        <where>1=1
+            <if test="deliverStatus!=null and deliverStatus!=''">
+                and deliver_status = #{deliverStatus}
+            </if>
+            <if test="pointsId!=null and pointsId!=''">
+                and points_id = #{pointsId}
+            </if>
+        </where>
+    </select>
+</mapper>
