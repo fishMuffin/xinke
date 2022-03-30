@@ -78,9 +78,6 @@ public class ExpressPriceReferenceService {
 
             }
         }
-        if (res==null){
-            throw new EmException(ExceptionEnums.INVALID_DESC);
-        }
         return res;
     }
 

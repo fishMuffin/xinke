@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.xkyz.xinke.controller.ExpressPriceReferenceController;
 import com.xkyz.xinke.model.ExpressPriceReference;
 import com.xkyz.xinke.model.ExpressPriceReferenceJitu;
+import com.xkyz.xinke.pojo.ApiResult;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceJituView;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
 import com.xkyz.xinke.service.ExpressPriceReferenceService;
@@ -29,10 +30,10 @@ public class ExpressPriceReferenceTest {
 
     @Test
     public void testInsertList() {
-        ResponseEntity<ExpressPriceReferenceJituView> priceForJitu = expressPriceReferenceController.getPriceForJitu("新疆");
-        ExpressPriceReferenceJituView body = priceForJitu.getBody();
-        String s = JSONObject.toJSONString(body);
-        System.out.println(s);
+        ApiResult priceForJitu = expressPriceReferenceController.getPriceForJitu("湖北");
+        ApiResult priceForJitu1 = expressPriceReferenceController.getPriceForJitu("香港");
+        System.out.println(priceForJitu);
+        System.out.println(priceForJitu1);
     }
 
     @Test

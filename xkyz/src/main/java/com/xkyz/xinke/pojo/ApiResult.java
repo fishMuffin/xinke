@@ -1,11 +1,13 @@
 package com.xkyz.xinke.pojo;
 
 
+import lombok.Builder;
 
 /**
  * 异步请求统一返回结果集
  * @author 
  */
+@Builder
 public class ApiResult {
 
     /** 成功还是失败 */

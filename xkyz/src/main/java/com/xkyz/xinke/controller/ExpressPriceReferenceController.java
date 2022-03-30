@@ -3,6 +3,7 @@ package com.xkyz.xinke.controller;
 import com.xkyz.xinke.model.DeliverTask;
 import com.xkyz.xinke.model.ExpressPriceReference;
 import com.xkyz.xinke.model.ExpressPriceReferenceJitu;
+import com.xkyz.xinke.pojo.ApiResult;
 import com.xkyz.xinke.pojo.DeliverTaskView;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceJituView;
 import com.xkyz.xinke.pojo.ExpressPriceReferenceView;
@@ -13,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.collections.ListUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,22 +38,27 @@ public class ExpressPriceReferenceController {
     @Autowired
     private ExpressPriceReferenceService expressPriceReferenceService;
 
-    @ApiOperation("根据目的地返回各个快递公司的价格")
+    @ApiOperation("根据目的地返回JD快递的价格")
     @GetMapping(value = "/get")
     public ResponseEntity<List<ExpressPriceReferenceView>> getPrice(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination, @ApiParam("快递公司id") Integer companyId) {
         logger.info("ExpressPriceReferenceController getPriceJD destination:" + destination);
-
         List<ExpressPriceReferenceView> price = expressPriceReferenceService.getPrice(destination, companyId);
-//        if(price.size()==0)
+        if(price==null){
+            new ResponseEntity<>("该省份(市)业务暂时不支持"+destination, HttpStatus.BAD_REQUEST);
+        }
         return ResponseEntity.ok(price);
     }
 
     @ApiOperation("根据目的地返回极兔的价格")
     @GetMapping(value = "/getPriceForJitu")
-    public ResponseEntity<ExpressPriceReferenceJituView> getPriceForJitu(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination) {
+    public ApiResult getPriceForJitu(@ApiParam("目的地(务必提供正确完整的省份名称比如：湖北省)") String destination) {
         logger.info("ExpressPriceReferenceController getPriceForJitu destination:" + destination);
         ExpressPriceReferenceJituView priceForJitu = expressPriceReferenceService.getPriceForJitu(destination);
-        return ResponseEntity.ok(priceForJitu);
+        if(priceForJitu==null){
+            return ApiResult.builder().code(HttpStatus.BAD_REQUEST+"").message("该地区不在配送范围:"+destination).success(false).build();
+        }
+        ResponseEntity<ExpressPriceReferenceJituView> res = ResponseEntity.ok(priceForJitu);
+        return ApiResult.builder().code(200+"").data(res).success(true).build();
     }
 
 
