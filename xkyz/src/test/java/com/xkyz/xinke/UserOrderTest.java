@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.ResponseEntity;
 
+import java.util.Collections;
 import java.util.List;
 
 @SpringBootTest
@@ -41,8 +42,9 @@ public class UserOrderTest {
 
     @Test
     public void testGetUserOrderListByOpenId() {
-        ResponseEntity<List<UserOrderView>> list = userOrderController.getUserOrderListByOpenId("824da98e-f39d-4932-b508-495e6c3b64ff",1);
-        list.getBody().stream().forEach(s -> System.out.println(s));
+        ResponseEntity<List<UserOrderView>> list = userOrderController.getUserOrderListByOpenId("3cc7b689-337c-4966-a25a-a8061a6e0399",2);
+//        Collections.sort(list.getBody(),new StudentComparator());
+        list.getBody().stream().forEach(s -> System.out.println(s.getUserOrder().getOrderUpdateTime()));
     }
     @Test
     public void testGetUserOrderListByDeliverToken() {
@@ -80,7 +82,7 @@ public class UserOrderTest {
 //
     @Test
     public void testUpdateUserOrderByOrderId() {
-        ResponseEntity<ReturnMSG> ggg = userOrderController.updateUserOrder(UserOrder.builder().orderNo("1070bcf7-0afd-415d-84f8-1fe6ce12").userToken("35740a06-fe2f-4ef8-981b-d12101ec790c").deliverToken("824da98e-f39d-4932-b508-495e6c3b64ff").price(1000.00).stuffType("4").estimatedWeight(100.00).imageUrl("www.baidu.com").pointsId(5).expressCompanyId(9).build());
+        ResponseEntity<ReturnMSG> ggg = userOrderController.updateUserOrder(UserOrder.builder().orderNo("1070bcf7-0afd-415d-84f8-1fe6ce12").userToken("3cc7b689-337c-4966-a25a-a8061a6e0399").deliverToken("0b86aea5-881e-46cc-91c5-0aed18a44676").price(1000.00).stuffType("4").estimatedWeight(100.00).imageUrl("www.baidu.com").pointsId(5).expressCompanyId(9).build());
         ReturnMSG body = ggg.getBody();
         System.out.println(body);
     }

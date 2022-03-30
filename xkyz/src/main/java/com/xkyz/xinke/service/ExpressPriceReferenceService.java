@@ -92,11 +92,17 @@ public class ExpressPriceReferenceService {
 
 
     private String dataConvert(String destination) {
-        if (destination.contains("市")) {
+        if (destination.contains("直辖市")) {
+            int i = destination.indexOf("直辖市");
+            return destination.substring(0, i);
+        } else if (destination.contains("市")) {
             int i = destination.indexOf("市");
             return destination.substring(0, i);
         } else if (destination.contains("省")) {
             int i = destination.indexOf("省");
+            return destination.substring(0, i);
+        } else if (destination.contains("自治区")) {
+            int i = destination.indexOf("自治区");
             return destination.substring(0, i);
         } else {
             return destination;

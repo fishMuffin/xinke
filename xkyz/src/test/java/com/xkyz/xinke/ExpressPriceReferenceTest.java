@@ -29,10 +29,36 @@ public class ExpressPriceReferenceTest {
 
     @Test
     public void testInsertList() {
-        ResponseEntity<ExpressPriceReferenceJituView> priceForJitu = expressPriceReferenceController.getPriceForJitu("阜阳市");
+        ResponseEntity<ExpressPriceReferenceJituView> priceForJitu = expressPriceReferenceController.getPriceForJitu("新疆");
         ExpressPriceReferenceJituView body = priceForJitu.getBody();
         String s = JSONObject.toJSONString(body);
         System.out.println(s);
+    }
+
+    @Test
+    public void testdataConvert() {
+        String s1 = dataConvert("广西壮族自治区");
+        String s2 = dataConvert("广西壮族直辖市");
+        System.out.println(s1);
+        System.out.println(s2);
+    }
+
+    private String dataConvert(String destination) {
+        if (destination.contains("直辖市")) {
+            int i = destination.indexOf("直辖市");
+            return destination.substring(0, i);
+        } else if (destination.contains("市")) {
+            int i = destination.indexOf("市");
+            return destination.substring(0, i);
+        } else if (destination.contains("省")) {
+            int i = destination.indexOf("省");
+            return destination.substring(0, i);
+        } else if (destination.contains("自治区")) {
+            int i = destination.indexOf("自治区");
+            return destination.substring(0, i);
+        } else {
+            return destination;
+        }
     }
 
 

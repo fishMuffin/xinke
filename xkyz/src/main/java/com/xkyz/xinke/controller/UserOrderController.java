@@ -1,5 +1,7 @@
 package com.xkyz.xinke.controller;
 
+import com.xkyz.xinke.common.UserOrderViewComparator;
+import com.xkyz.xinke.common.UserOrderWithComViewComparator;
 import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.IncomeView;
@@ -11,6 +13,7 @@ import com.xkyz.xinke.util.MoneyUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
 
 @Api(tags = "用户订单API")
@@ -49,7 +53,8 @@ public class UserOrderController {
     private UserProfileService userProfileService;
     @Autowired
     private UserAddressService userAddressService;
-//    userToken=35740a06-fe2f-4ef8-981b-d12101ec790c,
+
+    //    userToken=35740a06-fe2f-4ef8-981b-d12101ec790c,
     @ApiOperation("创建订单")//作用在API方法上，对操作进行说明
     @PostMapping(value = "/create")
     public ResponseEntity<ReturnMSG> addUserOrder(UserOrder userOrder) {
@@ -95,6 +100,7 @@ public class UserOrderController {
     @PostMapping(value = "/list")
     public ResponseEntity<List<UserOrderView>> getUserOrderListByOpenId(@ApiParam("token") String token, @ApiParam("订单状态：1未结算，2已取消，3已发货") Integer status) {
         List<UserOrderView> list = userOrderService.getUserOrderListByOpenId(token, status);
+        Collections.sort(list, new UserOrderViewComparator());
         return ResponseEntity.ok(list);
     }
 
@@ -102,6 +108,7 @@ public class UserOrderController {
     @PostMapping(value = "/deliverOrderList")
     public ResponseEntity<List<UserOrderWithCompanyView>> getUserOrderListByDeliverToken(@ApiParam("deliverToken") String deliverToken, @ApiParam("揽收状态：1.未揽收，2已揽收") Integer deliverStatus) {
         List<UserOrderWithCompanyView> list = userOrderService.getUserOrderListByDeliverToken(deliverToken, deliverStatus);
+        Collections.sort(list, new UserOrderWithComViewComparator());
         return ResponseEntity.ok(list);
     }
 
@@ -123,15 +130,16 @@ public class UserOrderController {
     @PostMapping(value = "/update")
     public ResponseEntity<ReturnMSG> updateUserOrder(
             @ApiParam("订单所需变更的信息：orderNo，图片url必填，") UserOrder userOrder) {
-        userOrderService.updateUserOrder(userOrder);
         //TODO 给用户通知
+        logger.info("UserOrderController--updateUserOrder--userOrder:" + userOrder);
         String userOpenId = userService.getOpenIdBySkey(userOrder.getUserToken());
 //        String deliverOpenId = userService.getOpenIdBySkey(userOrder.getDeliverToken());
         String pointsName = storePointsService.getPointsNameById(userOrder.getPointsId());
         String phoneNumber = userProfileService.getPhoneNumberByUserToken(userOrder.getUserToken());
 //        String addressName = userAddressService.getUserAddrescsNameByAddressId(userOrder.getReceiveAddress());
         String deliverName = userProfileService.getNameByUserToken(userOrder.getDeliverToken());
-        String s = sendWxMessageService.pushMessageToUser(userOpenId,pointsName,phoneNumber,userOrder.getPrice(),deliverName);
+        phoneNumber = StringUtils.isEmpty(phoneNumber) ? "" : phoneNumber;
+        String s = sendWxMessageService.pushMessageToUser(userOpenId, pointsName, userOrder.getPrice(), deliverName,phoneNumber);
         logger.info("UserOrderController--updateUserOrder--pushMessageToUser:" + s);
         userOrderService.updateUserOrder(userOrder);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
