@@ -38,6 +38,8 @@ public enum ExceptionEnums {
     INVALID_USER_CODE(507,"用户code不合法"),
     INVALID_DESC(508,"无效的目标城市(省份)"),
 
+    INVALID_ORDER_NO(511,"无效的订单单号"),
+
     USER_DATA_TYPE_ERROR(400, "用户数据类型无效!"),
     UNAUTHORIZED(403, "未授权!"),
 

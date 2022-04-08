@@ -23,17 +23,16 @@ public class ExpressPriceReferenceTest {
 
     @Test
     public void testGetList() {
-        ResponseEntity<List<ExpressPriceReferenceView>> price = expressPriceReferenceController.getPrice("湖北省", 1);
-        List<ExpressPriceReferenceView> list = price.getBody();
-        list.stream().forEach(System.out::println);
+        System.out.println(expressPriceReferenceController.getPrice("湖北省", 6));
+
     }
 
     @Test
     public void testInsertList() {
-        ApiResult priceForJitu = expressPriceReferenceController.getPriceForJitu("湖北");
-        ApiResult priceForJitu1 = expressPriceReferenceController.getPriceForJitu("香港");
-        System.out.println(priceForJitu);
-        System.out.println(priceForJitu1);
+//        ApiResult priceForJitu = expressPriceReferenceController.getPriceForJitu("湖北");
+//        ApiResult priceForJitu1 = expressPriceReferenceController.getPriceForJitu("香港");
+//        System.out.println(priceForJitu);
+//        System.out.println(priceForJitu1);
     }
 
     @Test

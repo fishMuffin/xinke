@@ -102,7 +102,7 @@ public class SendWxMessageService {
      */
 
     @ApiOperation("用户创建订单后给揽收员通知")
-    public String pushMessageToUser(String userOpenid,String pointsName,Double amount,String deliverName,String phoneNumber) {
+    public String pushMessageToUser(String userOpenid,String pointsName,Double amount,String deliverName,String phoneNumber,String orderNo) {
         RestTemplate restTemplate = new RestTemplate();
         //这里简单起见我们每次都获取最新的access_token（时间开发中，应该在access_token快过期时再重新获取）
         String url = "https://api.weixin.qq.com/cgi-bin/message/subscribe/send?access_token=" + getAccessToken();
@@ -110,7 +110,7 @@ public class SendWxMessageService {
         WxMssVo wxMssVo = new WxMssVo();
         wxMssVo.setTouser(userOpenid);//用户的openid（要发送给那个用户，通常这里应该动态传进来的）
         wxMssVo.setTemplate_id(MES_FOR_DELIVER);//订阅消息模板id
-        wxMssVo.setPage("pages/index/index");//TODO 后期改成传参数
+        wxMssVo.setPage("pages/list/info?orderNo="+orderNo);
         Map<String, TemplateData> m = new HashMap<>(5);
         m.put("thing2", new TemplateData(pointsName));
         m.put("date3", new TemplateData(getCurrentDateFormat()));

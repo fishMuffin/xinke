@@ -103,8 +103,10 @@ public class UserOrderService {
 //        userOrder.setStuffType(updateUser.getStuffType());
 //        userOrder.setStuffType(updateUser.getStuffType());
         if (this.getUserOrderByOrderNo(updateUser.getOrderNo())==null) throw new EmException(ExceptionEnums.USER_ORDER_NOT_EXIST);
+        UserOrderView userOrderByOrderNo = this.getUserOrderByOrderNo(updateUser.getOrderNo());
+        if(userOrderByOrderNo==null) throw new EmException(ExceptionEnums.INVALID_ORDER_NO);
         updateUser.setDeliverStatus(2);
-        updateUser.setStatus(1);
+        updateUser.setStatus(userOrderByOrderNo.getUserOrder().getStatus()==2?2:1);
         updateUser.setOrderUpdateTime(System.currentTimeMillis() / 1000);
         if (StringUtils.isEmpty(updateUser.getImageUrl())) throw new EmException(ExceptionEnums.IMAGE_URL_NOT_EXIST);
         //更新数据 订单更新时间 方便后期商家查询当日收益

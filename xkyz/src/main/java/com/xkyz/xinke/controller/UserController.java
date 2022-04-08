@@ -6,6 +6,8 @@ import com.xkyz.xinke.pojo.ReturnUser;
 import com.xkyz.xinke.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController()
 @RequestMapping("/sys/user")
 public class UserController {
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+
     @Autowired
     private UserService userService;
 
@@ -22,7 +26,9 @@ public class UserController {
     @ResponseBody
     public ResponseEntity<ReturnUser> user_login(@RequestParam(value = "js_code") String jsCode
     ) {
+        logger.info("UserController--user_login--js_code:" + jsCode);
         ReturnUser login = userService.login(jsCode);
+        logger.info("UserController--user_login--return-login:" + login);
         return ResponseEntity.ok(login);
     }
 

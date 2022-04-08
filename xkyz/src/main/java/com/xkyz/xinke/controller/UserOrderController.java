@@ -139,7 +139,7 @@ public class UserOrderController {
 //        String addressName = userAddressService.getUserAddrescsNameByAddressId(userOrder.getReceiveAddress());
         String deliverName = userProfileService.getNameByUserToken(userOrder.getDeliverToken());
         phoneNumber = StringUtils.isEmpty(phoneNumber) ? "" : phoneNumber;
-        String s = sendWxMessageService.pushMessageToUser(userOpenId, pointsName, userOrder.getPrice(), deliverName,phoneNumber);
+        String s = sendWxMessageService.pushMessageToUser(userOpenId, pointsName, userOrder.getPrice(), deliverName,phoneNumber,userOrder.getOrderNo());
         logger.info("UserOrderController--updateUserOrder--pushMessageToUser:" + s);
         userOrderService.updateUserOrder(userOrder);
         return ResponseEntity.ok().body(new ReturnMSG("ok"));
