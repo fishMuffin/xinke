@@ -95,7 +95,7 @@ public class UserOrderTest {
     }
     @Test
     public void testGetStoreTodayIncome() {
-        ResponseEntity<IncomeView> entity = userOrderController.storeTodayIncome("6532a4b9-2628-4aa2-9f52-4eec87382289");
+        ResponseEntity<IncomeView> entity = userOrderController.storeTodayIncome("db5a9a77-febc-405c-acf5-d036d9737878");
         IncomeView body = entity.getBody();
         System.out.println(body);
     }

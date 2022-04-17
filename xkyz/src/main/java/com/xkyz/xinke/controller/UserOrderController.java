@@ -2,6 +2,8 @@ package com.xkyz.xinke.controller;
 
 import com.xkyz.xinke.common.UserOrderViewComparator;
 import com.xkyz.xinke.common.UserOrderWithComViewComparator;
+import com.xkyz.xinke.enums.ExceptionEnums;
+import com.xkyz.xinke.exception.EmException;
 import com.xkyz.xinke.model.User;
 import com.xkyz.xinke.model.UserOrder;
 import com.xkyz.xinke.pojo.IncomeView;
@@ -152,6 +154,7 @@ public class UserOrderController {
             @ApiParam("商家token") String userToken) {
         logger.info("userOrderController storeTodayIncome userToken:" + userToken);
         Integer pointsId = userService.getPointsOwnerByUserToken(userToken);
+        if(pointsId==null) throw new EmException(ExceptionEnums.INVALID_POINTS_ID);
         IncomeView incomeAndCount = userOrderService.getIncomeAndCount(pointsId);
         Double incomeOfAll = incomeAndCount.getIncomeOfAll();
         BigDecimal incomeOfAllDecimal = new BigDecimal(incomeOfAll);

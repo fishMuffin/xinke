@@ -36,10 +36,11 @@ public enum ExceptionEnums {
     INVALID_USER_ADDRESS_ID(509,"无效的用户地址id"),
     USER_TOKEN_CANNOT_BE_EMPTY(506,"用户token不能为空"),
     INVALID_USER_CODE(507,"用户code不合法"),
+
     INVALID_DESC(508,"无效的目标城市(省份)"),
 
     INVALID_ORDER_NO(511,"无效的订单单号"),
-
+    INVALID_POINTS_ID(512,"无效的网点ID"),
     USER_DATA_TYPE_ERROR(400, "用户数据类型无效!"),
     UNAUTHORIZED(403, "未授权!"),
 

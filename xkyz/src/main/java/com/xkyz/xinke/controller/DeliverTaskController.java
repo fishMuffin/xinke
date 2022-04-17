@@ -30,7 +30,7 @@ public class DeliverTaskController {
 
     }
 
-    @ApiOperation("根据揽收员token获取揽收员新任务列表")
+    @ApiOperation("获取新任务列表")
     @PostMapping(value = "/list")
     public ResponseEntity<List<DeliverTaskView>> getDeliverTaskList() {
         List<DeliverTaskView> list = deliverTaskService.getDeliverTaskList();
